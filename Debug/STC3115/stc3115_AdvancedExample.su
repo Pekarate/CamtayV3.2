@@ -1,0 +1,5 @@
+stc3115_AdvancedExample.c:30:5:stc3115_Driver_main	4	static
+stc3115_AdvancedExample.c:40:5:stc3115_Driver_main1	112	static
+stc3115_AdvancedExample.c:225:6:ChangeLowPowerMode	16	static
+stc3115_AdvancedExample.c:245:12:GasGaugeTimerFinished	4	static
+stc3115_AdvancedExample.c:264:13:Delay_ms	16	static
