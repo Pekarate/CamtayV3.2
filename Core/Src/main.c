@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "fatfs.h"
 #include "usb_device.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -54,6 +55,8 @@ I2C_HandleTypeDef hi2c1;
 RTC_HandleTypeDef hrtc;
 
 SD_HandleTypeDef hsd;
+DMA_HandleTypeDef hdma_sdio_rx;
+DMA_HandleTypeDef hdma_sdio_tx;
 
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_tx;
@@ -63,6 +66,10 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart1_tx;
+DMA_HandleTypeDef hdma_usart2_tx;
+DMA_HandleTypeDef hdma_usart2_rx;
 
 osThreadId MainfunctionHandle;
 osThreadId io_handleHandle;
@@ -94,28 +101,10 @@ void STC3115_handle_cb(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define PWR_CTRL_GET_STATE HAL_GPIO_ReadPin(PWR_CTRL_GPIO_Port, PWR_CTRL_Pin)
-int SET_PWR_CTRL_GET_STATE()
-{
-		int res = 0;
-		GPIO_InitTypeDef GPIO_InitStruct = {0};
-		GPIO_InitStruct.Pin = PWR_CTRL_Pin;
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-		HAL_GPIO_Init(PWR_CTRL_GPIO_Port, &GPIO_InitStruct);
-		res = PWR_CTRL_GET_STATE;
-		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-		HAL_GPIO_Init(PWR_CTRL_GPIO_Port, &GPIO_InitStruct);
-		HAL_GPIO_WritePin(PWR_CTRL_GPIO_Port, PWR_CTRL_Pin, GPIO_PIN_SET);
-		return res;
-}
-typedef enum{
-	BTN_RELEASE,
-	BTN_START_PRESS
-}Btn_state_t;
-Btn_state_t Pwr_State = BTN_RELEASE;
-uint32_t timett = 0;
+
+
+
+
 uint8_t code_pic2[]=
 {
 
@@ -186,98 +175,10 @@ uint8_t code_pic2[]=
 0x82,0x81,0xBD,0xA2,0xA2,0xB9,0xA7,0x90,0xB2,0x8F,0x83,0x82,0xB9,0xA7,0x80,0xB8,
 0xA6,0xA1,0xB1,0xAF,0x90,0x80,0xBC,0xA2,0xA2,0xB9,0xA7,0x90,0x80,0x80,0x80,0xFF
 };
-STC3115_ConfigData_TypeDef STC3115_ConfigData;
-STC3115_BatteryData_TypeDef STC3115_BatteryData;
+
 uint8_t Rxdata[100];
 
-LV_FONT_DECLARE(Number_40);
-LV_FONT_DECLARE(Number_37);
-LV_FONT_DECLARE(Number_32);
-LV_FONT_DECLARE(Number_30);
-LV_FONT_DECLARE(Number_35);
-LV_FONT_DECLARE(Dseg7_55);
-LV_FONT_DECLARE(Arial_20);
-LV_FONT_DECLARE(Arial_16);
-LV_FONT_DECLARE(Arial_14);
-LV_FONT_DECLARE(Arial_12);
 
-#define FONT_NUM_LAGE  Number_35
-#define FONT_TEXT_NOMAL	Arial_16
-#define FONT_TEXT_SMALL	Arial_12
-
-lv_obj_t *Lb_Data,*Lb_Unit,*Lb_Name;
-char Lb1_dt[10];
-
-
-lv_style_t text_style_num_lage,text_style_nomal,text_style_smal;
-void Sys_Update_Data(float val)
-{
-	if(val<10)
-	{
-		sprintf(Lb1_dt,"%0.3f",val);
-	}else if (val<100)
-	{
-		sprintf(Lb1_dt,"%0.2f",val);
-	}else
-	{
-		sprintf(Lb1_dt,"%0.1f",val);
-	}
-	lv_label_set_text(Lb_Data, Lb1_dt);
-	lv_obj_set_pos(Lb_Data, 127- lv_obj_get_width(Lb_Data), 63 - lv_obj_get_height(Lb_Data));
-}
-void draw_hello_world(void) {
-
-	//	static lv_style_t style_line;
-//	lv_style_set_bg_color(&text_style_num_lage, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-//	lv_style_set_bg_color(&text_style_num_lage, LV_STATE_FOCUSED | LV_STATE_PRESSED, lv_color_hex(0xf88));
-	lv_style_set_text_color(&text_style_num_lage, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-	lv_style_set_text_font(&text_style_num_lage, LV_STATE_DEFAULT, &FONT_NUM_LAGE);
-
-//	lv_style_set_bg_color(&text_style_nomal, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-//	lv_style_set_bg_color(&text_style_nomal, LV_STATE_FOCUSED | LV_STATE_PRESSED, lv_color_hex(0xf88));
-	lv_style_set_text_color(&text_style_nomal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-	lv_style_set_text_font(&text_style_nomal, LV_STATE_DEFAULT, &FONT_TEXT_NOMAL);
-	lv_style_set_border_color(&text_style_nomal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-	lv_style_set_border_color(&text_style_nomal, LV_STATE_FOCUSED|LV_STATE_PRESSED, LV_COLOR_GRAY);
-
-//	lv_style_set_bg_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-//	lv_style_set_bg_color(&text_style_smal, LV_STATE_PRESSED, LV_COLOR_BLACK);
-//	lv_style_set_bg_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_BLACK);
-	lv_style_set_bg_color(&text_style_smal, LV_STATE_FOCUSED | LV_STATE_PRESSED, lv_color_hex(0xf88));
-	lv_style_set_text_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-	lv_style_set_text_font(&text_style_smal, LV_STATE_DEFAULT, &FONT_TEXT_SMALL);
-
-
-	/*Create a Label on the currently active screen*/
-	Lb_Data = lv_label_create(lv_scr_act(), NULL);
-	Lb_Unit = lv_label_create(lv_scr_act(), NULL);
-	Lb_Name = lv_label_create(lv_scr_act(), NULL);
-	/*Modify the Label's text*/
-	lv_obj_add_style(Lb_Data, LV_OBJ_PART_MAIN, &text_style_num_lage);
-	lv_label_set_text(Lb_Data, "01.23");
-
-	lv_obj_add_style(Lb_Unit, LV_OBJ_PART_MAIN, &text_style_smal);
-	lv_label_set_text(Lb_Unit, "mg/l");
-	lv_obj_set_pos(Lb_Unit, 125- lv_obj_get_width(Lb_Unit) , 61 - lv_obj_get_height(Lb_Data) - 1 -lv_obj_get_height(Lb_Unit) );
-
-	lv_obj_add_style(Lb_Name, LV_OBJ_PART_MAIN, &text_style_nomal);
-	lv_label_set_text(Lb_Name, "Đo Mặn");
-	lv_obj_set_pos(Lb_Name, 0,2);
-
-	/* Align the Label to the center
-     * NULL means align on parent (which is the screen now)
-     * 0, 0 at the end means an x, y offset after alignment*/
-	lv_obj_set_pos(Lb_Data, 127- lv_obj_get_width(Lb_Data), 63 - lv_obj_get_height(Lb_Data));
-
-
-    lv_obj_t * bar1 = lv_bar_create(lv_scr_act(), NULL);
-    lv_obj_set_size(bar1, 12, 9);
-
-    lv_bar_set_anim_time(bar1, 6);
-
-    lv_bar_set_value(bar1, 1, LV_ANIM_ON);
-    lv_obj_set_pos(bar1, 100, 20);
-}
 uint32_t st = 0;
 float val = 0.01f;
 /* USER CODE END 0 */
@@ -320,17 +221,18 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   MX_USART3_UART_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
   SET_PWR_CTRL_GET_STATE();
-  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_RESET);
-  for(uint8_t i=0;i<10;i++)
-  {
-	  //HAL_GPIO_TogglePin(LD_GPIO_Port, LD_Pin);
-	  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_RESET);
-	  HAL_Delay(100);
-	  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_SET);
-	  HAL_Delay(100);
-  }
+//  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_RESET);
+//  for(uint8_t i=0;i<10;i++)
+//  {
+//	  //HAL_GPIO_TogglePin(LD_GPIO_Port, LD_Pin);
+//	  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_RESET);
+//	  HAL_Delay(100);
+//	  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_SET);
+//	  HAL_Delay(100);
+//  }
 
 //  HAL_GPIO_WritePin(RS485_DE_GPIO_Port	, RS485_DE_Pin, GPIO_PIN_SET);
 //
@@ -357,85 +259,88 @@ int main(void)
 //	   HAL_Delay(5000);
 //   }
   //ST7565_st7565_init();
-  ST7565_begin(10);
-//  ST7565_clear_display();
-//  ST7565_display();
-  ST7565_st7565_command(0xA4);
-  memset(st7565_buffer,0XFF,1024);
-  ST7565_refresh();
-  HAL_Delay(1000);
-  memcpy(st7565_buffer,code_pic2,1024);
-  ST7565_refresh();
-  //ST7565_clear_display();
-  HAL_Delay(1000);
-  memset(st7565_buffer,0x00,1024);
-  ST7565_refresh();
-  //ST7565_fill(code_pic2);
-  HAL_Delay(1000);
-  lv_init(); // init lvgl
-  lv_port_disp_init();
-  draw_hello_world();
-  uint32_t tt = HAL_GetTick()+300;
-	while (1) {
-		lv_task_handler();
-		HAL_Delay(5); // 5ms
-		if(HAL_GetTick() >tt )
-		{
-			tt = HAL_GetTick()+300;
-			val += 1.01;
-			Sys_Update_Data(val);
-		}
-	}
+//  ST7565_begin(10);
+////  ST7565_clear_display();
+////  ST7565_display();
+//  ST7565_st7565_command(0xA4);
+//  memset(st7565_buffer,0XFF,1024);
+//  ST7565_refresh();
+//  HAL_Delay(500);
+//  memcpy(st7565_buffer,code_pic2,1024);
+//  ST7565_refresh();
+//  //ST7565_clear_display();
+//  HAL_Delay(500);
+//  memset(st7565_buffer,0x00,1024);
+//  ST7565_refresh();
+//  //ST7565_fill(code_pic2);
+//  HAL_Delay(500);
 
- // ST7565_fill(0, 0, 127, 63, color);
-  while(1)
-  {
-	  //HAL_GPIO_TogglePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin);
-	  memset(st7565_buffer,0XFF,1024);
-	  ST7565_refresh();
-	  HAL_Delay(1000);
-	  memcpy(st7565_buffer,code_pic2,1024);
-	  ST7565_refresh();
-	  //ST7565_clear_display();
-	  HAL_Delay(1000);
-	  memset(st7565_buffer,0x00,1024);
-	  ST7565_refresh();
-	  //ST7565_fill(code_pic2);
-	  HAL_Delay(1000);
-  }
-  ST7565_drawchar(20, 20, 'h');
-  HAL_Delay(10000);
-  while(1)
-  {
-	  if(SET_PWR_CTRL_GET_STATE())
-	  {
-		  if( Pwr_State == BTN_RELEASE)
-		  {
-			  HAL_Delay(15);
-			  if(SET_PWR_CTRL_GET_STATE())
-			  {
-				  Pwr_State = BTN_START_PRESS;
-				  timett = HAL_GetTick();
-			  }
-		  }
-	  }
-	  else {
-			if(Pwr_State == BTN_START_PRESS)
-			{
-				if(!SET_PWR_CTRL_GET_STATE())
-				{
-					Pwr_State = BTN_RELEASE;
-					timett = HAL_GetTick() - timett;
-					if(timett > 3000)
-					{
-						HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
-					}
-				}
-			}
-		}
-
-	  HAL_Delay(10);
-  }
+  //draw_hello_world();
+  //lv_ex_img_1();
+//  uint32_t tt = HAL_GetTick()+300;
+//  int cnt = 0;
+//	while (1) {
+//		lv_task_handler();
+//		HAL_Delay(1000); // 5ms
+//		if(HAL_GetTick() >tt )
+//		{
+//			tt = HAL_GetTick()+300;
+//			val += 1.01;
+//			//Sys_Update_Data(val);
+//		}
+//
+//		cnt++;
+//	}
+//
+// // ST7565_fill(0, 0, 127, 63, color);
+//  while(1)
+//  {
+//	  //HAL_GPIO_TogglePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin);
+//	  memset(st7565_buffer,0XFF,1024);
+//	  ST7565_refresh();
+//	  HAL_Delay(1000);
+//	  memcpy(st7565_buffer,code_pic2,1024);
+//	  ST7565_refresh();
+//	  //ST7565_clear_display();
+//	  HAL_Delay(1000);
+//	  memset(st7565_buffer,0x00,1024);
+//	  ST7565_refresh();
+//	  //ST7565_fill(code_pic2);
+//	  HAL_Delay(1000);
+//  }
+//  ST7565_drawchar(20, 20, 'h');
+//  HAL_Delay(10000);
+//  while(1)
+//  {
+//	  if(SET_PWR_CTRL_GET_STATE())
+//	  {
+//		  if( Pwr_State == BTN_RELEASE)
+//		  {
+//			  HAL_Delay(15);
+//			  if(SET_PWR_CTRL_GET_STATE())
+//			  {
+//				  Pwr_State = BTN_START_PRESS;
+//				  timett = HAL_GetTick();
+//			  }
+//		  }
+//	  }
+//	  else {
+//			if(Pwr_State == BTN_START_PRESS)
+//			{
+//				if(!SET_PWR_CTRL_GET_STATE())
+//				{
+//					Pwr_State = BTN_RELEASE;
+//					timett = HAL_GetTick() - timett;
+//					if(timett > 3000)
+//					{
+//						HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
+//					}
+//				}
+//			}
+//		}
+//
+//	  HAL_Delay(10);
+//  }
 //  HAL_Delay(10000);
 //  HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
   /* USER CODE END 2 */
@@ -458,15 +363,15 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of Mainfunction */
-  osThreadDef(Mainfunction, MainfunctionTask, osPriorityHigh, 0, 3072);
+  osThreadDef(Mainfunction, MainfunctionTask, osPriorityHigh, 0, 4096);
   MainfunctionHandle = osThreadCreate(osThread(Mainfunction), NULL);
 
   /* definition and creation of io_handle */
-  osThreadDef(io_handle, io_handle_cb, osPriorityIdle, 0, 1024);
+  osThreadDef(io_handle, io_handle_cb, osPriorityIdle, 0, 4096);
   io_handleHandle = osThreadCreate(osThread(io_handle), NULL);
 
   /* definition and creation of STC3115_handle */
-  osThreadDef(STC3115_handle, STC3115_handle_cb, osPriorityIdle, 0, 1024);
+  osThreadDef(STC3115_handle, STC3115_handle_cb, osPriorityIdle, 0, 4096);
   STC3115_handleHandle = osThreadCreate(osThread(STC3115_handle), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -512,7 +417,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 96;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV6;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -525,9 +430,9 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -706,15 +611,7 @@ static void MX_SDIO_SD_Init(void)
   hsd.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
   hsd.Init.BusWide = SDIO_BUS_WIDE_1B;
   hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd.Init.ClockDiv = 0;
-  if (HAL_SD_Init(&hsd) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_SD_ConfigWideBusOperation(&hsd, SDIO_BUS_WIDE_4B) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  hsd.Init.ClockDiv = 10;
   /* USER CODE BEGIN SDIO_Init 2 */
 
   /* USER CODE END SDIO_Init 2 */
@@ -912,11 +809,30 @@ static void MX_DMA_Init(void)
 
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+  /* DMA1_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
+  /* DMA2_Stream2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
   /* DMA2_Stream3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+  /* DMA2_Stream5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
+  /* DMA2_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
+  /* DMA2_Stream7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 
 }
 

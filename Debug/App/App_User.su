@@ -1,1 +1,5 @@
-App_User.c:6:7:MainfunctionTask	16	static
+App_User.c:43:13:STC3115_Hardware_reset	8	static
+App_User.c:51:5:Setting_Config_Parse	24	static
+App_User.c:64:7:MainfunctionTask	16	static
+App_User.c:147:7:io_handle_cb	16	static
+App_User.c:197:7:STC3115_handle_cb	32	static

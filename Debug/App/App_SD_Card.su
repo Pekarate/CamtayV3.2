@@ -1,0 +1,2 @@
+App_SD_Card.c:18:5:SD_Card_Mount	8	static
+App_SD_Card.c:32:5:SD_Card_Get_Setting	1608	static

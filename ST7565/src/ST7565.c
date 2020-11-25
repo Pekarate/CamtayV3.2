@@ -405,6 +405,8 @@ inline void ST7565_spiwrite(uint8_t c) {
 
 inline void ST7565_spiwrite_buf(uint8_t *c,uint16_t size){
 	HAL_SPI_Transmit(&hspi1, c, size, 1000);
+//	HAL_SPI_Transmit_DMA(&hspi1,  c, size);
+//	while(hspi1.)
 }
 
 void ST7565_st7565_command(uint8_t c) {
@@ -575,7 +577,23 @@ void ST7565_refresh(void)
 //		}
 	}
 }
+void st7565_sync(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
+{
 
+
+    uint8_t c, p;
+    for(p = y1 / 8; p <= y2 / 8; p++) {
+    	Set_Page_Address(p);
+    	ST7565_st7565_command(CMD_SET_COLUMN_LOWER | (x1 & 0xf));
+    	ST7565_st7565_command(CMD_SET_COLUMN_UPPER | ((x1 >> 4) & 0xf));
+    	ST7565_st7565_command(CMD_RMW);
+    	ST7565_st7565_Write_Buf( st7565_buffer+128*p+x1, x2-x1+1);
+//        for(c = x1; c <= x2; c++) {
+//            st7565_data(lcd_fb[(ST7565_HOR_RES * p) + c]);
+//        }
+    }
+
+}
 
 // this doesnt touch the buffer, just clears the display RAM - might be handy
 void ST7565_clear_display(void) {

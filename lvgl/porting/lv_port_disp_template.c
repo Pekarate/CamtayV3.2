@@ -156,7 +156,8 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
             color_p++;
         }
     }
-    ST7565_refresh();
+    st7565_sync(x = area->x1, area->y1, area->x2, area->y2);
+    //ST7565_refresh();
     /* IMPORTANT!!!
      * Inform the graphics library that you are ready with the flushing*/
     lv_disp_flush_ready(disp_drv);

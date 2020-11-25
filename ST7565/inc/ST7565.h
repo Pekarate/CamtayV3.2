@@ -93,6 +93,7 @@ extern uint8_t st7565_buffer[1024];
   void ST7565_drawstring_P(uint8_t x, uint8_t line, const char *c);
   void ST7565_fill(uint8_t *Data);
   void ST7565_refresh(void);
+  void st7565_sync(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
   void ST7565_drawbitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint8_t w, uint8_t h, uint8_t color);
 
   void ST7565_spiwrite(uint8_t c);

@@ -2,7 +2,7 @@
 #define __USER_DEFINE_H
 
 #include "main.h"
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 #include "usb_device.h"
 
@@ -60,7 +60,8 @@ typedef struct{
 
 extern volatile Button Btn_menu,Btn_exit,Btn_up,Btn_down;
 extern USBD_HandleTypeDef hUsbDeviceFS;
-
+extern uint8_t Sensor_Id;
+extern Sensor_typedef_t Sensor[MAX_SENSOR_NUM];
 void MainfunctionTask(void const * argument);
 void UsbProcessTask(void const * argument);
 void io_handle_cb(void const * argument);

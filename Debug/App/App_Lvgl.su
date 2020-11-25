@@ -1,0 +1,15 @@
+lv_color.h:650:26:lv_color_make	16	static
+lv_color.h:655:26:lv_color_hex	16	static
+lv_obj_style_dec.h:123:1:lv_style_set_bg_color	16	static
+lv_obj_style_dec.h:130:1:lv_style_set_border_color	16	static
+lv_obj_style_dec.h:164:1:lv_style_set_text_color	16	static
+lv_obj_style_dec.h:168:1:lv_style_set_text_font	24	static
+lv_disp.h:159:26:lv_scr_act	8	static
+App_Lvgl.c:37:6:Sys_Update_Data	24	static
+App_Lvgl.c:60:6:Lv_Battery_set	16	static
+App_Lvgl.c:122:13:lv_Battery_setting	16	static
+App_Lvgl.c:150:13:lv_font_init	8	static
+App_Lvgl.c:173:6:lv_obj_init	24	static
+App_Lvgl.c:200:6:Lv_Sensor_Data_set	24	static
+App_Lvgl.c:215:6:Lv_Sensor_Name_set	16	static
+App_Lvgl.c:219:6:Lv_Sensor_Unit_set	32	static
