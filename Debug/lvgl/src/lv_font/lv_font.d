@@ -1,7 +1,6 @@
 lvgl/src/lv_font/lv_font.o: ../lvgl/src/lv_font/lv_font.c \
  ../lvgl/src/lv_font/lv_font.h ../lvgl/src/lv_font/../lv_conf_internal.h \
- ../lvgl/src/lv_font/../lv_conf_kconfig.h \
- D:/ARM/Bocamtay_V3/ver3.1/lvgl/lv_conf.h \
+ ../lvgl/src/lv_font/../lv_conf_kconfig.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_font/lv_symbol_def.h \
  ../lvgl/src/lv_font/../lv_misc/lv_area.h \
  ../lvgl/src/lv_font/../lv_misc/../lv_conf_internal.h \
@@ -17,7 +16,7 @@ lvgl/src/lv_font/lv_font.o: ../lvgl/src/lv_font/lv_font.c \
 
 ../lvgl/src/lv_font/../lv_conf_kconfig.h:
 
-D:/ARM/Bocamtay_V3/ver3.1/lvgl/lv_conf.h:
+../lvgl/lv_conf.h:
 
 ../lvgl/src/lv_font/lv_symbol_def.h:
 

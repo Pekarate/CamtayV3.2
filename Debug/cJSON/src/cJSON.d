@@ -16,7 +16,7 @@ cJSON/src/cJSON.o: ../cJSON/src/cJSON.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- D:/ARM/Bocamtay_V3/ver3.1/cJSON/inc/cJSON.h
+ ../cJSON/inc/cJSON.h
 
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 
@@ -52,4 +52,4 @@ cJSON/src/cJSON.o: ../cJSON/src/cJSON.c \
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 
-D:/ARM/Bocamtay_V3/ver3.1/cJSON/inc/cJSON.h:
+../cJSON/inc/cJSON.h:

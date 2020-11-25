@@ -1,13 +1,12 @@
 lvgl/src/lv_core/lv_group.o: ../lvgl/src/lv_core/lv_group.c \
  ../lvgl/src/lv_core/lv_group.h ../lvgl/src/lv_core/lv_obj.h \
  ../lvgl/src/lv_core/../lv_conf_internal.h \
- ../lvgl/src/lv_core/../lv_conf_kconfig.h \
- D:/ARM/Bocamtay_V3/ver3.1/lvgl/lv_conf.h ../lvgl/src/lv_core/lv_style.h \
- ../lvgl/src/lv_core/../lv_font/lv_font.h \
+ ../lvgl/src/lv_core/../lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ ../lvgl/src/lv_core/lv_style.h ../lvgl/src/lv_core/../lv_font/lv_font.h \
  ../lvgl/src/lv_core/../lv_font/../lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_font/lv_symbol_def.h \
  ../lvgl/src/lv_core/../lv_font/../lv_misc/lv_area.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
+ ../lvgl/src/lv_core/../lv_font/../lv_misc/../lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_font/../lv_misc/lv_mem.h \
  ../lvgl/src/lv_core/../lv_font/../lv_misc/lv_log.h \
  ../lvgl/src/lv_core/../lv_font/../lv_misc/lv_types.h \
@@ -31,7 +30,7 @@ lvgl/src/lv_core/lv_group.o: ../lvgl/src/lv_core/lv_group.c \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_ll.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_mem.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_task.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
+ ../lvgl/src/lv_core/../lv_hal/../lv_misc/../lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_ll.h \
  ../lvgl/src/lv_core/../lv_hal/lv_hal_indev.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_conf_internal.h \
@@ -40,10 +39,10 @@ lvgl/src/lv_core/lv_group.o: ../lvgl/src/lv_core/lv_group.c \
  ../lvgl/src/lv_core/../lv_draw/../lv_core/lv_style.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_label.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
+ ../lvgl/src/lv_core/../lv_draw/../lv_misc/../lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h \
+ ../lvgl/src/lv_core/../lv_draw/../lv_misc/../lv_font/lv_font.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_img.h \
@@ -55,9 +54,9 @@ lvgl/src/lv_core/lv_group.o: ../lvgl/src/lv_core/lv_group.c \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_types.h \
  ../lvgl/src/lv_core/lv_obj_style_dec.h \
  ../lvgl/src/lv_core/../lv_themes/lv_theme.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_obj.h \
+ ../lvgl/src/lv_core/../lv_themes/../lv_conf_internal.h \
+ ../lvgl/src/lv_core/../lv_themes/../lv_core/lv_style.h \
+ ../lvgl/src/lv_core/../lv_themes/../lv_core/lv_obj.h \
  ../lvgl/src/lv_core/../lv_themes/lv_theme_empty.h \
  ../lvgl/src/lv_core/../lv_themes/lv_theme_template.h \
  ../lvgl/src/lv_core/../lv_themes/lv_theme_material.h \
@@ -77,7 +76,7 @@ lvgl/src/lv_core/lv_group.o: ../lvgl/src/lv_core/lv_group.c \
 
 ../lvgl/src/lv_core/../lv_conf_kconfig.h:
 
-D:/ARM/Bocamtay_V3/ver3.1/lvgl/lv_conf.h:
+../lvgl/lv_conf.h:
 
 ../lvgl/src/lv_core/lv_style.h:
 
@@ -89,7 +88,7 @@ D:/ARM/Bocamtay_V3/ver3.1/lvgl/lv_conf.h:
 
 ../lvgl/src/lv_core/../lv_font/../lv_misc/lv_area.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
+../lvgl/src/lv_core/../lv_font/../lv_misc/../lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_font/../lv_misc/lv_mem.h:
 
@@ -137,7 +136,7 @@ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_task.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
+../lvgl/src/lv_core/../lv_hal/../lv_misc/../lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_ll.h:
 
@@ -155,13 +154,13 @@ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
+../lvgl/src/lv_core/../lv_draw/../lv_misc/../lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h:
+../lvgl/src/lv_core/../lv_draw/../lv_misc/../lv_font/lv_font.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h:
 
@@ -185,11 +184,11 @@ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_core/../lv_themes/lv_theme.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
+../lvgl/src/lv_core/../lv_themes/../lv_conf_internal.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h:
+../lvgl/src/lv_core/../lv_themes/../lv_core/lv_style.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_obj.h:
+../lvgl/src/lv_core/../lv_themes/../lv_core/lv_obj.h:
 
 ../lvgl/src/lv_core/../lv_themes/lv_theme_empty.h:
 
