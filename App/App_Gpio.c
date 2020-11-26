@@ -17,6 +17,8 @@ int SET_PWR_CTRL_GET_STATE()
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
 		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 		HAL_GPIO_Init(PWR_CTRL_GPIO_Port, &GPIO_InitStruct);
+		__NOP();
+		__NOP();
 		res = PWR_CTRL_GET_STATE;
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 		HAL_GPIO_Init(PWR_CTRL_GPIO_Port, &GPIO_InitStruct);

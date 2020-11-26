@@ -166,11 +166,11 @@ uint32_t Battery_Display = 0;
 
  Btn_state_t Pwr_State = BTN_RELEASE;
  uint32_t Pwr_Time = 0;
-
+uint32_t time_tt1,time_tt2 = 0;
 
  void io_handle_cb(void const * argument){
 	 for (;;) {
-
+		 time_tt1 = HAL_GetTick();
 		  if(SET_PWR_CTRL_GET_STATE())
 		  {
 			  if( Pwr_State == BTN_RELEASE)
@@ -206,7 +206,9 @@ uint32_t Battery_Display = 0;
 
 				}
 		 }
+
 		 osDelay(1); // 5ms
+		 time_tt2 = HAL_GetTick() - time_tt1;
 
 	}
  }

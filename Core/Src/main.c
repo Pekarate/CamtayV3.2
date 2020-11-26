@@ -365,11 +365,11 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of Mainfunction */
-  osThreadDef(Mainfunction, MainfunctionTask, osPriorityHigh, 0, 4096);
+  osThreadDef(Mainfunction, MainfunctionTask, osPriorityNormal, 0, 4096);
   MainfunctionHandle = osThreadCreate(osThread(Mainfunction), NULL);
 
   /* definition and creation of io_handle */
-  osThreadDef(io_handle, io_handle_cb, osPriorityIdle, 0, 1024);
+  osThreadDef(io_handle, io_handle_cb, osPriorityNormal, 0, 1024);
   io_handleHandle = osThreadCreate(osThread(io_handle), NULL);
 
   /* definition and creation of STC3115_handle */
