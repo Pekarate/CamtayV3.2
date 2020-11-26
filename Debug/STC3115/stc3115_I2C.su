@@ -1,2 +1,2 @@
-stc3115_I2C.c:45:5:I2C_Write	48	static
-stc3115_I2C.c:72:5:I2C_Read	48	static
+stc3115_I2C.c:48:5:I2C_Write	48	static
+stc3115_I2C.c:79:5:I2C_Read	48	static

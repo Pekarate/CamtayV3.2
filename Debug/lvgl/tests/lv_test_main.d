@@ -14,7 +14,7 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
  ../lvgl/tests/../src/lv_hal/lv_hal_disp.h \
  ../lvgl/tests/../src/lv_hal/lv_hal.h \
  ../lvgl/tests/../src/lv_hal/../lv_misc/lv_color.h \
- ../lvgl/tests/../src/lv_hal/../lv_misc/../lv_conf_internal.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
  ../lvgl/tests/../src/lv_hal/../lv_misc/lv_math.h \
  ../lvgl/tests/../src/lv_hal/../lv_misc/lv_area.h \
  ../lvgl/tests/../src/lv_hal/../lv_misc/lv_mem.h \
@@ -27,38 +27,38 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
  ../lvgl/tests/../src/lv_core/../lv_conf_internal.h \
  ../lvgl/tests/../src/lv_core/lv_style.h \
  ../lvgl/tests/../src/lv_core/../lv_font/lv_font.h \
- ../lvgl/tests/../src/lv_core/../lv_font/../lv_conf_internal.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
  ../lvgl/tests/../src/lv_core/../lv_font/lv_symbol_def.h \
- ../lvgl/tests/../src/lv_core/../lv_font/../lv_misc/lv_area.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_area.h \
  ../lvgl/tests/../src/lv_core/../lv_misc/lv_color.h \
  ../lvgl/tests/../src/lv_core/../lv_misc/lv_area.h \
  ../lvgl/tests/../src/lv_core/../lv_misc/lv_anim.h \
- ../lvgl/tests/../src/lv_core/../lv_misc/../lv_conf_internal.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
  ../lvgl/tests/../src/lv_core/../lv_misc/lv_mem.h \
  ../lvgl/tests/../src/lv_core/../lv_misc/lv_types.h \
  ../lvgl/tests/../src/lv_core/../lv_misc/lv_debug.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_blend.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_color.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_area.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_color.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_area.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_mask.h \
  ../lvgl/tests/../src/lv_core/../lv_hal/lv_hal.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_rect.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_core/lv_style.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_label.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_bidi.h \
- d:\arm\stm32f4\bo_cam_tay\camtayv3.2\lvgl\src\lv_conf_internal.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_txt.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_area.h \
- d:\arm\stm32f4\bo_cam_tay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_printf.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_bidi.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_area.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_printf.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_img.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_img_decoder.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_conf_internal.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
  ../lvgl/tests/../src/lv_core/../lv_draw/lv_img_buf.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_fs.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_mem.h \
- ../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_types.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_fs.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_mem.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_types.h \
  ../lvgl/tests/../src/lv_core/lv_obj_style_dec.h \
  ../lvgl/tests/../src/lv_core/lv_group.h \
  ../lvgl/tests/../src/lv_core/lv_obj.h \
@@ -95,9 +95,9 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
  ../lvgl/tests/../src/lv_widgets/../lv_font/lv_symbol_def.h \
  ../lvgl/tests/../src/lv_widgets/../lv_misc/lv_txt.h \
  ../lvgl/tests/../src/lv_widgets/../lv_draw/lv_draw.h \
- ../lvgl/tests/../src/lv_widgets/../lv_draw/../lv_conf_internal.h \
- ../lvgl/tests/../src/lv_widgets/../lv_draw/../lv_core/lv_style.h \
- ../lvgl/tests/../src/lv_widgets/../lv_draw/../lv_misc/lv_txt.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h \
+ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h \
  ../lvgl/tests/../src/lv_widgets/../lv_draw/lv_img_decoder.h \
  ../lvgl/tests/../src/lv_widgets/../lv_draw/lv_draw_rect.h \
  ../lvgl/tests/../src/lv_widgets/../lv_draw/lv_draw_label.h \
@@ -191,7 +191,7 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
 
 ../lvgl/tests/../src/lv_hal/../lv_misc/lv_color.h:
 
-../lvgl/tests/../src/lv_hal/../lv_misc/../lv_conf_internal.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/tests/../src/lv_hal/../lv_misc/lv_math.h:
 
@@ -217,11 +217,11 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
 
 ../lvgl/tests/../src/lv_core/../lv_font/lv_font.h:
 
-../lvgl/tests/../src/lv_core/../lv_font/../lv_conf_internal.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/tests/../src/lv_core/../lv_font/lv_symbol_def.h:
 
-../lvgl/tests/../src/lv_core/../lv_font/../lv_misc/lv_area.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_area.h:
 
 ../lvgl/tests/../src/lv_core/../lv_misc/lv_color.h:
 
@@ -229,7 +229,7 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
 
 ../lvgl/tests/../src/lv_core/../lv_misc/lv_anim.h:
 
-../lvgl/tests/../src/lv_core/../lv_misc/../lv_conf_internal.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/tests/../src/lv_core/../lv_misc/lv_mem.h:
 
@@ -239,9 +239,9 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_blend.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_color.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_color.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_area.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_area.h:
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_mask.h:
 
@@ -249,21 +249,21 @@ lvgl/tests/lv_test_main.o: ../lvgl/tests/lv_test_main.c \
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_rect.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_core/lv_style.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h:
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_label.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_bidi.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_bidi.h:
 
-d:\arm\stm32f4\bo_cam_tay\camtayv3.2\lvgl\src\lv_conf_internal.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_txt.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_area.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_area.h:
 
-d:\arm\stm32f4\bo_cam_tay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_printf.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_printf.h:
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_draw_line.h:
 
@@ -271,15 +271,15 @@ d:\arm\stm32f4\bo_cam_tay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_img_decoder.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_conf_internal.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/tests/../src/lv_core/../lv_draw/lv_img_buf.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_fs.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_fs.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_mem.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_mem.h:
 
-../lvgl/tests/../src/lv_core/../lv_draw/../lv_misc/lv_types.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_types.h:
 
 ../lvgl/tests/../src/lv_core/lv_obj_style_dec.h:
 
@@ -353,11 +353,11 @@ d:\arm\stm32f4\bo_cam_tay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/tests/../src/lv_widgets/../lv_draw/lv_draw.h:
 
-../lvgl/tests/../src/lv_widgets/../lv_draw/../lv_conf_internal.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
 
-../lvgl/tests/../src/lv_widgets/../lv_draw/../lv_core/lv_style.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h:
 
-../lvgl/tests/../src/lv_widgets/../lv_draw/../lv_misc/lv_txt.h:
+d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h:
 
 ../lvgl/tests/../src/lv_widgets/../lv_draw/lv_img_decoder.h:
 

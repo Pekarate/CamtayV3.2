@@ -207,7 +207,7 @@ MBm_StateTypedef MBm_Read_data_hoilding(uint8_t SlaveID,uint16_t reg,uint8_t siz
     // printf("uart_write_bytes: %d",uart_write_bytes(MB_PORT,(const char *)Tx_buf,8)); 
     // printf("uart_wait_tx_done: %d",uart_wait_tx_done(MB_PORT,100));
 	memset(Rx_buf,0,100);
-	Rx_size =  MBm_Recv_Buff_Data(Rx_buf,pSize,1500);
+	Rx_size =  MBm_Recv_Buff_Data(Rx_buf,pSize,1000);
 	if(Rx_size != pSize)
 	{
 		return MB_TIME_OUT;

@@ -21,6 +21,8 @@
 #include "stc3115_I2C.h" 
 #include "stc3115_Driver.h" 
 #include "main.h"
+
+
 /*
   ===============================================================================
                     ##### How to use this file#####
@@ -33,6 +35,7 @@
 
 /* ---- External I2C R/W interface  ------------------------------------------- */
 extern I2C_HandleTypeDef hi2c1;
+
 /*******************************************************************************
 * Function Name  : I2C_Write
 * Description    : utility function to write several bytes to STC311x registers
@@ -45,12 +48,16 @@ extern I2C_HandleTypeDef hi2c1;
 int I2C_Write(int NumberOfBytes, int RegAddress , unsigned char *TxBuffer)
 {
 	int res=-1;
-    
 	/* TO DO: replace with your application specific I2C multiple-bytes write function ... */
 	if(HAL_I2C_Mem_Write(&hi2c1, STC3115_SLAVE_ADDRESS_7BIT<< 1, RegAddress, I2C_MEMADD_SIZE_8BIT, TxBuffer, NumberOfBytes, 1000) == HAL_OK)
 	{
 		res = 1;
 	}
+//	if(HAL_I2C_Mem_Write_DMA(&hi2c1, STC3115_SLAVE_ADDRESS_7BIT<< 1, RegAddress, I2C_MEMADD_SIZE_8BIT, TxBuffer, NumberOfBytes) == HAL_OK)
+//	{
+//		res = 1;
+//	}
+//	HAL_Delay(100);
 	//res = My_I2C_Write(STC3115_SLAVE_ADDRESS_7BIT,RegAddress,TxBuffer,NumberOfBytes);
 		
 	/*End of modification*/
@@ -78,6 +85,11 @@ int I2C_Read(int NumberOfBytes, int RegAddress , unsigned char *RxBuffer)
 	{
 		res = 1;
 	}
+//	if(HAL_I2C_Mem_Read_DMA(&hi2c1, STC3115_SLAVE_ADDRESS_7BIT<< 1, RegAddress, I2C_MEMADD_SIZE_8BIT, RxBuffer, NumberOfBytes) == HAL_OK)
+//	{
+//		res = 1;
+//	}
+//	HAL_Delay(100);
 	//res = My_I2C_Read(STC3115_SLAVE_ADDRESS_7BIT,RegAddress,RxBuffer,NumberOfBytes);
 
 	/*End of modification*/

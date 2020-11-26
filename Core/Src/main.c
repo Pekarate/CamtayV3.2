@@ -74,6 +74,7 @@ DMA_HandleTypeDef hdma_usart2_rx;
 osThreadId MainfunctionHandle;
 osThreadId io_handleHandle;
 osThreadId STC3115_handleHandle;
+osThreadId Uc20_TaskHandle;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -94,6 +95,7 @@ static void MX_USART3_UART_Init(void);
 void MainfunctionTask(void const * argument);
 void io_handle_cb(void const * argument);
 void STC3115_handle_cb(void const * argument);
+void Start_Uc20(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -367,12 +369,16 @@ int main(void)
   MainfunctionHandle = osThreadCreate(osThread(Mainfunction), NULL);
 
   /* definition and creation of io_handle */
-  osThreadDef(io_handle, io_handle_cb, osPriorityIdle, 0, 4096);
+  osThreadDef(io_handle, io_handle_cb, osPriorityIdle, 0, 1024);
   io_handleHandle = osThreadCreate(osThread(io_handle), NULL);
 
   /* definition and creation of STC3115_handle */
-  osThreadDef(STC3115_handle, STC3115_handle_cb, osPriorityIdle, 0, 4096);
+  osThreadDef(STC3115_handle, STC3115_handle_cb, osPriorityNormal, 0, 2048);
   STC3115_handleHandle = osThreadCreate(osThread(STC3115_handle), NULL);
+
+  /* definition and creation of Uc20_Task */
+  osThreadDef(Uc20_Task, Start_Uc20, osPriorityNormal, 0, 2048);
+  Uc20_TaskHandle = osThreadCreate(osThread(Uc20_Task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -951,6 +957,24 @@ __weak void STC3115_handle_cb(void const * argument)
     osDelay(1);
   }
   /* USER CODE END STC3115_handle_cb */
+}
+
+/* USER CODE BEGIN Header_Start_Uc20 */
+/**
+* @brief Function implementing the Uc20_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Start_Uc20 */
+__weak void Start_Uc20(void const * argument)
+{
+  /* USER CODE BEGIN Start_Uc20 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Start_Uc20 */
 }
 
 /**

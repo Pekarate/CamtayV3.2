@@ -12,6 +12,10 @@
 #include  "App_Sensor.h"
 #include "User_define.h"
 #include "App_Gpio.h"
+#include "AT_Command_driver.h"
+
+extern UART_HandleTypeDef huart1;
+
 
 
 char Sys_config[1024] = "{\"Sys_Setting\":{\"Sensor_index\":1,\"language_index\":1},\"Systeminfo\":{\"Config_title\":[\"Cài đặt\",\"Setting\"],\"language_config\":[\"Ngôn ngữ\",\"Language\"],\"save_ok\":[\"Lưu thành công\",\"Save data successful\"],\"save_fail\":[\"Lưu thành thất bại\",\"Failed to save data\"],\"language_title\":[\"Chọn ngôn ngữ\",\"Language select\"]},\"info\":[{\"Addr\":4,\"SSname\":[\"Đo mặn\",\"Saility\"],\"para\":[{\"Reg\":30007,\"Regname\":[\"Độ mặn\",\"Salinity\"],\"Unit\":[\"ppt\",\"ppt\"],\"base\":100}]}]}";
@@ -33,6 +37,9 @@ uint32_t Battery_Gettime = 0;
 uint32_t Battery_Updatetime = 0;
 uint32_t Sensor_Updatetime = 0;
 uint32_t Sensor_Scan_Time = 0;
+int8_t Sensor_Scan_res = -1;
+uint8_t Sensor_request_update = 1;
+
 
 uint8_t Sensor_index = 0;
 
@@ -115,23 +122,40 @@ uint32_t Battery_Display = 0;
 
 
 		 		}
-		 		if(HAL_GetTick()> Sensor_Updatetime)
+		 		if(Sensor_request_update)
 		 		{
 					  if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 10 ) == pdTRUE )
 					  {
-							 Sensor_Updatetime =HAL_GetTick() +500;
+						  if(Sensor_Scan_res>= 0)
+						  {
 							 Lv_Sensor_Data_set((float)Sensor[Sensor_index].Datax[0].Data/Sensor[Sensor_index].Datax[0].base);
-							 if(Update_Name)
-							 {
+//							 if(Update_Name)
+//							 {
 								 Lv_Sensor_Name_set(Sensor[Sensor_index].Name);
 								 Update_Name = 0;
-							 }
-							 if(Update_Unit)
-							 {
+//							 }
+//							 if(Update_Unit)
+//							 {
 								 Lv_Sensor_Unit_set(Sensor[Sensor_index].Datax[0].Unit);
 								 Update_Unit= 0;
-							 }
+//							 }
+						  }
+						  else
+						  {
+							 Lv_Sensor_Data_set(0.0f);
+//							 if(Update_Name)
+//							 {
+								 Lv_Sensor_Name_set("Scan...");
+								 Update_Name = 0;
+//							 }
+//							 if(Update_Unit)
+//							 {
+								 Lv_Sensor_Unit_set("");
+								 Update_Unit= 0;
+//							 }
+						  }
 							 xSemaphoreGive( xSemaphore_Sensordata );
+							 Sensor_request_update = 0;
 					  }
 
 		 		}
@@ -146,6 +170,7 @@ uint32_t Battery_Display = 0;
 
  void io_handle_cb(void const * argument){
 	 for (;;) {
+
 		  if(SET_PWR_CTRL_GET_STATE())
 		  {
 			  if( Pwr_State == BTN_RELEASE)
@@ -194,8 +219,11 @@ uint8_t UID[16];
 #define FLASH_SIZE (*(volatile uint32_t *)0x1FFF7A22)
 uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
  void STC3115_handle_cb(void const * argument){
-
-	 uint32_t Bat_cnt = 0;
+//	 for(;;)
+//	 {
+//		 osDelay(1);
+//	 }
+//	 uint32_t Bat_cnt = 0;
 	 UniqueID0 = UID0;
 	 UniqueID1 = UID1;
 	 UniqueID2 = UID2;
@@ -221,9 +249,9 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 {
 			 if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 10 ) == pdTRUE )
 			 {
-				 if(Sensor_Scan(Sensor_index,0)>-1)
+				 if((Sensor_Scan_res = Sensor_Scan(Sensor_index,0))>-1)
 				 {
-					 Sensor_Scan_Time = HAL_GetTick() +500;
+					 Sensor_Scan_Time = HAL_GetTick() +300;
 
 				 }
 				 else
@@ -235,10 +263,50 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 	//				 Lv_Sensor_Name_set("Scan...");
 	//				 Lv_Sensor_Unit_set("");
 				 }
+				 Sensor_request_update = 1;
 				 xSemaphoreGive( xSemaphore_Sensordata );
 			 }
 		 }
 
 		 osDelay(1); // 5ms
 	}
+ }
+ uint32_t at_ok =0,at_fail = 0;
+ uint8_t tmpp[100];
+ void Start_Uc20(void const * argument){
+	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
+	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
+	 osDelay(100);
+	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
+	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
+	 HAL_GPIO_WritePin(PCIE_WLAN_DIS_GPIO_Port, PCIE_WLAN_DIS_Pin, GPIO_PIN_SET);
+
+//	 HAL_UART_Transmit(&huart1, (uint8_t *)"AT\r\n", 4, 1000);
+//	 HAL_UART_Receive_DMA(&huart1, tmpp, 100);
+//	 osDelay(3000);
+//	 HAL_UART_DMAStop(&huart1);
+//	 HAL_UART_Transmit(&huart1, (uint8_t *)"AT\r\n", 4, 1000);
+//	 HAL_UART_Receive_DMA(&huart1, tmpp+15, 100);
+//	 osDelay(3000);
+//	 HAL_UART_DMAStop(&huart1);
+//	 HAL_UART_Transmit(&huart1, (uint8_t *)"AT\r\n", 4, 1000);
+//	 HAL_UART_Receive_DMA(&huart1, tmpp+30, 100);
+//	 osDelay(3000);
+//	 HAL_UART_DMAStop(&huart1);
+	 osDelay(10000);
+	 At_init();
+	 At_Command((char*)"ATE0\r\n", (char*)"OK\r\n", 2000);
+	 for(;;)
+	 {
+		 if(At_Command((char*)"AT+CPIN?\r\n", (char*)"OK\r\n", 2000)>=0)
+		 {
+			 at_ok ++;
+
+		 }
+		 else
+		 {
+			 at_fail++;
+		 }
+		 osDelay(100);
+	 }
  }

@@ -85,8 +85,8 @@ all: main-build
 main-build: Version3.1.elf secondary-outputs
 
 # Tool invocations
-Version3.1.elf: $(OBJS) $(USER_OBJS) D:\ARM\STM32F4\Bo_Cam_Tay\CamtayV3.2\STM32F407VGTX_FLASH.ld
-	arm-none-eabi-gcc -o "Version3.1.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\ARM\STM32F4\Bo_Cam_Tay\CamtayV3.2\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Version3.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Version3.1.elf: $(OBJS) $(USER_OBJS) D:\ARM\Bocamtay_V3\ver3.1\STM32F407VGTX_FLASH.ld
+	arm-none-eabi-gcc -o "Version3.1.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\ARM\Bocamtay_V3\ver3.1\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Version3.1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
