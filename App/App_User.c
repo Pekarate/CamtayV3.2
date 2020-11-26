@@ -192,7 +192,6 @@ uint8_t UID[16];
 #define UID1 (*(volatile uint32_t *)0x1FFF7A14)
 #define UID2 (*(volatile uint32_t *)0x1FFF7A18)
 #define FLASH_SIZE (*(volatile uint32_t *)0x1FFF7A22)
-
 uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
  void STC3115_handle_cb(void const * argument){
 
