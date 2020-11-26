@@ -23,7 +23,7 @@ int At_Command(char *cmd ,char *RSP1,uint32_t timeout)
 	uint32_t Tol = 0,recv;
 	AT_Send_buf((uint8_t *)cmd, strlen(cmd), timeout);
 	AT_Free_Rxbuffer();
-	memset(AT_Buff,0,1024);
+	memset(AT_Buff,0,100);
 	while(Get_Millis() < Time_t)
 	{
 		recv = AT_Recv_Rx_buf((uint8_t *)AT_Buff+Tol , 1024);
@@ -38,4 +38,7 @@ int At_Command(char *cmd ,char *RSP1,uint32_t timeout)
 	}
 	return -1;
 }
+
+
+
 

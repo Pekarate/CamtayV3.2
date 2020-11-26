@@ -275,6 +275,8 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
  }
  uint32_t at_ok =0,at_fail = 0;
  uint8_t tmpp[100];
+ uint8_t Simready = 0;
+ uint8_t Network_on = 0;
  void Start_Uc20(void const * argument){
 	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
@@ -297,10 +299,22 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 //	 HAL_UART_DMAStop(&huart1);
 	 osDelay(10000);
 	 At_init();
+	 while(At_Command((char*)"AT\r\n", (char*)"OK\r\n", 2000)<0)
+	 {
+		 osDelay(1000);
+	 }
 	 At_Command((char*)"ATE0\r\n", (char*)"OK\r\n", 2000);
+	 if(At_Command((char*)"AT+CPIN?\r\n", (char*)"READY", 2000)>=0)
+	 {
+		 Simready = 1;
+	 }
+	 if(At_Command((char *)"AT+CREG=1",(char *)"OK\r\n",5000)> 0)
+	 {
+		 Network_on = 1;
+	 }
 	 for(;;)
 	 {
-		 if(At_Command((char*)"AT+CPIN?\r\n", (char*)"OK\r\n", 2000)>=0)
+		 if(At_Command((char*)"AT+CSQ\r\n", (char*)"OK\r\n", 2000)>=0)
 		 {
 			 at_ok ++;
 
@@ -309,6 +323,7 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 {
 			 at_fail++;
 		 }
+		 At_Command((char*)"AT+CPIN?\r\n", (char*)"READY", 2000);
 		 osDelay(100);
 	 }
  }

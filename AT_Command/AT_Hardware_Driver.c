@@ -141,6 +141,24 @@ int AT_Recv_buf(uint8_t *data,uint16_t len,uint8_t timeout)
 {
 	return -1;
 }
+int AT_Recv_until(uint8_t *data,char* end,uint8_t timeout)
+{
+	uint32_t Time_t = Get_Millis()+ timeout;
+	uint16_t tol = 0,recv = 0;
+	while(Get_Millis() < Time_t)
+	{
+		recv = AT_Recv_Rx_buf((uint8_t *)data+ tol , 1024);
+		if(recv > 0 )
+		{
+			tol+= recv;
+			end[tol] = 0;
+			if(strstr((char *)data,end))
+				return timeout - (Time_t -Get_Millis() );
+		}
+		AT_delay(1);
+	}
+	return 0;
+}
 
 
 

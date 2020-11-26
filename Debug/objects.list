@@ -1,3 +1,4 @@
+"AT_Command/AT_Comand.o"
 "AT_Command/AT_Command_driver.o"
 "AT_Command/AT_Hardware_Driver.o"
 "App/App_Callback.o"
