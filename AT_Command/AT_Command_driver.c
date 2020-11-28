@@ -7,9 +7,10 @@
 
 #include "AT_Command_driver.h"
 #include "AT_Hardware_Driver.h"
-
 #include "stdint.h"
 #include "string.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 char AT_Buff[1024];
 int At_init(void)
@@ -39,6 +40,60 @@ int At_Command(char *cmd ,char *RSP1,uint32_t timeout)
 	return -1;
 }
 
+int AT_Getstring_index(char *des,char *scr,char *key,int index)
+{
+   char *p;
+   if(!(p = strstr(scr,key))) //tim kiem key
+      return -1;
+   uint16_t len = strlen(p);
+   char *tmp = (char *)malloc(len);
+   len = sprintf(tmp,",%s",p+2);
+   uint8_t cnt=0;
+   uint16_t i=0;
+   //printf("%s\n",tmp);
+   for(i=0;i<len;i++)
+   {
+      if(tmp[i] == ',')
+      {
+         if(cnt == index)
+            break;
+         cnt++;
+      }
+   }
+   char *start= (tmp+i+1);
+   if(i != len)
+   {
+      //printf("find match\n");
+      uint8_t tot;
+      if(!(p = strstr(start,",")))
+      {
+         if(!(p = strstr(start,"\r")))
+         {
+            tot = strlen(start);
+         }
+         else tot = strlen(start)-strlen(p);
+      }
+      else
+        tot = strlen(start)-strlen(p);
+      memcpy(des,start,tot);
+      des[tot]=0;
+      free(tmp);
+      return 1;
+   }
+   free(tmp);
+   printf("not find index\n" );
+   return -3;
+}
+int AT_Getint_index(int *res,char *src,char *key,int index)
+{
+   char des[20];
+   if(AT_Getstring_index(des,src,key,index)<0)
+   {
+      return-1;
+   }
+   *res = atoi(des);
+   return *res;
+}
 
 
 

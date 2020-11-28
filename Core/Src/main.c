@@ -70,6 +70,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
+DMA_HandleTypeDef hdma_usart3_rx;
 
 osThreadId MainfunctionHandle;
 osThreadId io_handleHandle;
@@ -181,6 +182,16 @@ uint8_t code_pic2[]=
 uint8_t Rxdata[100];
 
 
+int _write(int file, char *ptr, int len)
+{
+	for(int i =0;i<len;i++)
+	{
+		ITM_SendChar(*ptr);
+		ptr++;
+	}
+	return len;
+}
+
 uint32_t st = 0;
 float val = 0.01f;
 /* USER CODE END 0 */
@@ -226,7 +237,22 @@ int main(void)
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
   SET_PWR_CTRL_GET_STATE();
-//  HAL_GPIO_WritePin(LD_GPIO_Port, LD_Pin, GPIO_PIN_RESET);
+
+
+  HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_RESET);
+  HAL_Delay(10);
+  HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_SET);
+  HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
+////  HAL_Delay(2000);
+//  while(1)
+//  {
+//	  printf("hello world\n");
+////	  HAL_UART_Transmit(&huart3, (uint8_t *)"AT\r\n",4, 1000);
+////	  HAL_Delay(2000);
+//  }
+
+
+
 //  for(uint8_t i=0;i<10;i++)
 //  {
 //	  //HAL_GPIO_TogglePin(LD_GPIO_Port, LD_Pin);
@@ -818,6 +844,9 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
   /* DMA1_Stream5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
@@ -867,7 +896,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, RS485_DE_Pin|V_BOOT_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LD_Pin|PCIE_RST_Pin|PCIE_WLAN_DIS_Pin|STC3115_RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LD_Pin|V_BLE_E_Pin|PCIE_RST_Pin|PCIE_WLAN_DIS_Pin
+                          |STC3115_RESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PWR_OFF_Pin */
   GPIO_InitStruct.Pin = PWR_OFF_Pin;
@@ -890,8 +920,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LD_Pin PCIE_RST_Pin PCIE_WLAN_DIS_Pin STC3115_RESET_Pin */
-  GPIO_InitStruct.Pin = LD_Pin|PCIE_RST_Pin|PCIE_WLAN_DIS_Pin|STC3115_RESET_Pin;
+  /*Configure GPIO pins : LD_Pin V_BLE_E_Pin PCIE_RST_Pin PCIE_WLAN_DIS_Pin
+                           STC3115_RESET_Pin */
+  GPIO_InitStruct.Pin = LD_Pin|V_BLE_E_Pin|PCIE_RST_Pin|PCIE_WLAN_DIS_Pin
+                          |STC3115_RESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

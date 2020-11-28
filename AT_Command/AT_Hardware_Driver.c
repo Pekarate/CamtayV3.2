@@ -55,7 +55,7 @@ void AT_delay(uint32_t dl)
 	osDelay(dl);
 }
 
-int AT_Send_buf(uint8_t *data,uint16_t len,uint8_t timeout)
+int AT_Send_buf(uint8_t *data,uint16_t len,uint32_t timeout)
 {
 	AT_Tx_done = 0;
 	if(HAL_UART_Transmit_DMA(&AT_PORT, data, len) != HAL_OK)
@@ -137,11 +137,11 @@ int AT_Recv_Rx_buf(uint8_t *des,uint16_t size) // return data in rx bufer
 	return Rxsize;
 }
 
-int AT_Recv_buf(uint8_t *data,uint16_t len,uint8_t timeout)
+int AT_Recv_buf(uint8_t *data,uint16_t len,uint32_t timeout)
 {
 	return -1;
 }
-int AT_Recv_until(uint8_t *data,char* end,uint8_t timeout)
+int AT_Recv_until(uint8_t *data,char* end,uint32_t timeout)
 {
 	uint32_t Time_t = Get_Millis()+ timeout;
 	uint16_t tol = 0,recv = 0;
@@ -152,7 +152,7 @@ int AT_Recv_until(uint8_t *data,char* end,uint8_t timeout)
 		{
 			tol+= recv;
 			end[tol] = 0;
-			if(strstr((char *)data,end))
+			if(strstr((char *)data+1,end))
 				return timeout - (Time_t -Get_Millis() );
 		}
 		AT_delay(1);

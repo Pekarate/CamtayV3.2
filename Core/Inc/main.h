@@ -86,6 +86,8 @@ void Error_Handler(void);
 #define BLE_TX_GPIO_Port GPIOB
 #define LD_Pin GPIO_PIN_12
 #define LD_GPIO_Port GPIOB
+#define V_BLE_E_Pin GPIO_PIN_13
+#define V_BLE_E_GPIO_Port GPIOB
 #define PCIE_RX_Pin GPIO_PIN_9
 #define PCIE_RX_GPIO_Port GPIOA
 #define PCIE_TX_Pin GPIO_PIN_10

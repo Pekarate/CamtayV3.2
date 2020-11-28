@@ -13,10 +13,17 @@
 #include "User_define.h"
 #include "App_Gpio.h"
 #include "AT_Command_driver.h"
+#include "AT_Uc20_http.h"
+#include "AT_Gps.h"
+
 
 extern UART_HandleTypeDef huart1;
 
-
+typedef struct
+{
+   char ucMessageID;
+   char ucData[ 20 ];
+}xMessage;
 
 char Sys_config[1024] = "{\"Sys_Setting\":{\"Sensor_index\":1,\"language_index\":1},\"Systeminfo\":{\"Config_title\":[\"Cài đặt\",\"Setting\"],\"language_config\":[\"Ngôn ngữ\",\"Language\"],\"save_ok\":[\"Lưu thành công\",\"Save data successful\"],\"save_fail\":[\"Lưu thành thất bại\",\"Failed to save data\"],\"language_title\":[\"Chọn ngôn ngữ\",\"Language select\"]},\"info\":[{\"Addr\":4,\"SSname\":[\"Đo mặn\",\"Saility\"],\"para\":[{\"Reg\":30007,\"Regname\":[\"Độ mặn\",\"Salinity\"],\"Unit\":[\"ppt\",\"ppt\"],\"base\":100}]}]}";
 char Sensor_info[512];// ="[{\"Addr\":4,\"SSname\":[\"Đo mặn\",\"Saility\"],\"para\":[{\"Reg\":30007,\"Regname\":[\"Độ mặn\",\"Salinity\"],\"Unit\":[\"ppt\",\"ppt\"],\"base\":100}]},{\"Addr\":5,\"SSname\":[\"Đo PH\",\"PH\"],\"para\":[{\"Reg\":30001,\"Regname\":[\"PH\",\"PH\"],\"Unit\":[\"\",\"\"],\"base\":100}]}]";
@@ -34,12 +41,12 @@ STC3115_BatteryData_TypeDef STC3115_BatteryData;
 
 uint32_t Ramfree;
 uint32_t Battery_Gettime = 0;
-uint32_t Battery_Updatetime = 0;
+
 uint32_t Sensor_Updatetime = 0;
 uint32_t Sensor_Scan_Time = 0;
 int8_t Sensor_Scan_res = -1;
 uint8_t Sensor_request_update = 1;
-
+uint32_t Battery_Updatetime = 0;
 
 uint8_t Sensor_index = 0;
 
@@ -111,21 +118,12 @@ uint32_t Battery_Display = 0;
 						Battery_Updatetime =HAL_GetTick()+1000;
 						xSemaphoreGive( xSemaphore_battery );
 		 			}
-//		 			  if( xSemaphoreTake( xSemaphore, ( TickType_t ) 10 ) == pdTRUE )
-//		 			  {
-
-//		 			  }
-//		 			  else
-//		 			  {
-//		 				  while(1);
-//		 			  }
-
 
 		 		}
-		 		if(Sensor_request_update)
-		 		{
-					  if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 10 ) == pdTRUE )
-					  {
+				  if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 10 ) == pdTRUE )
+				  {
+					if(Sensor_request_update)
+					{
 						  if(Sensor_Scan_res>= 0)
 						  {
 							 Lv_Sensor_Data_set((float)Sensor[Sensor_index].Datax[0].Data/Sensor[Sensor_index].Datax[0].base);
@@ -162,8 +160,6 @@ uint32_t Battery_Display = 0;
 		 		osDelay(1); // 5ms
 	}
  }
-
-
  Btn_state_t Pwr_State = BTN_RELEASE;
  uint32_t Pwr_Time = 0;
 uint32_t time_tt1,time_tt2 = 0;
@@ -277,6 +273,8 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
  uint8_t tmpp[100];
  uint8_t Simready = 0;
  uint8_t Network_on = 0;
+ char lat[20] = {0};
+ char Longs[20] = {0};
  void Start_Uc20(void const * argument){
 	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
@@ -308,9 +306,40 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 	 {
 		 Simready = 1;
 	 }
-	 if(At_Command((char *)"AT+CREG=1",(char *)"OK\r\n",5000)> 0)
+	 else
+	 {
+
+	 }
+	 AT_Gps_On();
+	 for(;;)
+	 {
+		 if(At_Command((char*)"AT+CSQ\r\n", (char*)"OK\r\n", 2000)>=0)
+		 {
+			 at_ok ++;
+
+		 }
+		 else
+		 {
+			 at_fail++;
+		 }
+		 AT_Gps_Getlocation(lat, Longs);
+		 osDelay(500);
+	 }
+	 if(At_Command((char *)"AT+CREG=1\r\n",(char *)"OK\r\n",5000)> 0)
 	 {
 		 Network_on = 1;
+	 }
+	 osDelay(1000);
+	 AT_Http_Init();
+	 char *url = "http://apihandsetmanager.namlongtekgroup.com/api/station/AddStationData";
+	 char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"123123\",\"Extention2\":\"12312\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
+	 if(AT_Http_set_url(url)>0)
+	 {
+		 AT_Http_post(dt);
+	 }
+	 for(;;)
+	 {
+		 osDelay(100);
 	 }
 	 for(;;)
 	 {
@@ -323,7 +352,7 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 {
 			 at_fail++;
 		 }
-		 At_Command((char*)"AT+CPIN?\r\n", (char*)"READY", 2000);
+		 //At_Command((char*)"AT+CPIN?\r\n", (char*)"READY", 2000);
 		 osDelay(100);
 	 }
  }
