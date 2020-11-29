@@ -30,6 +30,7 @@
 #include "stc3115_Driver.h"
 #include "lvgl.h"
 #include "lv_port_disp_template.h"
+#include "App_Gpio.h"
 //#include "lvgl.h"
 /* USER CODE END Includes */
 
@@ -184,11 +185,12 @@ uint8_t Rxdata[100];
 
 int _write(int file, char *ptr, int len)
 {
-	for(int i =0;i<len;i++)
-	{
-		ITM_SendChar(*ptr);
-		ptr++;
-	}
+	HAL_UART_Transmit(&huart3, (uint8_t *)ptr,len, 3000);
+//	for(int i =0;i<len;i++)
+//	{
+//		ITM_SendChar(*ptr);
+//		ptr++;
+//	}
 	return len;
 }
 
@@ -243,10 +245,15 @@ int main(void)
   HAL_Delay(10);
   HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_SET);
   HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
-////  HAL_Delay(2000);
+//  HAL_Delay(2000);
+  uint8_t cnt = 0;
+  uint8_t tranbuf[100];
 //  while(1)
 //  {
-//	  printf("hello world\n");
+//	  int s = sprintf(tranbuf,"hello world: %d\n",cnt ++);
+////	  HAL_UART_Transmit(&huart3, tranbuf, s, 1000);
+////	  HAL_Delay(1000);
+////	  printf("hello world\n");
 ////	  HAL_UART_Transmit(&huart3, (uint8_t *)"AT\r\n",4, 1000);
 ////	  HAL_Delay(2000);
 //  }

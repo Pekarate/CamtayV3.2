@@ -1,4 +1,4 @@
 AT_Uc20_http.c:16:5:AT_Http_Init	8	static
 AT_Uc20_http.c:43:5:AT_Http_set_url	24	static
-AT_Uc20_http.c:70:5:AT_Http_post	1064	static
-AT_Uc20_http.c:93:5:AT_Http_get_data	16	static
+AT_Uc20_http.c:70:5:AT_Http_post	2088	static
+AT_Uc20_http.c:101:5:AT_Http_get_data	16	static

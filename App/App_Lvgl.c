@@ -23,6 +23,8 @@ LV_FONT_DECLARE(Arial_12);
 LV_FONT_DECLARE(Arial_10);
 LV_FONT_DECLARE(Arial_8);
 
+LV_IMG_DECLARE(Imagetest);
+LV_IMG_DECLARE(Location);
 
 extern uint8_t Is_mounted;
 
@@ -40,6 +42,7 @@ char Lb1_dt[10];
 
 
 lv_style_t text_style_num_lage,text_style_nomal,text_style_smal,text_style_very_smal;
+
 void Sys_Update_Data(float val)
 {
 	if(val<10)
@@ -55,8 +58,8 @@ void Sys_Update_Data(float val)
 	lv_label_set_text(Lb_Data, Lb1_dt);
 	lv_obj_set_pos(Lb_Data, 127- lv_obj_get_width(Lb_Data), 63 - lv_obj_get_height(Lb_Data));
 }
-LV_IMG_DECLARE(Google);
 
+lv_obj_t * LvSimready,*Gsm_on;
 lv_obj_t * Battery;
 lv_obj_t * Img_Sd;
 lv_obj_t * Gps_on;
@@ -128,6 +131,35 @@ void Lv_Battery_set(int Presen,int change)
 			}
 		}
 }
+void lv_Gps_on()
+{
+	lv_obj_set_hidden(Gps_on, false);
+}
+
+void lv_Gps_off()
+{
+	lv_obj_set_hidden(Gps_on, true);
+}
+void lv_Sim_ready()
+{
+		lv_obj_set_hidden(LvSimready, false);
+}
+
+void lv_Sim_not_ready()
+{
+		lv_obj_set_hidden(LvSimready, true);
+}
+
+void lv_Gsm_on()
+{
+	lv_obj_set_hidden(Gsm_on, false);
+}
+
+void lv_Gsm_off()
+{
+	lv_obj_set_hidden(Gsm_on, true);
+}
+
 static void lv_Battery_setting(void)
 {
 //    lv_obj_t * img1 = lv_img_create(Main_Screen, NULL);
@@ -145,7 +177,17 @@ static void lv_Battery_setting(void)
     Gps_on = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(Gps_on, LV_SYMBOL_GPS);
     lv_obj_set_pos(Gps_on, 64, 0);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+    lv_Gps_off();
 
+    LvSimready = lv_img_create(Main_Screen, NULL);
+    lv_img_set_src(LvSimready, LV_SYMBOL_BLUETOOTH);
+    lv_obj_set_pos(LvSimready, 40, 0);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+    lv_Sim_not_ready();
+
+    Gsm_on = lv_img_create(Main_Screen, NULL);
+    lv_img_set_src(Gsm_on, LV_SYMBOL_LOOP);
+   	lv_obj_set_pos(Gsm_on,0, 0);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+   	lv_Gsm_off();
 
 //    Img_Warnig = lv_img_create(Main_Screen, NULL);
 //	lv_img_set_src(Img_Warnig, LV_SYMBOL_SD_CARD);
@@ -272,28 +314,28 @@ void lv_obj_init(void) {
 
 
     /*Create a label on the page*/
-    Lb_line1 = lv_label_create(Debug_Screen, NULL);
-    Lb_line2 = lv_label_create(Debug_Screen, NULL);
-    Lb_line3 =lv_label_create(Debug_Screen, NULL);
-    Lb_line4 =lv_label_create(Debug_Screen, NULL);
-    Lb_line5 = lv_label_create(Debug_Screen, NULL);
-    lv_obj_add_style(Lb_line1,LV_OBJ_PART_MAIN,&text_style_very_smal);
-    lv_obj_add_style(Lb_line2,LV_OBJ_PART_MAIN,&text_style_very_smal);
-    lv_obj_add_style(Lb_line3,LV_OBJ_PART_MAIN,&text_style_very_smal);
-    lv_obj_add_style(Lb_line4,LV_OBJ_PART_MAIN,&text_style_very_smal);
-    lv_obj_add_style(Lb_line5,LV_OBJ_PART_MAIN,&text_style_very_smal);
-    lv_obj_set_pos(Lb_line1, 0, 0);
-    lv_obj_set_pos(Lb_line2, 0, 12);
-    lv_obj_set_pos(Lb_line3, 0, 24);
-    lv_obj_set_pos(Lb_line4, 0, 36);
-    lv_obj_set_pos(Lb_line5, 0, 48);
-    lv_label_set_text(Lb_line1, "");
-    lv_label_set_text(Lb_line2,	"");
-    lv_label_set_text(Lb_line3,	"");
-    lv_label_set_text(Lb_line4,	"");
-    lv_label_set_text(Lb_line5,	"");
+//    Lb_line1 = lv_label_create(Debug_Screen, NULL);
+//    Lb_line2 = lv_label_create(Debug_Screen, NULL);
+//    Lb_line3 =lv_label_create(Debug_Screen, NULL);
+//    Lb_line4 =lv_label_create(Debug_Screen, NULL);
+//    Lb_line5 = lv_label_create(Debug_Screen, NULL);
+//    lv_obj_add_style(Lb_line1,LV_OBJ_PART_MAIN,&text_style_very_smal);
+//    lv_obj_add_style(Lb_line2,LV_OBJ_PART_MAIN,&text_style_very_smal);
+//    lv_obj_add_style(Lb_line3,LV_OBJ_PART_MAIN,&text_style_very_smal);
+//    lv_obj_add_style(Lb_line4,LV_OBJ_PART_MAIN,&text_style_very_smal);
+//    lv_obj_add_style(Lb_line5,LV_OBJ_PART_MAIN,&text_style_very_smal);
+//    lv_obj_set_pos(Lb_line1, 0, 0);
+//    lv_obj_set_pos(Lb_line2, 0, 12);
+//    lv_obj_set_pos(Lb_line3, 0, 24);
+//    lv_obj_set_pos(Lb_line4, 0, 36);
+//    lv_obj_set_pos(Lb_line5, 0, 48);
+//    lv_label_set_text(Lb_line1, "");
+//    lv_label_set_text(Lb_line2,	"");
+//    lv_label_set_text(Lb_line3,	"");
+//    lv_label_set_text(Lb_line4,	"");
+//    lv_label_set_text(Lb_line5,	"");
 
-   // lv_scr_load(Debug_Screen);
+//    lv_scr_load(Debug_Screen);
 }
 void Lv_Sensor_Data_set(float val)
 {

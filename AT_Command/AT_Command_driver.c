@@ -11,8 +11,12 @@
 #include "string.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "AT_define.h"
 
 char AT_Buff[1024];
+
+
+
 int At_init(void)
 {
 	AT_Hardware_Port_init();
@@ -20,23 +24,42 @@ int At_init(void)
 }
 int At_Command(char *cmd ,char *RSP1,uint32_t timeout)
 {
+	#if AT_DEDUG
+		sprintf(AT_Debug_buf,"[%lu] AT_CMD: %s",Get_Millis(),cmd);
+		AT_Debug_write(AT_Debug_buf);
+	#endif
 	uint32_t Time_t = Get_Millis() + timeout;
-	uint32_t Tol = 0,recv;
-	AT_Send_buf((uint8_t *)cmd, strlen(cmd), timeout);
-	AT_Free_Rxbuffer();
+	uint32_t Tol = 0;
+	if(cmd != NULL)
+		AT_Send_buf((uint8_t *)cmd, strlen(cmd), timeout);
+	//AT_Free_Rxbuffer();
 	memset(AT_Buff,0,100);
-	while(Get_Millis() < Time_t)
+	int s = AT_Get_Data_Avaiable(AT_Buff);
+
+	if(AT_Recv_until(AT_Buff+s, RSP1, timeout))
 	{
-		recv = AT_Recv_Rx_buf((uint8_t *)AT_Buff+Tol , 1024);
-		if(recv > 0 )
-		{
-			Tol+= recv;
-			AT_Buff[Tol] = 0;
-			if(strstr(AT_Buff,RSP1))
-				return timeout - (Time_t -Get_Millis() );
-		}
-		AT_delay(1);
+		#if AT_DEDUG
+			sprintf(AT_Debug_buf,"[%lu] AT_DONE: %lu ms,%s",Get_Millis(),timeout - (Time_t -Get_Millis()),AT_Buff);
+			AT_Debug_write(AT_Debug_buf);
+		#endif
+		return timeout - (Time_t -Get_Millis() );;
 	}
+	#if AT_DEDUG
+			sprintf(AT_Debug_buf,"[%lu] AT_FAIL: %s",Get_Millis(),AT_Buff);
+			AT_Debug_write(AT_Debug_buf);
+	#endif
+//	while(Get_Millis() < Time_t)
+//	{
+//		recv = AT_Recv_Rx_buf((uint8_t *)AT_Buff+Tol , 1024);
+//		if(recv > 0 )
+//		{
+//			Tol+= recv;
+//			AT_Buff[Tol] = 0;
+//			if(strstr(AT_Buff,RSP1))
+//				return timeout - (Time_t -Get_Millis() );
+//		}
+//		AT_delay(1);
+//	}
 	return -1;
 }
 

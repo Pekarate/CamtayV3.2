@@ -69,30 +69,39 @@ char *header2=  	"\r\n"
 
 int AT_Http_post(char *data)
 {
-	char data_tmp[1024];
+	char data_tmp[2048];
 #if CUSTUM_HEADER
-	uint16_t dt_len =  sprintf(data_tmp,"%s%d%s",header1,strlen(data),header2);//strlen(data);
+	uint16_t dt_len =  sprintf(data_tmp,"%s%d%s%s",header1,strlen(data),header2,data);//strlen(data);
 #else
 	uint16_t dt_len =  sprintf(data_tmp,"%s%d%s",header1,strlen(data),header2);//strlen(data);
 #endif
 	sprintf(AT_Buff,"AT+QHTTPPOST=%d,2,60\r\n",dt_len);
 	 if(At_Command(AT_Buff,(char *)"CONNECT\r\n",5000)> 0)
 	 {
-		 if(At_Command(data_tmp,(char *)"OK\r\n",5000)> 0)
+		 AT_Send_buf((uint8_t *)data_tmp, strlen(data_tmp), 2000);
+		 //if(At_Command(data_tmp,(char *)"OK\r\n",5000)> 0)
+		 int s = AT_Get_Data_Avaiable(AT_Buff);
+		 if(AT_Recv_until(AT_Buff+s, "OK\r\n",5000))
 		 {
-			 if(AT_Recv_until((uint8_t *)AT_Buff,(char *)"\r\n" , 60000)>0)
+			AT_Get_Data_Avaiable(AT_Buff);
+			if(AT_Check_Response(AT_Buff, (char *)"POST", 60000)>0)
+//			printf("[%lu] HTTP Send data done\n",Get_Millis());
+			//if(AT_Recv_until(AT_Buff,(char *)"\r\n" , 60000)>0)
+			//if(At_Command(NULL, (char *)"\r\n" , 60000)>0)
 			{
-				 AT_delay(100);
-
+				printf("[%lu] HTTP Read: %d byte: %s\n",Get_Millis(),strlen(AT_Buff),AT_Buff);
 				 return 1;
 			}
 		 }
+		 else
+			 printf("Send data FAIL\n");
 	 }
 	 return -1;
 }
 int AT_Http_get_data(char *des)
 {
 	At_Command((char *)"AT+QHTTPREAD=80\r\n",(char *)"+QHTTPREAD",5000);
+	return  1;
 }
 
 

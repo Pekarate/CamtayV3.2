@@ -104,10 +104,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_core/lv_style.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_label.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_img.h \
@@ -145,9 +145,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../lvgl/src/lv_widgets/../lv_font/lv_symbol_def.h \
  ../lvgl/src/lv_widgets/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h \
- d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_img_decoder.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_rect.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_label.h \
@@ -188,7 +188,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../lvgl/src/lv_widgets/../lv_widgets/lv_textarea.h \
  ../lvgl/src/lv_draw/lv_img_cache.h ../lvgl/src/lv_draw/lv_img_decoder.h \
  ../lvgl/src/lv_api_map.h ../lvgl/src/../lvgl.h \
- ../lvgl/porting/lv_port_disp_template.h
+ ../lvgl/porting/lv_port_disp_template.h ../App/App_Gpio.h \
+ ../App/User_define.h
 
 ../Core/Inc/main.h:
 
@@ -434,13 +435,13 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h:
 
@@ -532,11 +533,11 @@ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_draw.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_conf_internal.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_core\lv_style.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h:
 
-d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_img_decoder.h:
 
@@ -653,3 +654,7 @@ d:\arm\bocamtay_v3\ver3.1\lvgl\src\lv_misc\lv_txt.h:
 ../lvgl/src/../lvgl.h:
 
 ../lvgl/porting/lv_port_disp_template.h:
+
+../App/App_Gpio.h:
+
+../App/User_define.h:

@@ -23,7 +23,7 @@ int AT_Gps_On(void)
 
 int AT_Gps_Getlocation(char *lat,char *longs)
 {
-	 if(At_Command((char*)"AT+QGPSLOC=2\r\n", (char*)"OK\r\n", 2000))
+	 if(At_Command((char*)"AT+QGPSLOC=2\r\n", (char*)"OK\r\n", 2000)>0)
 	 {
 		 AT_Getstring_index(lat, AT_Buff, (char *)": ", 1);
 		 AT_Getstring_index(longs, AT_Buff, (char *)": ", 2);

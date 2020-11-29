@@ -65,7 +65,7 @@ AT_Command/AT_Hardware_Driver.o: ../AT_Command/AT_Hardware_Driver.c \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../FATFS/Target/sd_diskio.h \
  ../USB_DEVICE/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- ../USB_DEVICE/Target/usbd_conf.h
+ ../USB_DEVICE/Target/usbd_conf.h ../AT_Command/AT_define.h
 
 ../Core/Inc/main.h:
 
@@ -208,3 +208,5 @@ AT_Command/AT_Hardware_Driver.o: ../AT_Command/AT_Hardware_Driver.c \
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
 
 ../USB_DEVICE/Target/usbd_conf.h:
+
+../AT_Command/AT_define.h:

@@ -11,11 +11,21 @@
 #include "fatfs.h"
 #include "usb_device.h"
 #include "string.h"
-
+#include "AT_define.h"
 
 extern UART_HandleTypeDef huart1;
 #define AT_PORT huart1
 #define AT_RX_SIZE 1024
+
+
+#if AT_DEDUG
+char AT_Debug_buf[1024];
+void AT_Debug_write(char *ptr)
+{
+	printf(ptr);
+}
+#endif
+
 
 __IO uint16_t AT_Rx_done = 0;
 __IO uint16_t AT_Tx_done = 0;
@@ -57,6 +67,7 @@ void AT_delay(uint32_t dl)
 
 int AT_Send_buf(uint8_t *data,uint16_t len,uint32_t timeout)
 {
+
 	AT_Tx_done = 0;
 	if(HAL_UART_Transmit_DMA(&AT_PORT, data, len) != HAL_OK)
 	{
@@ -84,12 +95,7 @@ int AT_Recv_1byte(uint16_t *len)
 //	}
 	return -1;
 }
-int AT_Free_Rxbuffer(void){
-	Rx_index_next = AT_RX_SIZE - AT_PORT.hdmarx->Instance->NDTR; // NDTR counter down
-	Rx_index_reg = Rx_index_next; // reset contro
-	Rx_overload = 0;
-	return 1;
-}
+
 
 int AT_Recv_Rx_buf(uint8_t *des,uint16_t size) // return data in rx bufer
 {
@@ -119,7 +125,6 @@ int AT_Recv_Rx_buf(uint8_t *des,uint16_t size) // return data in rx bufer
 
 			Rx_index_reg = Rx_index_next;
 			Rx_overload = 0;
-
 		}
 	}
 	else
@@ -136,12 +141,60 @@ int AT_Recv_Rx_buf(uint8_t *des,uint16_t size) // return data in rx bufer
 	}
 	return Rxsize;
 }
+int AT_Free_Rxbuffer(void){
+	uint8_t tmp[1024];
+	int s= AT_Recv_Rx_buf((uint8_t *)tmp,1024);
+#if AT_DEDUG
+	if(s > 0)
+	{
+		AT_Debug_buf[s] = 0;
+		sprintf(AT_Debug_buf,"[%lu] AT_F %d: %s\n",Get_Millis(),s,(char *)tmp);
+		AT_Debug_write(AT_Debug_buf);
+	}
+#endif
+//	Rx_index_next = AT_RX_SIZE - AT_PORT.hdmarx->Instance->NDTR; // NDTR counter down
+//	Rx_index_reg = Rx_index_next; // reset contro
+//	Rx_overload = 0;
+	return 1;
+}
+
+int AT_Get_Data_Avaiable(char *Des){
+	int s= AT_Recv_Rx_buf((uint8_t *)Des,1024);
+	return s;
+}
 
 int AT_Recv_buf(uint8_t *data,uint16_t len,uint32_t timeout)
 {
 	return -1;
 }
-int AT_Recv_until(uint8_t *data,char* end,uint32_t timeout)
+int AT_Check_Response(char *data,char* end,uint32_t timeout)
+{
+	uint32_t Time_t = Get_Millis()+ timeout;
+	uint16_t tol = 0,recv = 0;
+	char *p  = NULL;
+	int tot_get = 0;
+	while(Get_Millis() < Time_t)
+	{
+		recv = AT_Recv_Rx_buf((uint8_t *)data+ tol , 1024);
+		if(recv > 0 )
+		{
+			tot_get ++;
+			tol+= recv;
+			end[tol] = 0;
+			if( p== NULL)
+			{
+				p = strstr(data,end);
+			}
+			else
+				if(strstr(p,(char *)"\r\n"))
+					return timeout - (Time_t -Get_Millis() );
+		}
+		AT_delay(1);
+	}
+	return 0;
+}
+
+int AT_Recv_until(char *data,char* end,uint32_t timeout)
 {
 	uint32_t Time_t = Get_Millis()+ timeout;
 	uint16_t tol = 0,recv = 0;
@@ -159,6 +212,7 @@ int AT_Recv_until(uint8_t *data,char* end,uint32_t timeout)
 	}
 	return 0;
 }
+
 
 
 
