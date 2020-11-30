@@ -29,7 +29,7 @@ LV_IMG_DECLARE(Location);
 extern uint8_t Is_mounted;
 
 #define FONT_NUM_LAGE  Number_35
-#define FONT_TEXT_NOMAL	Arial_16
+#define FONT_TEXT_NOMAL	Arial_14
 #define FONT_TEXT_SMALL	Arial_12
 #define FONT_TEXT_VERY_SMALL	Arial_10
 
@@ -176,17 +176,17 @@ static void lv_Battery_setting(void)
 
     Gps_on = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(Gps_on, LV_SYMBOL_GPS);
-    lv_obj_set_pos(Gps_on, 64, 0);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_set_pos(Gps_on, 64, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
     lv_Gps_off();
 
     LvSimready = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(LvSimready, LV_SYMBOL_BLUETOOTH);
-    lv_obj_set_pos(LvSimready, 40, 0);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_set_pos(LvSimready, 40, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
     lv_Sim_not_ready();
 
     Gsm_on = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(Gsm_on, LV_SYMBOL_LOOP);
-   	lv_obj_set_pos(Gsm_on,0, 0);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+   	lv_obj_set_pos(Gsm_on,0, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
    	lv_Gsm_off();
 
 //    Img_Warnig = lv_img_create(Main_Screen, NULL);
@@ -303,7 +303,7 @@ void lv_obj_init(void) {
 
 	lv_obj_add_style(Lb_Name, LV_OBJ_PART_MAIN, &text_style_nomal);
 	lv_label_set_text(Lb_Name, "Đo Mặn");
-	lv_obj_set_pos(Lb_Name, 0,2);
+	lv_obj_set_pos(Lb_Name, 0,8);
 
 	/* Align the Label to the center
      * NULL means align on parent (which is the screen now)

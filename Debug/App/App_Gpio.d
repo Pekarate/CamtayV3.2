@@ -78,10 +78,10 @@ App/App_Gpio.o: ../App/App_Gpio.c ../Core/Inc/main.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_core/lv_style.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_label.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
+ d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_font\lv_font.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_img.h \
@@ -119,9 +119,9 @@ App/App_Gpio.o: ../App/App_Gpio.c ../Core/Inc/main.h \
  ../lvgl/src/lv_widgets/../lv_font/lv_symbol_def.h \
  ../lvgl/src/lv_widgets/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
+ ../lvgl/src/lv_widgets/../lv_draw/../lv_conf_internal.h \
+ ../lvgl/src/lv_widgets/../lv_draw/../lv_core/lv_style.h \
+ ../lvgl/src/lv_widgets/../lv_draw/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_img_decoder.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_rect.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_label.h \
@@ -164,7 +164,24 @@ App/App_Gpio.o: ../App/App_Gpio.c ../Core/Inc/main.h \
  ../lvgl/src/lv_api_map.h ../lvgl/src/../lvgl.h \
  ../USB_DEVICE/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- ../USB_DEVICE/Target/usbd_conf.h
+ ../USB_DEVICE/Target/usbd_conf.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
+ ../Core/Inc/FreeRTOSConfig.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 
 ../Core/Inc/main.h:
 
@@ -350,13 +367,13 @@ App/App_Gpio.o: ../App/App_Gpio.c ../Core/Inc/main.h \
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
+d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
+d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h:
 
@@ -448,11 +465,11 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_draw.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
+../lvgl/src/lv_widgets/../lv_draw/../lv_conf_internal.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h:
+../lvgl/src/lv_widgets/../lv_draw/../lv_core/lv_style.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h:
+../lvgl/src/lv_widgets/../lv_draw/../lv_misc/lv_txt.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_img_decoder.h:
 
@@ -573,3 +590,37 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
 
 ../USB_DEVICE/Target/usbd_conf.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
+
+../Core/Inc/FreeRTOSConfig.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
+
+../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:

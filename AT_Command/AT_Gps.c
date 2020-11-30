@@ -34,6 +34,29 @@ int AT_Gps_Getlocation(char *lat,char *longs)
 	 }
 	return -1;
 }
+int AT_Gps_Getconfig(void)
+{
+	 if(At_Command((char*)"AT+QGPSCFG=?\r\n", (char*)"OK\r\n", 2000)>=0)
+	 {
+		 return 1;
+	 }
+	 else
+	 {
+		 return -1;
+	 }
+}
+
+int AT_Gps_Set_auto(void)
+{
+	 if(At_Command((char*)"AT+QGPSCFG=\"autogps\",1\r\n", (char*)"OK\r\n", 2000)>=0)
+	 {
+		 return 1;
+	 }
+	 else
+	 {
+		 return -1;
+	 }
+}
 
 int AT_Gps_Off(void)
 {

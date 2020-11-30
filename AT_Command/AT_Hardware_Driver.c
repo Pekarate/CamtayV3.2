@@ -172,20 +172,18 @@ int AT_Check_Response(char *data,char* end,uint32_t timeout)
 	uint32_t Time_t = Get_Millis()+ timeout;
 	uint16_t tol = 0,recv = 0;
 	char *p  = NULL;
-	int tot_get = 0;
 	while(Get_Millis() < Time_t)
 	{
 		recv = AT_Recv_Rx_buf((uint8_t *)data+ tol , 1024);
 		if(recv > 0 )
 		{
-			tot_get ++;
 			tol+= recv;
 			end[tol] = 0;
 			if( p== NULL)
 			{
 				p = strstr(data,end);
 			}
-			else
+			if(p)
 				if(strstr(p,(char *)"\r\n"))
 					return timeout - (Time_t -Get_Millis() );
 		}

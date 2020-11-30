@@ -246,13 +246,13 @@ int main(void)
   HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_SET);
   HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
 //  HAL_Delay(2000);
-  uint8_t cnt = 0;
-  uint8_t tranbuf[100];
+//  uint8_t cnt = 0;
+//  uint8_t tranbuf[100];
 //  while(1)
 //  {
 //	  int s = sprintf(tranbuf,"hello world: %d\n",cnt ++);
-////	  HAL_UART_Transmit(&huart3, tranbuf, s, 1000);
-////	  HAL_Delay(1000);
+//	  HAL_UART_Transmit(&huart3, tranbuf, s, 1000);
+//	  HAL_Delay(1000);
 ////	  printf("hello world\n");
 ////	  HAL_UART_Transmit(&huart3, (uint8_t *)"AT\r\n",4, 1000);
 ////	  HAL_Delay(2000);
@@ -402,7 +402,7 @@ int main(void)
   MainfunctionHandle = osThreadCreate(osThread(Mainfunction), NULL);
 
   /* definition and creation of io_handle */
-  osThreadDef(io_handle, io_handle_cb, osPriorityNormal, 0, 1024);
+  osThreadDef(io_handle, io_handle_cb, osPriorityAboveNormal, 0, 1024);
   io_handleHandle = osThreadCreate(osThread(io_handle), NULL);
 
   /* definition and creation of STC3115_handle */

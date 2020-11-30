@@ -19,15 +19,7 @@
 
 extern UART_HandleTypeDef huart1;
 
-typedef enum{
 
-	GPS_GET_LOCATION_DONE = 0,
-	GPS_GET_LOCATION_FAIL,
-	SIM_READY,
-	SIM_NOT_READY,
-	GSM_ON,
-	GSM_OFF
-};
 
 typedef struct
 {
@@ -66,6 +58,12 @@ SemaphoreHandle_t xSemaphore_Sensordata;
 
 QueueHandle_t Queue_Handle = NULL;
 
+void System_Add_event(_Sys_Event Event)
+{
+	 xMessage Message;
+	 Message.handle_id = Event;
+	 xQueueSend(Queue_Handle,( void * ) &Message,( TickType_t )1000);
+}
 
 static void STC3115_Hardware_reset()
 {
@@ -167,9 +165,10 @@ uint32_t Battery_Display = 0;
 								 Update_Unit= 0;
 //							 }
 						  }
-							 xSemaphoreGive( xSemaphore_Sensordata );
-							 Sensor_request_update = 0;
+
 					  }
+					xSemaphoreGive( xSemaphore_Sensordata );
+					Sensor_request_update = 0;
 
 		 		}
 				  xMessage Handle;
@@ -194,6 +193,10 @@ uint32_t Battery_Display = 0;
 						case GSM_OFF:
 							lv_Gsm_off();
 							break;
+						case SYSTEM_OFF:
+							//lv_Gsm_off();
+							HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
+							break;
 						default:
 							break;
 					}
@@ -201,46 +204,13 @@ uint32_t Battery_Display = 0;
 		 		osDelay(1); // 5ms
 	}
  }
- Btn_state_t Pwr_State = BTN_RELEASE;
- uint32_t Pwr_Time = 0;
+
 uint32_t time_tt1,time_tt2 = 0;
 
  void io_handle_cb(void const * argument){
 	 for (;;) {
 		 time_tt1 = HAL_GetTick();
-		  if(SET_PWR_CTRL_GET_STATE())
-		  {
-			  if( Pwr_State == BTN_RELEASE)
-			  {
-				  HAL_Delay(15);
-				  if(SET_PWR_CTRL_GET_STATE())
-				  {
-					  Pwr_State = BTN_START_PRESS;
-					  Pwr_Time = HAL_GetTick();
-				  }
-			  }
-			  else
-			  {
-					if(HAL_GetTick() - Pwr_Time > 3000)
-					{
-						HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
-					}
-			  }
-		  }
-		  else {
-				if(Pwr_State == BTN_START_PRESS)
-				{
-						if(!SET_PWR_CTRL_GET_STATE())
-						{
-							Pwr_State = BTN_RELEASE;
-							Pwr_Time = HAL_GetTick() - Pwr_Time;
-							if(Pwr_Time > 3000)
-							{
-								HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
-							}
-						}
-				}
-		 }
+
 
 		 osDelay(1); // 5ms
 		 time_tt2 = HAL_GetTick() - time_tt1;
@@ -331,8 +301,10 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 	 {
 		 osDelay(100);
 	 }
+//	 AT_Gps_Getconfig();
+	  AT_Gps_Set_auto();
 	 AT_Gps_On();
-
+//	 AT_Gps_Getconfig();
 	 char *url = "http://apihandsetmanager.namlongtekgroup.com/api/station/AddStationData";
 	 char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"123123\",\"Extention2\":\"12312\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
 
@@ -343,9 +315,10 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 			 if(AT_Check_SimReady())
 			 {
 				 Simready =1;
-				 xMessage Gps;
-				 Gps.handle_id = SIM_READY;
-				 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
+				 System_Add_event(SIM_READY);
+//				 xMessage Gps;
+//				 Gps.handle_id = SIM_READY;
+//				 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
 				 Simready = 1;
 			 }
 		 }
@@ -356,9 +329,10 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 				 if(AT_TurnOn_network())
 				 {
 					 Network_on = 1;
-					 xMessage Gps;
-					 Gps.handle_id = GSM_ON;
-					 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
+					 System_Add_event(GSM_ON);
+//					 xMessage Gps;
+//					 Gps.handle_id = GSM_ON;
+//					 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
 
 					 AT_Http_Init();
 
@@ -376,9 +350,10 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 }
 		 if(AT_Gps_Getlocation(lat, Longs)<1)
 		 {
-			 xMessage Gps;
-			 Gps.handle_id = GPS_GET_LOCATION_FAIL;
-			 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
+//			 xMessage Gps;
+//			 Gps.handle_id = GPS_GET_LOCATION_FAIL;
+//			 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
+			 System_Add_event(GPS_GET_LOCATION_FAIL);
 		 }
 		 if(Network_on)
 			 if(AT_Http_set_url(url)>0)

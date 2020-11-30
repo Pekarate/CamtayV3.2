@@ -49,6 +49,18 @@ typedef struct{
 	uint32_t 		Start_time;
 	Btn_Id 			Id;
 }Button;
+
+typedef enum{
+
+	GPS_GET_LOCATION_DONE = 0,
+	GPS_GET_LOCATION_FAIL,
+	SIM_READY,
+	SIM_NOT_READY,
+	GSM_ON,
+	GSM_OFF,
+	SYSTEM_OFF
+}_Sys_Event;
+
 typedef struct{
 	uint16_t when;
 }IO_Event_t;
@@ -61,8 +73,11 @@ typedef struct{
 extern volatile Button Btn_menu,Btn_exit,Btn_up,Btn_down;
 extern USBD_HandleTypeDef hUsbDeviceFS;
 extern uint8_t Sensor_Id;
+
+
 extern Sensor_typedef_t Sensor[MAX_SENSOR_NUM];
 void MainfunctionTask(void const * argument);
 void UsbProcessTask(void const * argument);
 void io_handle_cb(void const * argument);
+void System_Add_event(_Sys_Event Event);
 #endif

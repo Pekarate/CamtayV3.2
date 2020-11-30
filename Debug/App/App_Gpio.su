@@ -1,1 +1,2 @@
-App_Gpio.c:11:5:SET_PWR_CTRL_GET_STATE	32	static,ignoring_inline_asm
+App_Gpio.c:13:5:SET_PWR_CTRL_GET_STATE	32	static,ignoring_inline_asm
+App_Gpio.c:32:5:Power_ctrl_Process	8	static

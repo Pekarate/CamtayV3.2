@@ -1,3 +1,5 @@
 AT_Gps.c:12:5:AT_Gps_On	8	static
 AT_Gps.c:24:5:AT_Gps_Getlocation	16	static
-AT_Gps.c:38:5:AT_Gps_Off	8	static
+AT_Gps.c:37:5:AT_Gps_Getconfig	8	static
+AT_Gps.c:49:5:AT_Gps_Set_auto	8	static
+AT_Gps.c:61:5:AT_Gps_Off	8	static
