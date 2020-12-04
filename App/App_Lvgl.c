@@ -8,6 +8,7 @@
 #include "User_define.h"
 #include "lvgl.h"
 #include "lv_port_disp_template.h"
+#include "App_Lvgl.h"
 //#include  'stri'
 
 LV_FONT_DECLARE(Number_40);
@@ -19,6 +20,7 @@ LV_FONT_DECLARE(Dseg7_55);
 LV_FONT_DECLARE(Arial_20);
 LV_FONT_DECLARE(Arial_16);
 LV_FONT_DECLARE(Arial_14);
+LV_FONT_DECLARE(Arial1_13);
 LV_FONT_DECLARE(Arial_12);
 LV_FONT_DECLARE(Arial_10);
 LV_FONT_DECLARE(Arial_8);
@@ -30,11 +32,11 @@ extern uint8_t Is_mounted;
 
 #define FONT_NUM_LAGE  Number_35
 #define FONT_TEXT_NOMAL	Arial_14
-#define FONT_TEXT_SMALL	Arial_12
+#define FONT_TEXT_SMALL	Arial1_13
 #define FONT_TEXT_VERY_SMALL	Arial_10
 
 
-lv_obj_t *Lb_Data,*Lb_Unit,*Lb_Name;
+lv_obj_t *Lb_Data,*Lb_Unit,*Lb_Name,*LB_Time;
 
 lv_obj_t *Lb_line1,*Lb_line2,*Lb_line3,*Lb_line4,*Lb_line5;
 
@@ -160,6 +162,10 @@ void lv_Gsm_off()
 	lv_obj_set_hidden(Gsm_on, true);
 }
 
+void Lv_DateTime_update(char *Time)
+{
+	lv_label_set_text(LB_Time, Time);
+}
 static void lv_Battery_setting(void)
 {
 //    lv_obj_t * img1 = lv_img_create(Main_Screen, NULL);
@@ -168,11 +174,13 @@ static void lv_Battery_setting(void)
 
 	Battery = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(Battery, LV_SYMBOL_BATTERY_EMPTY);
-    lv_obj_set_pos(Battery, 127-lv_obj_get_width(Battery), -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_set_pos(Battery, 127-lv_obj_get_width(Battery), -3);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
 
-    Img_Sd = lv_img_create(Main_Screen, NULL);
-    lv_img_set_src(Img_Sd, LV_SYMBOL_SD_CARD);
-    lv_obj_set_pos(Img_Sd, 127-lv_obj_get_width(Battery) - lv_obj_get_width(Img_Sd)-3, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+//    Img_Sd = lv_img_create(Main_Screen, NULL);
+//    lv_img_set_src(Img_Sd, LV_SYMBOL_SD_CARD);
+//    lv_obj_set_pos(Img_Sd, 127-lv_obj_get_width(Battery) - lv_obj_get_width(Img_Sd)-3, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+
+
 
     Gps_on = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(Gps_on, LV_SYMBOL_GPS);
@@ -293,9 +301,14 @@ void lv_obj_init(void) {
 	Lb_Data = lv_label_create(Main_Screen, NULL);
 	Lb_Unit = lv_label_create(Main_Screen, NULL);
 	Lb_Name = lv_label_create(Main_Screen, NULL);
+	LB_Time = lv_label_create(Main_Screen, NULL);
 	/*Modify the Label's text*/
 	lv_obj_add_style(Lb_Data, LV_OBJ_PART_MAIN, &text_style_num_lage);
 	lv_label_set_text(Lb_Data, "0.00");
+
+	lv_obj_add_style(LB_Time, LV_OBJ_PART_MAIN, &text_style_smal);
+	lv_label_set_text(LB_Time, "0:00");
+	lv_obj_set_pos(LB_Time,50,0);
 
 	lv_obj_add_style(Lb_Unit, LV_OBJ_PART_MAIN, &text_style_smal);
 	lv_label_set_text(Lb_Unit, "mg/l");

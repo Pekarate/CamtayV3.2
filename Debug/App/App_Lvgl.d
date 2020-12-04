@@ -164,7 +164,8 @@ App/App_Lvgl.o: ../App/App_Lvgl.c ../App/User_define.h ../Core/Inc/main.h \
  ../lvgl/src/lv_api_map.h ../lvgl/src/../lvgl.h \
  ../USB_DEVICE/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- ../USB_DEVICE/Target/usbd_conf.h ../lvgl/porting/lv_port_disp_template.h
+ ../USB_DEVICE/Target/usbd_conf.h ../lvgl/porting/lv_port_disp_template.h \
+ ../App/App_Lvgl.h
 
 ../App/User_define.h:
 
@@ -573,3 +574,5 @@ d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 ../USB_DEVICE/Target/usbd_conf.h:
 
 ../lvgl/porting/lv_port_disp_template.h:
+
+../App/App_Lvgl.h:

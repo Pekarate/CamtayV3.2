@@ -84,13 +84,15 @@ int AT_Http_post(char *data)
 		 if(AT_Recv_until(AT_Buff+s, "OK\r\n",5000))
 		 {
 			AT_Get_Data_Avaiable(AT_Buff);
-			if(AT_Check_Response(AT_Buff, (char *)"POST", 60000)>0)
+			if(AT_Check_Response(AT_Buff, (char *)"POST", 103000)>0)
 //			printf("[%lu] HTTP Send data done\n",Get_Millis());
 			//if(AT_Recv_until(AT_Buff,(char *)"\r\n" , 60000)>0)
 			//if(At_Command(NULL, (char *)"\r\n" , 60000)>0)
 			{
+				int http_res = 0;
+				AT_Getint_index(&http_res, AT_Buff, ": ", 1);
 				printf("[%lu] HTTP Read: %d byte: %s\n",Get_Millis(),strlen(AT_Buff),AT_Buff);
-				 return 1;
+				return http_res;
 			}
 		 }
 		 else
@@ -101,6 +103,7 @@ int AT_Http_post(char *data)
 int AT_Http_get_data(char *des)
 {
 	At_Command((char *)"AT+QHTTPREAD=80\r\n",(char *)"+QHTTPREAD",5000);
+
 	return  1;
 }
 

@@ -185,7 +185,7 @@ uint8_t Rxdata[100];
 
 int _write(int file, char *ptr, int len)
 {
-	HAL_UART_Transmit(&huart3, (uint8_t *)ptr,len, 3000);
+///	HAL_UART_Transmit(&huart3, (uint8_t *)ptr,len, 3000);
 //	for(int i =0;i<len;i++)
 //	{
 //		ITM_SendChar(*ptr);
@@ -196,6 +196,12 @@ int _write(int file, char *ptr, int len)
 
 uint32_t st = 0;
 float val = 0.01f;
+//RTC_TimeTypeDef sTime = {0};
+//RTC_DateTypeDef sDate = {0};
+
+void App_Huart3_rx_callback(){
+	HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
+}
 /* USER CODE END 0 */
 
 /**
@@ -245,14 +251,19 @@ int main(void)
   HAL_Delay(10);
   HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_SET);
   HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
-//  HAL_Delay(2000);
-//  uint8_t cnt = 0;
-//  uint8_t tranbuf[100];
+//  uint32_t Message_ID;
+//  char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"10.834650\",\"Extention2\":\"106.700431\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
+//
+////  HAL_Delay(2000);
+////  uint8_t cnt = 0;
+////  uint8_t tranbuf[100];
 //  while(1)
 //  {
-//	  int s = sprintf(tranbuf,"hello world: %d\n",cnt ++);
-//	  HAL_UART_Transmit(&huart3, tranbuf, s, 1000);
-//	  HAL_Delay(1000);
+//
+//	  HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+//	  HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+////	  HAL_UART_Transmit(&huart3, (uint8_t *)dt, strlen(dt), 1000);
+//	  HAL_Delay(200);
 ////	  printf("hello world\n");
 ////	  HAL_UART_Transmit(&huart3, (uint8_t *)"AT\r\n",4, 1000);
 ////	  HAL_Delay(2000);
@@ -456,7 +467,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 96;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV6;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -471,7 +482,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
     Error_Handler();
   }
@@ -600,12 +611,14 @@ static void MX_RTC_Init(void)
   }
 
   /* USER CODE BEGIN Check_RTC_BKUP */
-
+  if(HAL_RTCEx_BKUPRead(&hrtc, 19)!= 1000)
+  {
+	  HAL_RTCEx_BKUPWrite(&hrtc, 19, 1000);
   /* USER CODE END Check_RTC_BKUP */
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 17;
+  sTime.Hours = 10;
   sTime.Minutes = 0;
   sTime.Seconds = 0;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
@@ -614,9 +627,9 @@ static void MX_RTC_Init(void)
   {
     Error_Handler();
   }
-  sDate.WeekDay = RTC_WEEKDAY_MONDAY;
-  sDate.Month = RTC_MONTH_OCTOBER;
-  sDate.Date = 5;
+  sDate.WeekDay = RTC_WEEKDAY_TUESDAY;
+  sDate.Month = RTC_MONTH_DECEMBER;
+  sDate.Date = 1;
   sDate.Year = 20;
 
   if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
@@ -624,7 +637,7 @@ static void MX_RTC_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN RTC_Init 2 */
-
+  }
   /* USER CODE END RTC_Init 2 */
 
 }
@@ -935,6 +948,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : BTN_MENU_Pin BTN_EXIT_Pin BTN_UP_Pin BTN_DOWN_Pin */
+  GPIO_InitStruct.Pin = BTN_MENU_Pin|BTN_EXIT_Pin|BTN_UP_Pin|BTN_DOWN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 }
 

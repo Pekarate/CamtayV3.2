@@ -17,7 +17,27 @@
 #include "AT_Gps.h"
 #include "AT_Command.h"
 
+#define UID0 (*(volatile uint32_t *)0x1FFF7A10) //Unique device ID register
+#define UID1 (*(volatile uint32_t *)0x1FFF7A14)
+#define UID2 (*(volatile uint32_t *)0x1FFF7A18)
+#define FLASH_SIZE (*(volatile uint32_t *)0x1FFF7A22)
+
 extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart3;
+extern RTC_HandleTypeDef hrtc;
+char UID[20];
+uint32_t at_ok =0,at_fail = 0;
+uint8_t tmpp[100];
+uint8_t Simready = 0;
+uint8_t Network_on = 0;
+char lat[20] = {0};
+char Longs[20] = {0};
+int rssi;
+uint8_t Sensor_def;
+float Sensor_value;
+char SysTemData[1024] = {0};
+uint16_t Packeg_len = 0;
+uint32_t Sensor_ScanFail_cnt = 0;
 
 
 
@@ -48,8 +68,9 @@ uint32_t Sensor_Scan_Time = 0;
 int8_t Sensor_Scan_res = -1;
 uint8_t Sensor_request_update = 1;
 uint32_t Battery_Updatetime = 0;
-
+uint32_t Time_sendata;
 uint8_t Sensor_index = 0;
+uint32_t DateTime_Updatetime = 0;
 
 SemaphoreHandle_t xSemaphore;
 SemaphoreHandle_t xSemaphore_battery;
@@ -57,6 +78,48 @@ SemaphoreHandle_t xSemaphore_Sensordata;
 
 
 QueueHandle_t Queue_Handle = NULL;
+
+RTC_TimeTypeDef sTime = {0};
+RTC_DateTypeDef sDate = {0};
+
+int Make_aData_packeg()
+{
+	Packeg_len = sprintf(SysTemData,"{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\","
+			 	 	 "\"StationID\":\"%s\","
+			 	 	 "\"Extention1\":\"%s\"," //lat
+			 	 	 "\"Extention2\":\"%s\"," //long
+			 	 	 "\"Extention3\":\"%d\"," //Code thiet bi
+			 	 	 "\"Extention4\":\"%02f\"," //gia tri
+			 	 	 "\"Extention5\":\"string\","
+			 	 	 "\"Extention6\":\"string\","
+			 	 	 "\"Extention7\":\"string\","
+			 	 	 "\"Extention8\":\"string\","
+			 	 	 "\"Extention9\":\"string\","
+			 	 	 "\"Extention10\":\"%d\"}",
+					 UID,
+					 lat,
+					 Longs,
+					 Sensor_def,
+					 Sensor_value,
+					 (int)STC3115_BatteryData.SOC/10);
+	return Packeg_len;
+}
+
+void Sendata_via_Ble()
+{
+	HAL_UART_Transmit(&huart3,(uint8_t *)SysTemData, Packeg_len, 2000);
+//	HAL_UART_Transmit(&huart3, (uint8_t *)"\r\n", 2, 100);
+}
+uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
+int Sys_Get_UID()
+{
+	 UniqueID0 = UID0;
+	 UniqueID1 = UID1;
+	 UniqueID2 = UID2;
+	 return sprintf(UID,"%lu",UID0);
+}
+
+
 
 void System_Add_event(_Sys_Event Event)
 {
@@ -86,8 +149,107 @@ int Setting_Config_Parse(char *info)
 }
 
 uint32_t Battery_Display = 0;
+static void SYS_Get_Time()
+{
+	HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+	HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+}
+static void Update_Datetime()
+{
+	SYS_Get_Time();
+	char strr[7];
+	sprintf(strr,"%d:%d",sTime.Hours,sTime.Minutes);
+	Lv_DateTime_update(strr);
+}
+static void Updata_data_sensor()
+{
+	  if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 10 ) == pdTRUE )
+	  {
+		if(Sensor_request_update)
+		{
+			  if(Sensor_Scan_res>= 0)
+			  {
+				 Sensor_value = (float)Sensor[Sensor_index].Datax[0].Data/Sensor[Sensor_index].Datax[0].base;
+				 Lv_Sensor_Data_set(Sensor_value);
+				 Lv_Sensor_Name_set(Sensor[Sensor_index].Name);
+				 Update_Name = 0;
+				 Lv_Sensor_Unit_set(Sensor[Sensor_index].Datax[0].Unit);
+				 Update_Unit= 0;
+				 switch (Sensor[Sensor_index].Id) {
+					case 4:
+						Sensor_def = 1; // cảm biến mặn
+						break;
+					case 5:
+						Sensor_def = 2; // cảm biến PH
+						break;
+					default:
+						Sensor_def = 3; // Không xác định
+						break;
+				}
+			  }
+			  else
+			  {
+				  Sensor_ScanFail_cnt++;
+				 Lv_Sensor_Data_set(0.0f);
+				 switch (Sensor_ScanFail_cnt%3) {
+					case 0:
+						Lv_Sensor_Name_set("Scan.");
+						break;
+					case 1:
+						Lv_Sensor_Name_set("Scan..");
+						break;
+					case 2:
+						Lv_Sensor_Name_set("Scan...");
+						break;
+					default:
+						break;
+				}
+
+			   Update_Name = 0;
+//							 }
+//							 if(Update_Unit)
+//							 {
+					 Lv_Sensor_Unit_set("");
+					 Update_Unit= 0;
+//							 }
+			  }
+
+		}
+		xSemaphoreGive( xSemaphore_Sensordata );
+		Sensor_request_update = 0;
+		if(HAL_GetTick() > Time_sendata)
+		{
+			Time_sendata = HAL_GetTick() + 2000;
+			Make_aData_packeg();
+			Sendata_via_Ble();
+		}
+	}
+}
+
+static void Update_Baterry_Data()
+{
+		if(HAL_GetTick() > Battery_Updatetime)
+		{
+			if( xSemaphoreTake( xSemaphore_battery, ( TickType_t ) 10 ) == pdTRUE )
+			{
+			if(STC3115_BatteryData.Current >0 )//charge
+			{
+				 Lv_Battery_set(STC3115_BatteryData.SOC/10,1);
+			 }
+			 else
+			 {
+				 Lv_Battery_set(STC3115_BatteryData.SOC/10,0);
+			 }
+			Battery_Updatetime =HAL_GetTick()+1000;
+			xSemaphoreGive( xSemaphore_battery );
+			}
+
+		}
+}
  void MainfunctionTask(void const * argument)
  {
+	 Sys_Get_UID();
 	  xSemaphore = xSemaphoreCreateMutex();
 	  xSemaphore_battery = xSemaphoreCreateMutex();
 	  xSemaphore_Sensordata = xSemaphoreCreateMutex();
@@ -109,70 +271,23 @@ uint32_t Battery_Display = 0;
 	  }
 	  Setting_Config_Parse(Sys_config);
 	  App_Sensor_Init(Sensor_info);
-	  ST7565_begin(10);
+	  ST7565_begin(12);
 	  lv_init(); // init lvgl
 	  lv_port_disp_init();
 	  lv_obj_init();
+	  Time_sendata = HAL_GetTick()+2000;
+	  DateTime_Updatetime = HAL_GetTick()-1;
+	  xMessage Handle;
 	  for (;;) {
 		  Ramfree = xPortGetFreeHeapSize();
-		 		lv_task_handler();
-		 		if(HAL_GetTick() > Battery_Updatetime)
+		 		if(HAL_GetTick()> DateTime_Updatetime)
 		 		{
-		 			if( xSemaphoreTake( xSemaphore_battery, ( TickType_t ) 10 ) == pdTRUE )
-		 			{
-						if(STC3115_BatteryData.Current >0 )//charge
-						{
-							 Lv_Battery_set(STC3115_BatteryData.SOC/10,1);
-						 }
-						 else
-						 {
-							 Lv_Battery_set(STC3115_BatteryData.SOC/10,0);
-						 }
-						Battery_Updatetime =HAL_GetTick()+1000;
-						xSemaphoreGive( xSemaphore_battery );
-		 			}
-
+		 			DateTime_Updatetime = HAL_GetTick()+30000;
+		 			Update_Datetime();
 		 		}
-				  if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 10 ) == pdTRUE )
-				  {
-					if(Sensor_request_update)
-					{
-						  if(Sensor_Scan_res>= 0)
-						  {
-							 Lv_Sensor_Data_set((float)Sensor[Sensor_index].Datax[0].Data/Sensor[Sensor_index].Datax[0].base);
-//							 if(Update_Name)
-//							 {
-								 Lv_Sensor_Name_set(Sensor[Sensor_index].Name);
-								 Update_Name = 0;
-//							 }
-//							 if(Update_Unit)
-//							 {
-								 Lv_Sensor_Unit_set(Sensor[Sensor_index].Datax[0].Unit);
-								 Update_Unit= 0;
-//							 }
-						  }
-						  else
-						  {
-							 Lv_Sensor_Data_set(0.0f);
-//							 if(Update_Name)
-//							 {
-								 Lv_Sensor_Name_set("Scan...");
-								 Update_Name = 0;
-//							 }
-//							 if(Update_Unit)
-//							 {
-								 Lv_Sensor_Unit_set("");
-								 Update_Unit= 0;
-//							 }
-						  }
-
-					  }
-					xSemaphoreGive( xSemaphore_Sensordata );
-					Sensor_request_update = 0;
-
-		 		}
-				  xMessage Handle;
-				if(xQueueReceive(Queue_Handle, &Handle, ( TickType_t )2) == pdPASS )
+		 		Updata_data_sensor();
+		 		Update_Baterry_Data();
+				if(xQueueReceive(Queue_Handle, &Handle, ( TickType_t )1) == pdPASS )
 				{
 					switch (Handle.handle_id) {
 						case GPS_GET_LOCATION_DONE:
@@ -201,6 +316,7 @@ uint32_t Battery_Display = 0;
 							break;
 					}
 				}
+				lv_task_handler();
 		 		osDelay(1); // 5ms
 	}
  }
@@ -208,10 +324,14 @@ uint32_t Battery_Display = 0;
 uint32_t time_tt1,time_tt2 = 0;
 
  void io_handle_cb(void const * argument){
+	 Button_Init();
 	 for (;;) {
 		 time_tt1 = HAL_GetTick();
-
-
+		 Power_ctrl_Process();
+		  Button_process(&Btn_down);
+		  Button_process(&Btn_exit);
+		  Button_process(&Btn_menu);
+		  Button_process(&Btn_up);
 		 osDelay(1); // 5ms
 		 time_tt2 = HAL_GetTick() - time_tt1;
 
@@ -219,21 +339,14 @@ uint32_t time_tt1,time_tt2 = 0;
  }
 
 
-uint8_t UID[16];
-#define UID0 (*(volatile uint32_t *)0x1FFF7A10) //Unique device ID register
-#define UID1 (*(volatile uint32_t *)0x1FFF7A14)
-#define UID2 (*(volatile uint32_t *)0x1FFF7A18)
-#define FLASH_SIZE (*(volatile uint32_t *)0x1FFF7A22)
-uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
+
  void STC3115_handle_cb(void const * argument){
 //	 for(;;)
 //	 {
 //		 osDelay(1);
 //	 }
 //	 uint32_t Bat_cnt = 0;
-	 UniqueID0 = UID0;
-	 UniqueID1 = UID1;
-	 UniqueID2 = UID2;
+
 	 Flash = FLASH_SIZE;
 	 STC3115_Hardware_reset();
 	 osDelay(1000);
@@ -276,16 +389,14 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 osDelay(1); // 5ms
 	}
  }
- uint32_t at_ok =0,at_fail = 0;
- uint8_t tmpp[100];
- uint8_t Simready = 0;
- uint8_t Network_on = 0;
- char lat[20] = {0};
- char Longs[20] = {0};
- int rssi;
+
  void Start_Uc20(void const * argument){
 	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
+	 for(;;)
+	 {
+		osDelay(1);
+	 }
 	 osDelay(10);
 	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
 	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
@@ -302,12 +413,17 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 osDelay(100);
 	 }
 //	 AT_Gps_Getconfig();
-	  AT_Gps_Set_auto();
+	 AT_Gps_Set_auto();
 	 AT_Gps_On();
+//	 AT_Gps_GNSS_nmeasrc_enable();
+//	 while(1)
+//	 {
+//		 AT_Gps_GNSS_nmeasrc_data();
+//		 osDelay(1000);
+//	 }
 //	 AT_Gps_Getconfig();
 	 char *url = "http://apihandsetmanager.namlongtekgroup.com/api/station/AddStationData";
-	 char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"123123\",\"Extention2\":\"12312\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
-
+	 char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"10.834650\",\"Extention2\":\"106.700431\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
 	 for(;;)
 	 {
 		 if(!Simready)
@@ -358,8 +474,12 @@ uint32_t UniqueID0,UniqueID1,UniqueID2,Flash;
 		 if(Network_on)
 			 if(AT_Http_set_url(url)>0)
 			 {
-				 AT_Http_post(dt);
+				 Make_aData_packeg();
+				 int Http_Res = AT_Http_post(SysTemData);
+				 printf("Http res: %d\n",Http_Res);
 			 }
+		 HAL_UART_Transmit(&huart3, (uint8_t*)SysTemData, strlen(SysTemData), 2000);
+		 HAL_UART_Transmit(&huart3, (uint8_t *)"\r\n", 2, 100);
 		 osDelay(2000);
 	 }
 

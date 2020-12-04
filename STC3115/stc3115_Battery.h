@@ -38,7 +38,7 @@
 #define ALM_EN			0			/* Alarm enable constant, set at 1 to enable	*/
 #define ALM_SOC			10			/* SOC alarm in % 								*/
 #define ALM_VBAT 		3600		/* Voltage alarm in mV							*/
-#define RSENSE			11			/* sense resistor (soldered on the board) in mOhms */
+#define RSENSE			10			/* sense resistor (soldered on the board) in mOhms */
 
 #define APP_EOC_CURRENT       75   		/* end charge current in mA                 */
 #define APP_CUTOFF_VOLTAGE	  3000   	/* application cut-off voltage in mV      	*/

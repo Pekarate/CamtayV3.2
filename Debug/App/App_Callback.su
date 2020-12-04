@@ -1,6 +1,8 @@
-App_Callback.c:17:13:App_Huart2_Tx_callback	4	static
-App_Callback.c:20:13:App_Huart2_rx_callback	4	static
-App_Callback.c:24:13:App_Huart1_Tx_callback	4	static
-App_Callback.c:27:13:App_Huart1_rx_callback	4	static
-App_Callback.c:32:6:HAL_UART_TxCpltCallback	16	static
-App_Callback.c:51:6:HAL_UART_RxCpltCallback	16	static
+App_Callback.c:18:13:App_Huart2_Tx_callback	4	static
+App_Callback.c:21:13:App_Huart2_rx_callback	4	static
+App_Callback.c:25:13:App_Huart1_Tx_callback	4	static
+App_Callback.c:28:13:App_Huart1_rx_callback	4	static
+App_Callback.c:31:13:App_Huart3_Tx_callback	4	static
+App_Callback.c:34:13:App_Huart3_rx_callback	4	static
+App_Callback.c:39:6:HAL_UART_TxCpltCallback	16	static
+App_Callback.c:58:6:HAL_UART_RxCpltCallback	16	static
