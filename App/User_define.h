@@ -61,6 +61,11 @@ typedef enum{
 	SYSTEM_OFF
 }_Sys_Event;
 
+
+
+typedef enum{
+
+}Sys_State;
 typedef struct{
 	uint16_t when;
 }IO_Event_t;

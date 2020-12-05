@@ -159,7 +159,7 @@ static void Update_Datetime()
 {
 	SYS_Get_Time();
 	char strr[7];
-	sprintf(strr,"%d:%d",sTime.Hours,sTime.Minutes);
+	sprintf(strr,"%d:%02d",sTime.Hours,sTime.Minutes);
 	Lv_DateTime_update(strr);
 }
 static void Updata_data_sensor()
@@ -347,8 +347,13 @@ uint32_t time_tt1,time_tt2 = 0;
 //	 }
 //	 uint32_t Bat_cnt = 0;
 
-	 Flash = FLASH_SIZE;
-	 STC3115_Hardware_reset();
+		int status = GasGauge_Initialization(&STC3115_ConfigData, &STC3115_BatteryData);
+		if(status!=0 && status!=-2)
+		{
+			printf("STC3115: Error in GasGauge_Initialization\n");
+			return -1; //return on error
+		}
+	 //STC3115_Hardware_reset();
 	 osDelay(1000);
 	 for (;;) {
 
@@ -361,7 +366,7 @@ uint32_t time_tt1,time_tt2 = 0;
 				 Battery_Gettime = HAL_GetTick()+1000;
 				 if(STC3115_BatteryData.OCV == 0)
 				 {
-					 STC3115_Hardware_reset();
+					STC3115_Hardware_reset();
 				 }
 				 xSemaphoreGive( xSemaphore_battery );
 			 }
