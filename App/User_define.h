@@ -30,25 +30,7 @@ typedef enum{
 
 }System_state_t;
 
-typedef enum{
-	BTN_ID_MENU,
-	BTN_ID_UP,
-	BTN_ID_DOWN,
-	BTN_ID_EXIT
-}Btn_Id;
 
-typedef enum{
-	BTN_RELEASE,
-	BTN_START_PRESS
-}Btn_state_t;
-typedef struct{
-	GPIO_TypeDef 	*Btn_Port;
-	uint32_t 		Btn_Pin;
-	Btn_state_t 	State;
-	uint32_t 		Press_time;
-	uint32_t 		Start_time;
-	Btn_Id 			Id;
-}Button;
 
 typedef enum{
 
@@ -63,9 +45,7 @@ typedef enum{
 
 
 
-typedef enum{
 
-}Sys_State;
 typedef struct{
 	uint16_t when;
 }IO_Event_t;
@@ -75,7 +55,7 @@ typedef struct{
 
 #define BTN_READ_PIN_STATE(btn) HAL_GPIO_ReadPin(btn->Btn_Port, btn->Btn_Pin)
 
-extern volatile Button Btn_menu,Btn_exit,Btn_up,Btn_down;
+
 extern USBD_HandleTypeDef hUsbDeviceFS;
 extern uint8_t Sensor_Id;
 

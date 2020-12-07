@@ -409,7 +409,7 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of Mainfunction */
-  osThreadDef(Mainfunction, MainfunctionTask, osPriorityNormal, 0, 4096);
+  osThreadDef(Mainfunction, MainfunctionTask, osPriorityNormal, 0, 3096);
   MainfunctionHandle = osThreadCreate(osThread(Mainfunction), NULL);
 
   /* definition and creation of io_handle */
@@ -417,7 +417,7 @@ int main(void)
   io_handleHandle = osThreadCreate(osThread(io_handle), NULL);
 
   /* definition and creation of STC3115_handle */
-  osThreadDef(STC3115_handle, STC3115_handle_cb, osPriorityNormal, 0, 2048);
+  osThreadDef(STC3115_handle, STC3115_handle_cb, osPriorityNormal, 0, 1024);
   STC3115_handleHandle = osThreadCreate(osThread(STC3115_handle), NULL);
 
   /* definition and creation of Uc20_Task */
@@ -467,7 +467,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 96;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV6;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -482,7 +482,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }

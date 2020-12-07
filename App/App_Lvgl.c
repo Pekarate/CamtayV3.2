@@ -32,7 +32,7 @@ extern uint8_t Is_mounted;
 
 #define FONT_NUM_LAGE  Number_35
 #define FONT_TEXT_NOMAL	Arial_14
-#define FONT_TEXT_SMALL	Arial1_13
+#define FONT_TEXT_SMALL	lv_font_montserrat_12
 #define FONT_TEXT_VERY_SMALL	Arial_10
 
 
@@ -41,9 +41,61 @@ lv_obj_t *Lb_Data,*Lb_Unit,*Lb_Name,*LB_Time;
 lv_obj_t *Lb_line1,*Lb_line2,*Lb_line3,*Lb_line4,*Lb_line5;
 
 char Lb1_dt[10];
-
+lv_obj_t * list_btn[5];
 
 lv_style_t text_style_num_lage,text_style_nomal,text_style_smal,text_style_very_smal;
+
+uint8_t Max_list_btn = 3;
+uint8_t List_btn_cnt = 0;
+lv_obj_t * listConfig;
+
+lv_obj_t *Lv_btn_menu,*Lv_btn_exit,*Lv_btn_down,*Lv_btn_up;
+
+lv_obj_t * LvSimready,*Gsm_on;
+lv_obj_t * Battery;
+lv_obj_t * Img_Sd;
+lv_obj_t * Gps_on;
+lv_obj_t * Img_Warnig;
+lv_obj_t * Main_Screen;
+lv_obj_t * Setup_Screen;
+uint32_t Bat_cnt =0;
+uint8_t bat_offset[] = {10,33,66,96};
+
+Sys_Screen_Active current_active = MAIN_SCREEN;
+void Lv_switch_to_screen(Sys_Screen_Active screen)
+{
+	current_active =screen;
+	switch (screen) {
+		case SETUP_SCREEN:
+			lv_scr_load(Setup_Screen);
+			break;
+		case MAIN_SCREEN:
+			lv_scr_load(Main_Screen);
+			break;
+		default:
+			break;
+	}
+
+	lv_scr_load(Setup_Screen);
+}
+void Lv_list_up(uint8_t up_down)
+{
+	if(up_down){
+		List_btn_cnt --;
+		if(List_btn_cnt == 255)
+		{
+			List_btn_cnt = Max_list_btn -1;
+		}
+	}else
+	{
+		List_btn_cnt ++;
+		if(List_btn_cnt == Max_list_btn)
+		{
+			List_btn_cnt = 0;
+		}
+	}
+	lv_list_focus_btn(listConfig, list_btn[List_btn_cnt]);
+}
 
 void Sys_Update_Data(float val)
 {
@@ -61,15 +113,7 @@ void Sys_Update_Data(float val)
 	lv_obj_set_pos(Lb_Data, 127- lv_obj_get_width(Lb_Data), 63 - lv_obj_get_height(Lb_Data));
 }
 
-lv_obj_t * LvSimready,*Gsm_on;
-lv_obj_t * Battery;
-lv_obj_t * Img_Sd;
-lv_obj_t * Gps_on;
-lv_obj_t * Img_Warnig;
-lv_obj_t * Main_Screen;
-lv_obj_t * Debug_Screen;
-uint32_t Bat_cnt =0;
-uint8_t bat_offset[] = {10,33,66,96};
+
 
 void Lv_Battery_set(int Presen,int change)
 {
@@ -233,6 +277,13 @@ static void lv_font_init(void)
 	lv_style_set_text_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_style_set_text_font(&text_style_smal, LV_STATE_DEFAULT, &FONT_TEXT_SMALL);
 
+	//lv_style_set_pad_top(&text_style_smal, LV_STATE_DEFAULT, 2);
+	lv_style_set_pad_all(&text_style_smal, LV_STATE_DEFAULT, 0);
+	lv_style_set_pad_left(&text_style_smal, LV_STATE_DEFAULT, 8);
+	//lv_style_set_border_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_BLACK);
+	lv_style_set_bg_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_BLACK);
+	lv_style_set_text_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_WHITE);
+
 //	lv_style_set_bg_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 //	lv_style_set_bg_color(&text_style_smal, LV_STATE_PRESSED, LV_COLOR_BLACK);
 //	lv_style_set_bg_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_BLACK);
@@ -291,10 +342,62 @@ int App_add_console_log(char *log,int len)
 	return i;
 
 }
+static void event_handler(lv_obj_t * obj, lv_event_t event)
+{
+    if(event == LV_EVENT_CLICKED) {
+        printf("Clicked: %s\n", lv_list_get_btn_text(obj));
+    }
+}
+//static void event_btn_menu_handler(lv_obj_t * obj, lv_event_t event)
+//{
+//    if(event == LV_EVENT_LONG_PRESSED) {
+//        //printf("Clicked\n");
+//    	//Screen_change =2;
+//    	lv_scr_load(Setup_Screen);
+//    }
+//    else if(event == LV_EVENT_VALUE_CHANGED) {
+//        //printf("Toggled\n");
+//        //Screen_change =100;
+//    }
+//}
+//static void event_btn_up_handler(lv_obj_t * obj, lv_event_t event)
+//{
+//    if(event == LV_EVENT_CLICKED) {
+//        //printf("Clicked\n");
+//    	//Screen_change =3;
+//    }
+//    else if(event == LV_EVENT_VALUE_CHANGED) {
+//        //printf("Toggled\n");
+//       // Screen_change =100;
+//    }
+//}
+//static void event_btn_down_handler(lv_obj_t * obj, lv_event_t event)
+//{
+//    if(event == LV_EVENT_CLICKED) {
+//        //printf("Clicked\n");
+//    	//Screen_change =4;
+//    }
+//    else if(event == LV_EVENT_VALUE_CHANGED) {
+//        //printf("Toggled\n");
+//       // Screen_change =100;
+//    }
+//}
+//static void event_btn_exit_handler(lv_obj_t * obj, lv_event_t event)
+//{
+//    if(event == LV_EVENT_LONG_PRESSED) {
+//        //printf("Clicked\n");
+////    	Screen_change =5;
+////    	lv_scr_load(Result_screen);
+//    }
+//    else if(event == LV_EVENT_VALUE_CHANGED) {
+//        //printf("Toggled\n");
+//        //Screen_change =100;
+//    }
+//}
 void lv_obj_init(void) {
 
 	Main_Screen = lv_obj_create(NULL, NULL);
-	Debug_Screen = lv_obj_create(NULL, NULL);
+	Setup_Screen = lv_obj_create(NULL, NULL);
 	lv_Battery_setting();
 	lv_font_init();
 	/*Create a Label on the currently active screen*/
@@ -322,16 +425,17 @@ void lv_obj_init(void) {
      * NULL means align on parent (which is the screen now)
      * 0, 0 at the end means an x, y offset after alignment*/
 	lv_obj_set_pos(Lb_Data, 127- lv_obj_get_width(Lb_Data), 63 - lv_obj_get_height(Lb_Data));
-	lv_scr_load(Main_Screen);
+
+	//lv_scr_load(Main_Screen);
 
 
 
     /*Create a label on the page*/
-//    Lb_line1 = lv_label_create(Debug_Screen, NULL);
-//    Lb_line2 = lv_label_create(Debug_Screen, NULL);
-//    Lb_line3 =lv_label_create(Debug_Screen, NULL);
-//    Lb_line4 =lv_label_create(Debug_Screen, NULL);
-//    Lb_line5 = lv_label_create(Debug_Screen, NULL);
+//    Lb_line1 = lv_label_create(Setup_Screen, NULL);
+//    Lb_line2 = lv_label_create(Setup_Screen, NULL);
+//    Lb_line3 =lv_label_create(Setup_Screen, NULL);
+//    Lb_line4 =lv_label_create(Setup_Screen, NULL);
+//    Lb_line5 = lv_label_create(Setup_Screen, NULL);
 //    lv_obj_add_style(Lb_line1,LV_OBJ_PART_MAIN,&text_style_very_smal);
 //    lv_obj_add_style(Lb_line2,LV_OBJ_PART_MAIN,&text_style_very_smal);
 //    lv_obj_add_style(Lb_line3,LV_OBJ_PART_MAIN,&text_style_very_smal);
@@ -348,7 +452,58 @@ void lv_obj_init(void) {
 //    lv_label_set_text(Lb_line4,	"");
 //    lv_label_set_text(Lb_line5,	"");
 
-//    lv_scr_load(Debug_Screen);
+
+
+	listConfig = lv_list_create(Setup_Screen, NULL);
+	lv_obj_set_size(listConfig, 128, 64);
+	lv_obj_set_pos(listConfig, 0, 0);
+
+	/*Add buttons to the list*/
+
+
+
+	list_btn[0] = lv_list_add_btn(listConfig, NULL, "SETUP");
+	lv_obj_add_style(list_btn[0],LV_OBJ_PART_MAIN,&text_style_smal );
+
+	lv_obj_set_event_cb(list_btn[0], event_handler);
+
+	list_btn[1] = lv_list_add_btn(listConfig, NULL, "OPEN");
+	lv_obj_add_style(list_btn[1],LV_OBJ_PART_MAIN,&text_style_smal );
+	lv_obj_set_event_cb(list_btn[1], event_handler);
+
+	list_btn[2] = lv_list_add_btn(listConfig, NULL, "DEVICE INFO");
+	lv_obj_add_style(list_btn[2],LV_OBJ_PART_MAIN,&text_style_smal );
+	lv_obj_set_event_cb(list_btn[2], event_handler);
+	lv_list_focus_btn(listConfig,list_btn[0]);
+
+//    Lv_btn_menu = lv_btn_create(Main_Screen, NULL);
+//    lv_obj_set_event_cb(Lv_btn_menu, event_btn_menu_handler);
+//    lv_obj_set_size(Lv_btn_menu, 128/4, 2);
+//    lv_obj_set_pos(Lv_btn_menu, 0, 62);
+//    lv_obj_t *label = lv_label_create(Lv_btn_menu, NULL);
+//    lv_label_set_text(label, "");
+//
+//    Lv_btn_up = lv_btn_create(Main_Screen,Lv_btn_menu);
+//    lv_obj_set_event_cb(Lv_btn_up, event_btn_up_handler);
+//    lv_obj_align(Lv_btn_up, Lv_btn_menu, LV_ALIGN_IN_BOTTOM_MID, 128/4, 0);
+//    label = lv_label_create(Lv_btn_up, NULL);
+//    //lv_label_set_text(label, "up");
+//
+//    Lv_btn_down = lv_btn_create(Main_Screen,Lv_btn_menu);
+//    lv_obj_set_event_cb(Lv_btn_down, event_btn_down_handler);
+//	lv_obj_align(Lv_btn_down, Lv_btn_up, LV_ALIGN_IN_BOTTOM_MID, 128/4, 0);
+//	label = lv_label_create(Lv_btn_down, NULL);
+//	//lv_label_set_text(label, "down");
+//
+//	Lv_btn_exit = lv_btn_create(Main_Screen,Lv_btn_menu);
+//	lv_obj_set_event_cb(Lv_btn_exit, event_btn_exit_handler);
+//	lv_obj_align(Lv_btn_exit, Lv_btn_down, LV_ALIGN_IN_BOTTOM_RIGHT, 128/4, 0);
+//	label = lv_label_create(Lv_btn_exit, NULL);
+	//lv_label_set_text(label, "exit");
+
+
+	lv_scr_load(Main_Screen);
+
 }
 void Lv_Sensor_Data_set(float val)
 {

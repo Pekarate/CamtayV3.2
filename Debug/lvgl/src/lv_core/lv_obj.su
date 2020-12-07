@@ -109,7 +109,6 @@ lv_obj_style_dec.h:197:1:lv_obj_get_style_scale_end_line_width	16	static
 lv_obj_style_dec.h:198:1:lv_obj_get_style_scale_grad_color	16	static
 lv_obj_style_dec.h:199:1:lv_obj_get_style_scale_end_color	16	static
 lv_obj.c:171:6:lv_init	48	static
-lv_obj.c:246:6:lv_deinit	8	static
 lv_obj.c:273:12:lv_obj_create	32	static
 lv_obj.c:480:10:lv_obj_del	40	static
 lv_obj.c:515:6:lv_obj_del_anim_ready_cb	16	static

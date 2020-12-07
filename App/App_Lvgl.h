@@ -11,6 +11,13 @@
 void lv_obj_init(void);
 
 
+typedef enum{
+	MAIN_SCREEN,
+	SETUP_SCREEN
+}Sys_Screen_Active;
+
+extern Sys_Screen_Active current_active;
+void Lv_switch_to_screen(Sys_Screen_Active screen);
 void lv_Gps_on();
 void lv_Gps_off();
 void lv_Sim_ready();
@@ -28,4 +35,7 @@ void Lv_Sensor_Unit_set(char *Unit);
 int App_add_console_log(char *log,int len);
 
 void Lv_DateTime_update(char *Time);
+
+void Lv_list_up(uint8_t up_down);
+
 #endif /* APP_LVGL_H_ */

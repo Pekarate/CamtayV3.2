@@ -1,4 +1,6 @@
-App_Gpio.c:17:5:SET_PWR_CTRL_GET_STATE	32	static,ignoring_inline_asm
-App_Gpio.c:36:5:Power_ctrl_Process	8	static
-App_Gpio.c:76:6:Button_Init	4	static
-App_Gpio.c:99:6:Button_process	16	static
+App_Gpio.c:21:5:GPIO_Add_message	32	static
+App_Gpio.c:37:5:GPIO_Get_message	40	static
+App_Gpio.c:49:5:SET_PWR_CTRL_GET_STATE	32	static,ignoring_inline_asm
+App_Gpio.c:68:5:Power_ctrl_Process	8	static
+App_Gpio.c:109:6:Button_Init	8	static
+App_Gpio.c:138:6:Button_process	16	static

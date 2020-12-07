@@ -25,6 +25,7 @@ int SD_Card_Mount(void)
 	  else
 	  {
 		  Is_mounted =0;
+		  // no sd card
 
 	  }
 	  return Is_mounted;

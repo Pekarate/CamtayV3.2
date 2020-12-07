@@ -8,6 +8,7 @@
 #include "App_Lvgl.h"
 #include "App_SD_Card.h"
 #include "lv_port_disp_template.h"
+#include "lv_port_indev_template.h"
 #include "cJSON.h"
 #include  "App_Sensor.h"
 #include "User_define.h"
@@ -247,6 +248,7 @@ static void Update_Baterry_Data()
 
 		}
 }
+uint8_t cnt = 0;
  void MainfunctionTask(void const * argument)
  {
 	 Sys_Get_UID();
@@ -278,53 +280,175 @@ static void Update_Baterry_Data()
 	  Time_sendata = HAL_GetTick()+2000;
 	  DateTime_Updatetime = HAL_GetTick()-1;
 	  xMessage Handle;
+	  IoMessage BTN_Message;
+	  uint32_t cnttask = 0;
 	  for (;;) {
-		  Ramfree = xPortGetFreeHeapSize();
-		 		if(HAL_GetTick()> DateTime_Updatetime)
-		 		{
-		 			DateTime_Updatetime = HAL_GetTick()+30000;
-		 			Update_Datetime();
-		 		}
-		 		Updata_data_sensor();
-		 		Update_Baterry_Data();
-				if(xQueueReceive(Queue_Handle, &Handle, ( TickType_t )1) == pdPASS )
-				{
-					switch (Handle.handle_id) {
-						case GPS_GET_LOCATION_DONE:
-							lv_Gps_on();
-							break;
-						case GPS_GET_LOCATION_FAIL:
-							lv_Gps_off();
-							break;
-						case SIM_READY:
-							lv_Sim_ready();
-							break;
-						case SIM_NOT_READY:
-							lv_Sim_not_ready();
-							break;
-						case GSM_ON:
-							lv_Gsm_on();
-							break;
-						case GSM_OFF:
-							lv_Gsm_off();
-							break;
-						case SYSTEM_OFF:
-							//lv_Gsm_off();
-							HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
-							break;
-						default:
+		  for(;;)
+		  {
+			  lv_task_handler();
+			  osDelay(1); // 5ms
+			  cnttask++;
+			  if(cnttask>1500)
+			  {
+				  Lv_switch_to_screen(SETUP_SCREEN);
+			  }
+			  else if(cnttask>3000)
+			  {
+				  Lv_switch_to_screen(MAIN_SCREEN);
+				  cnttask=0;
+			  }
+
+		  }
+		  	  	  	Ramfree = xPortGetFreeHeapSize();
+		 			switch (current_active) {
+						case MAIN_SCREEN:
+					 		if(HAL_GetTick()> DateTime_Updatetime)
+					 		{
+					 			DateTime_Updatetime = HAL_GetTick()+30000;
+					 			Update_Datetime();
+					 		}
+					 		Updata_data_sensor();
+					 		Update_Baterry_Data();
+							if(xQueueReceive(Queue_Handle, &Handle, ( TickType_t )1) == pdPASS )
+							{
+								switch (Handle.handle_id) {
+									case GPS_GET_LOCATION_DONE:
+										lv_Gps_on();
+										break;
+									case GPS_GET_LOCATION_FAIL:
+										lv_Gps_off();
+										break;
+									case SIM_READY:
+										lv_Sim_ready();
+										break;
+									case SIM_NOT_READY:
+										lv_Sim_not_ready();
+										break;
+									case GSM_ON:
+										lv_Gsm_on();
+										break;
+									case GSM_OFF:
+										lv_Gsm_off();
+										break;
+									case SYSTEM_OFF:
+										//lv_Gsm_off();
+										HAL_GPIO_WritePin(PWR_OFF_GPIO_Port, PWR_OFF_Pin, GPIO_PIN_SET);
+										break;
+									default:
+										break;
+								}
+							}
+					 		if(GPIO_Get_message(&BTN_Message))
+					 		{
+					 			switch (BTN_Message.btn_id){
+								case BTN_ID_MENU:
+									{
+										switch (BTN_Message.event) {
+
+											case BTN_RELEASE:
+												if(BTN_Message.Time_press <1000) //pre Presslong
+												{
+													//
+													Lv_switch_to_screen(SETUP_SCREEN);
+												}
+												break;
+											case BTN_PRESS_LONG:
+
+												break;
+											default:
+												break;
+										}
+									}
+									break;
+
+								case BTN_ID_EXIT:
+
+									break;
+								case BTN_ID_UP:
+									{
+										if(BTN_Message.event == BTN_RELEASE)
+										{
+//											Lv_list_up(1);
+										}
+									}
+									break;
+								case BTN_ID_DOWN:
+									{
+										if(BTN_Message.event == BTN_RELEASE)
+										{
+//											Lv_list_up(0);
+										}
+									}
+									break;
+								default:
+									break;
+					 			}
+							}
+					 		break;
+							case SETUP_SCREEN:
+								if(GPIO_Get_message(&BTN_Message))
+								{
+									switch (BTN_Message.btn_id){
+										case BTN_ID_MENU:
+											{
+												switch (BTN_Message.event) {
+
+													case BTN_RELEASE:
+														if(BTN_Message.Time_press <1000) //pre Presslong
+														{
+															//
+														}
+														break;
+													case BTN_PRESS_LONG:
+
+														break;
+													default:
+														break;
+												}
+											}
+											break;
+
+										case BTN_ID_EXIT:
+											if(BTN_Message.event == BTN_RELEASE)
+											{
+												cnt++;
+												Lv_switch_to_screen(MAIN_SCREEN);
+											}
+											break;
+										case BTN_ID_UP:
+											{
+												if(BTN_Message.event == BTN_RELEASE)
+												{
+													Lv_list_up(1);
+												}
+											}
+											break;
+										case BTN_ID_DOWN:
+											{
+												if(BTN_Message.event == BTN_RELEASE)
+												{
+													Lv_list_up(0);
+												}
+											}
+											break;
+										default:
+											break;
+									}
+								}
+					 	default:
 							break;
 					}
-				}
+
 				lv_task_handler();
 		 		osDelay(1); // 5ms
-	}
+	  }
  }
 
 uint32_t time_tt1,time_tt2 = 0;
 
  void io_handle_cb(void const * argument){
 	 Button_Init();
+	 //lv_port_indev_init();
 	 for (;;) {
 		 time_tt1 = HAL_GetTick();
 		 Power_ctrl_Process();
@@ -354,7 +478,7 @@ uint32_t time_tt1,time_tt2 = 0;
 			return -1; //return on error
 		}
 	 //STC3115_Hardware_reset();
-	 osDelay(1000);
+	 osDelay(1500);
 	 for (;;) {
 
 		 if(HAL_GetTick() > Battery_Gettime)

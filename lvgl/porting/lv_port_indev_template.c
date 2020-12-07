@@ -4,7 +4,7 @@
  */
 
  /*Copy this file as "lv_port_indev.c" and set this value to "1" to enable content*/
-#if 0
+#if 1
 
 /*********************
  *      INCLUDES
@@ -14,7 +14,7 @@
 /*********************
  *      DEFINES
  *********************/
-
+#include "App_Gpio.h"
 /**********************
  *      TYPEDEFS
  **********************/
@@ -81,7 +81,7 @@ void lv_port_indev_init(void)
 
 
     lv_indev_drv_t indev_drv;
-
+#if 0
     /*------------------
      * Touchpad
      * -----------------*/
@@ -148,7 +148,7 @@ void lv_port_indev_init(void)
      * add objects to the group with `lv_group_add_obj(group, obj)`
      * and assign this input device to group to navigate in it:
      * `lv_indev_set_group(indev_encoder, group);` */
-
+#endif
     /*------------------
      * Button
      * -----------------*/
@@ -163,9 +163,11 @@ void lv_port_indev_init(void)
     indev_button = lv_indev_drv_register(&indev_drv);
 
     /*Assign buttons to points on the screen*/
-    static const lv_point_t btn_points[2] = {
-            {10, 10},   /*Button 0 -> x:10; y:10*/
-            {40, 100},  /*Button 1 -> x:40; y:100*/
+    static const lv_point_t btn_points[4] = {
+            {16, 63},   /*Button 0 -> x:10; y:10*/
+            {48, 63},  /*Button 1 -> x:40; y:100*/
+			{80, 63},   /*Button 0 -> x:10; y:10*/
+			{112, 63},  /*Button 1 -> x:40; y:100*/
     };
     lv_indev_set_button_points(indev_button, btn_points);
 }
@@ -401,7 +403,7 @@ static int8_t button_get_pressed_id(void)
     uint8_t i;
 
     /*Check to buttons see which is being pressed (assume there are 2 buttons)*/
-    for(i = 0; i < 2; i++) {
+    for(i = 0; i < 4; i++) {
         /*Return the pressed button's ID*/
         if(button_is_pressed(i)) {
             return i;
@@ -417,7 +419,18 @@ static bool button_is_pressed(uint8_t id)
 {
 
     /*Your code comes here*/
-
+	if(id == BTN_ID_MENU){
+		return Btn_menu.State;
+	}
+	else if (id == BTN_ID_UP) {
+		return Btn_up.State;
+	}
+	else if (id == BTN_ID_DOWN) {
+		return Btn_down.State;
+	}
+	else if (id == BTN_ID_EXIT) {
+		return Btn_exit.State;
+	}
     return false;
 }
 

@@ -37,10 +37,10 @@ App/Number_60.o: ../App/Number_60.c ../lvgl/lvgl.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_core/lv_style.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_label.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h \
- d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h \
- d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_font\lv_font.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_img.h \
@@ -78,9 +78,9 @@ App/Number_60.o: ../App/Number_60.c ../lvgl/lvgl.h \
  ../lvgl/src/lv_widgets/../lv_font/lv_symbol_def.h \
  ../lvgl/src/lv_widgets/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw.h \
- ../lvgl/src/lv_widgets/../lv_draw/../lv_conf_internal.h \
- ../lvgl/src/lv_widgets/../lv_draw/../lv_core/lv_style.h \
- ../lvgl/src/lv_widgets/../lv_draw/../lv_misc/lv_txt.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_img_decoder.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_rect.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_label.h \
@@ -220,13 +220,13 @@ App/Number_60.o: ../App/Number_60.c ../lvgl/lvgl.h \
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_bidi.h:
 
-d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_conf_internal.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h:
 
-d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_font\lv_font.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h:
 
@@ -318,11 +318,11 @@ d:\arm\bocamtay_v3\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_draw.h:
 
-../lvgl/src/lv_widgets/../lv_draw/../lv_conf_internal.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
 
-../lvgl/src/lv_widgets/../lv_draw/../lv_core/lv_style.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h:
 
-../lvgl/src/lv_widgets/../lv_draw/../lv_misc/lv_txt.h:
+d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_img_decoder.h:
 
