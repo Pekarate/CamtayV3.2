@@ -221,4 +221,5 @@
 "lvgl/tests/lv_test_fonts/font_1.o"
 "lvgl/tests/lv_test_fonts/font_2.o"
 "lvgl/tests/lv_test_fonts/font_3.o"
+"lvgl/tests/lv_test_objx/lv_test_cont.o"
 "lvgl/tests/lv_test_widgets/lv_test_label.o"

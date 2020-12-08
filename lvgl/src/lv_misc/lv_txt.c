@@ -6,11 +6,9 @@
 /*********************
  *      INCLUDES
  *********************/
-#include <stdarg.h>
 #include "lv_txt.h"
 #include "lv_math.h"
 #include "lv_log.h"
-#include "lv_debug.h"
 
 /*********************
  *      DEFINES
@@ -149,7 +147,7 @@ void _lv_txt_get_size(lv_point_t * size_res, const char * text, const lv_font_t 
  *
  * If the first character is a break character, returns the next index.
  *
- * Example calls from lv_txt_get_next_line() assuming sufficient max_width and
+ * Example calls from lv_txt_get_next_line() assuming sufficent max_width and
  * txt = "Test text\n"
  *        0123456789
  *
@@ -438,8 +436,6 @@ void _lv_txt_ins(char * txt_buf, uint32_t pos, const char * ins_txt)
 {
     size_t old_len = strlen(txt_buf);
     size_t ins_len = strlen(ins_txt);
-    if(ins_len == 0) return;
-
     size_t new_len = ins_len + old_len;
     pos              = _lv_txt_encoded_get_byte_id(txt_buf, pos); /*Convert to byte index instead of letter index*/
 
@@ -473,54 +469,6 @@ void _lv_txt_cut(char * txt, uint32_t pos, uint32_t len)
     for(i = pos; i <= old_len - len; i++) {
         txt[i] = txt[i + len];
     }
-}
-
-/**
- * return a new formatted text. Memory will be allocated to store the text.
- * @param fmt `printf`-like format
- * @return pointer to the allocated text string.
- */
-char * _lv_txt_set_text_vfmt(const char * fmt, va_list ap)
-{
-    /*Allocate space for the new text by using trick from C99 standard section 7.19.6.12 */
-    va_list ap_copy;
-    va_copy(ap_copy, ap);
-    uint32_t len = lv_vsnprintf(NULL, 0, fmt, ap_copy);
-    va_end(ap_copy);
-
-    char * text = 0;
-#if LV_USE_ARABIC_PERSIAN_CHARS
-    /*Put together the text according to the format string*/
-    char * raw_txt = _lv_mem_buf_get(len + 1);
-    LV_ASSERT_MEM(raw_txt);
-    if(raw_txt == NULL) {
-        return NULL;
-    }
-
-    lv_vsnprintf(raw_txt, len + 1, fmt, ap);
-
-    /*Get the size of the Arabic text and process it*/
-    size_t len_ap = _lv_txt_ap_calc_bytes_cnt(raw_txt);
-    text = lv_mem_alloc(len_ap + 1);
-    LV_ASSERT_MEM(text);
-    if(text == NULL) {
-        return NULL;
-    }
-    _lv_txt_ap_proc(raw_txt, text);
-
-    _lv_mem_buf_release(raw_txt);
-#else
-    text = lv_mem_alloc(len + 1);
-    LV_ASSERT_MEM(text);
-    if(text == NULL) {
-        return NULL;
-    }
-    text[len] = 0; /* Ensure NULL termination */
-
-    lv_vsnprintf(text, len + 1, fmt, ap);
-#endif
-
-    return text;
 }
 
 #if LV_TXT_ENC == LV_TXT_ENC_UTF8
@@ -586,7 +534,6 @@ static uint32_t lv_txt_unicode_to_utf8(uint32_t letter_uni)
  */
 static uint32_t lv_txt_utf8_conv_wc(uint32_t c)
 {
-#if LV_BIG_ENDIAN_SYSTEM == 0
     /*Swap the bytes (UTF-8 is big endian, but the MCUs are little endian)*/
     if((c & 0x80) != 0) {
         uint32_t swapped;
@@ -600,7 +547,7 @@ static uint32_t lv_txt_utf8_conv_wc(uint32_t c)
         }
         c = swapped;
     }
-#endif
+
     return c;
 }
 

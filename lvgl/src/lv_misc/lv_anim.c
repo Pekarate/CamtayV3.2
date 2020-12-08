@@ -64,7 +64,7 @@ void _lv_anim_core_init(void)
     last_task_run = lv_tick_get();
     _lv_anim_task = lv_task_create(anim_task, LV_DISP_DEF_REFR_PERIOD, LV_ANIM_TASK_PRIO, NULL);
     anim_mark_list_change(); /*Turn off the animation task*/
-    anim_list_changed = false; /*The list has not actually changed*/
+    anim_list_changed = false; /*The list has not actaully changed*/
 }
 
 /**
@@ -73,6 +73,7 @@ void _lv_anim_core_init(void)
  * lv_anim_t a;
  * lv_anim_init(&a);
  * lv_anim_set_...(&a);
+ * lv_anim_craete(&a);
  * @param a pointer to an `lv_anim_t` variable to initialize
  */
 void lv_anim_init(lv_anim_t * a)
@@ -341,7 +342,7 @@ lv_anim_value_t lv_anim_path_overshoot(const lv_anim_path_t * path, const lv_ani
     else
         t = (uint32_t)((uint32_t)a->act_time * 1024) / a->time;
 
-    int32_t step = _lv_bezier3(t, 0, 1000, 1300, 1024);
+    int32_t step = _lv_bezier3(t, 0, 1000, 2000, 1024);
 
     int32_t new_value;
     new_value = (int32_t)step * (a->end - a->start);
@@ -475,11 +476,8 @@ static void anim_task(lv_task_t * param)
                 if(a->path.cb) new_value = a->path.cb(&a->path, a);
                 else new_value = lv_anim_path_linear(&a->path, a);
 
-                if(new_value != a->current) {
-                    a->current = new_value;
-                    /*Apply the calculated value*/
-                    if(a->exec_cb) a->exec_cb(a->var, new_value);
-                }
+                /*Apply the calculated value*/
+                if(a->exec_cb) a->exec_cb(a->var, new_value);
 
                 /*If the time is elapsed the animation is ready*/
                 if(a->act_time >= a->time) {
@@ -503,7 +501,7 @@ static void anim_task(lv_task_t * param)
  * Called when an animation is ready to do the necessary thinks
  * e.g. repeat, play back, delete etc.
  * @param a pointer to an animation descriptor
- * @return true: animation delete occurred and the `LV_GC_ROOT(_lv_anim_ll)` has changed
+ * @return true: animation delete occurred nnd the `LV_GC_ROOT(_lv_anim_ll)` has changed
  * */
 static bool anim_ready_handler(lv_anim_t * a)
 {

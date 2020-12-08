@@ -39,8 +39,11 @@ extern uint8_t Is_mounted;
 lv_obj_t *Lb_Data,*Lb_Unit,*Lb_Name,*LB_Time;
 
 lv_obj_t *Lb_line1,*Lb_line2,*Lb_line3,*Lb_line4,*Lb_line5;
-
+lv_obj_t *lb_uid;
 char Lb1_dt[10];
+
+lv_obj_t *lb_calib_infor;
+
 lv_obj_t * list_btn[5];
 
 lv_style_t text_style_num_lage,text_style_nomal,text_style_smal,text_style_very_smal;
@@ -62,21 +65,76 @@ uint32_t Bat_cnt =0;
 uint8_t bat_offset[] = {10,33,66,96};
 
 Sys_Screen_Active current_active = MAIN_SCREEN;
+
+void lv_cablib_start_show()
+{
+	//lv_obj_add_style(lb_calib_infor, LV_OBJ_PART_MAIN, &text_style_smal);
+	lv_label_set_text(lb_calib_infor,"Please wait 2 min..");
+	lv_obj_align(lb_calib_infor, NULL, LV_ALIGN_CENTER, 0, 0);
+}
+uint8_t sensor_running = 0;
+void lv_set_sensor_running(int id)
+{
+	sensor_running = id;
+}
+void lv_cablib_init_show()
+{
+	if(sensor_running == 4)
+	//lv_obj_add_style(lb_calib_infor, LV_OBJ_PART_MAIN, &text_style_smal);
+	{
+		lv_label_set_text(lb_calib_infor,"Please immerse the\nsensor in 12.88mS/\nCm solution and \npress SET");
+	}
+	else if(sensor_running == 4)
+	{
+		lv_label_set_text(lb_calib_infor,"cablib PH sensor");
+	}
+	else
+		lv_label_set_text(lb_calib_infor,"START CALIIB FAIL");
+	lv_obj_align(lb_calib_infor, NULL, LV_ALIGN_CENTER, 0, 0);
+}
+
 void Lv_switch_to_screen(Sys_Screen_Active screen)
 {
 	current_active =screen;
 	switch (screen) {
 		case SETUP_SCREEN:
 			lv_scr_load(Setup_Screen);
+			if(!lv_obj_get_hidden(lb_uid))
+			{
+				lv_obj_set_hidden(lb_uid, true);
+			}
+			if(!lv_obj_get_hidden(lb_calib_infor))
+			{
+				lv_obj_set_hidden(lb_calib_infor, true);
+			}
+			if(lv_obj_get_hidden(listConfig))
+			{
+				lv_obj_set_hidden(listConfig, false);
+			}
 			break;
 		case MAIN_SCREEN:
 			lv_scr_load(Main_Screen);
+			break;
+		case GET_UID_SCREEN:
+			//lv_scr_load(Main_Screen);
+			lv_obj_set_hidden(listConfig, true);
+			lv_obj_set_hidden(lb_uid, false);
+			break;
+		case CALIB_MODE:
+			lv_obj_set_hidden(listConfig, true);
+			lv_cablib_init_show();
+			lv_obj_set_hidden(lb_calib_infor, false);
+			break;
+		case CALIB_START:
+			lv_obj_set_hidden(listConfig, true);
+			lv_cablib_start_show();
+			//lv_obj_set_hidden(lb_calib_infor, true);
 			break;
 		default:
 			break;
 	}
 
-	lv_scr_load(Setup_Screen);
+	//lv_scr_load(Setup_Screen);
 }
 void Lv_list_up(uint8_t up_down)
 {
@@ -95,6 +153,26 @@ void Lv_list_up(uint8_t up_down)
 		}
 	}
 	lv_list_focus_btn(listConfig, list_btn[List_btn_cnt]);
+}
+int lv_list_get_forcus_index()
+{
+	return List_btn_cnt;
+}
+void lv_list_forcus_btn()
+{
+	switch (List_btn_cnt) {
+		case 0:
+
+			break;
+		case 1:
+			Lv_switch_to_screen(CALIB_MODE);
+			break;
+		case 2:
+			Lv_switch_to_screen(GET_UID_SCREEN);
+			break;
+		default:
+			break;
+	}
 }
 
 void Sys_Update_Data(float val)
@@ -277,12 +355,18 @@ static void lv_font_init(void)
 	lv_style_set_text_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_style_set_text_font(&text_style_smal, LV_STATE_DEFAULT, &FONT_TEXT_SMALL);
 
-	//lv_style_set_pad_top(&text_style_smal, LV_STATE_DEFAULT, 2);
-	lv_style_set_pad_all(&text_style_smal, LV_STATE_DEFAULT, 0);
+	lv_style_set_pad_top(&text_style_smal, LV_STATE_DEFAULT, 0);
+	lv_style_set_pad_right(&text_style_smal, LV_STATE_DEFAULT, 0);
+	lv_style_set_pad_bottom(&text_style_smal, LV_STATE_DEFAULT, 0);
 	lv_style_set_pad_left(&text_style_smal, LV_STATE_DEFAULT, 8);
+	//lv_style_set_pad(&text_style_smal, LV_STATE_DEFAULT, 0);
+
 	//lv_style_set_border_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_BLACK);
 	lv_style_set_bg_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_BLACK);
 	lv_style_set_text_color(&text_style_smal, LV_STATE_FOCUSED, LV_COLOR_WHITE);
+	lv_style_set_border_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+	//lv_style_set_border_color(&text_style_smal, LV_STATE_FOCUSED|LV_STATE_PRESSED, LV_COLOR_BLACK);
+
 
 //	lv_style_set_bg_color(&text_style_smal, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 //	lv_style_set_bg_color(&text_style_smal, LV_STATE_PRESSED, LV_COLOR_BLACK);
@@ -414,11 +498,11 @@ void lv_obj_init(void) {
 	lv_obj_set_pos(LB_Time,50,0);
 
 	lv_obj_add_style(Lb_Unit, LV_OBJ_PART_MAIN, &text_style_smal);
-	lv_label_set_text(Lb_Unit, "mg/l");
+	lv_label_set_text(Lb_Unit, "");
 	lv_obj_set_pos(Lb_Unit, 125- lv_obj_get_width(Lb_Unit) , 61 - lv_obj_get_height(Lb_Data) - 1 -lv_obj_get_height(Lb_Unit) );
 
-	lv_obj_add_style(Lb_Name, LV_OBJ_PART_MAIN, &text_style_nomal);
-	lv_label_set_text(Lb_Name, "Đo Mặn");
+	lv_obj_add_style(Lb_Name, LV_OBJ_PART_MAIN, &text_style_smal);
+	lv_label_set_text(Lb_Name, "Scan");
 	lv_obj_set_pos(Lb_Name, 0,8);
 
 	/* Align the Label to the center
@@ -426,48 +510,23 @@ void lv_obj_init(void) {
      * 0, 0 at the end means an x, y offset after alignment*/
 	lv_obj_set_pos(Lb_Data, 127- lv_obj_get_width(Lb_Data), 63 - lv_obj_get_height(Lb_Data));
 
-	//lv_scr_load(Main_Screen);
 
 
 
     /*Create a label on the page*/
-//    Lb_line1 = lv_label_create(Setup_Screen, NULL);
-//    Lb_line2 = lv_label_create(Setup_Screen, NULL);
-//    Lb_line3 =lv_label_create(Setup_Screen, NULL);
-//    Lb_line4 =lv_label_create(Setup_Screen, NULL);
-//    Lb_line5 = lv_label_create(Setup_Screen, NULL);
-//    lv_obj_add_style(Lb_line1,LV_OBJ_PART_MAIN,&text_style_very_smal);
-//    lv_obj_add_style(Lb_line2,LV_OBJ_PART_MAIN,&text_style_very_smal);
-//    lv_obj_add_style(Lb_line3,LV_OBJ_PART_MAIN,&text_style_very_smal);
-//    lv_obj_add_style(Lb_line4,LV_OBJ_PART_MAIN,&text_style_very_smal);
-//    lv_obj_add_style(Lb_line5,LV_OBJ_PART_MAIN,&text_style_very_smal);
-//    lv_obj_set_pos(Lb_line1, 0, 0);
-//    lv_obj_set_pos(Lb_line2, 0, 12);
-//    lv_obj_set_pos(Lb_line3, 0, 24);
-//    lv_obj_set_pos(Lb_line4, 0, 36);
-//    lv_obj_set_pos(Lb_line5, 0, 48);
-//    lv_label_set_text(Lb_line1, "");
-//    lv_label_set_text(Lb_line2,	"");
-//    lv_label_set_text(Lb_line3,	"");
-//    lv_label_set_text(Lb_line4,	"");
-//    lv_label_set_text(Lb_line5,	"");
-
-
 
 	listConfig = lv_list_create(Setup_Screen, NULL);
-	lv_obj_set_size(listConfig, 128, 64);
-	lv_obj_set_pos(listConfig, 0, 0);
-
+	lv_obj_set_size(listConfig, 127, 63);
+	lv_obj_set_pos(listConfig, 1, 1);
+	lv_obj_add_style(listConfig,LV_OBJ_PART_ALL,&text_style_smal );
 	/*Add buttons to the list*/
-
-
 
 	list_btn[0] = lv_list_add_btn(listConfig, NULL, "SETUP");
 	lv_obj_add_style(list_btn[0],LV_OBJ_PART_MAIN,&text_style_smal );
 
 	lv_obj_set_event_cb(list_btn[0], event_handler);
 
-	list_btn[1] = lv_list_add_btn(listConfig, NULL, "OPEN");
+	list_btn[1] = lv_list_add_btn(listConfig, NULL, "CALIBRATION");
 	lv_obj_add_style(list_btn[1],LV_OBJ_PART_MAIN,&text_style_smal );
 	lv_obj_set_event_cb(list_btn[1], event_handler);
 
@@ -476,31 +535,20 @@ void lv_obj_init(void) {
 	lv_obj_set_event_cb(list_btn[2], event_handler);
 	lv_list_focus_btn(listConfig,list_btn[0]);
 
-//    Lv_btn_menu = lv_btn_create(Main_Screen, NULL);
-//    lv_obj_set_event_cb(Lv_btn_menu, event_btn_menu_handler);
-//    lv_obj_set_size(Lv_btn_menu, 128/4, 2);
-//    lv_obj_set_pos(Lv_btn_menu, 0, 62);
-//    lv_obj_t *label = lv_label_create(Lv_btn_menu, NULL);
-//    lv_label_set_text(label, "");
-//
-//    Lv_btn_up = lv_btn_create(Main_Screen,Lv_btn_menu);
-//    lv_obj_set_event_cb(Lv_btn_up, event_btn_up_handler);
-//    lv_obj_align(Lv_btn_up, Lv_btn_menu, LV_ALIGN_IN_BOTTOM_MID, 128/4, 0);
-//    label = lv_label_create(Lv_btn_up, NULL);
-//    //lv_label_set_text(label, "up");
-//
-//    Lv_btn_down = lv_btn_create(Main_Screen,Lv_btn_menu);
-//    lv_obj_set_event_cb(Lv_btn_down, event_btn_down_handler);
-//	lv_obj_align(Lv_btn_down, Lv_btn_up, LV_ALIGN_IN_BOTTOM_MID, 128/4, 0);
-//	label = lv_label_create(Lv_btn_down, NULL);
-//	//lv_label_set_text(label, "down");
-//
-//	Lv_btn_exit = lv_btn_create(Main_Screen,Lv_btn_menu);
-//	lv_obj_set_event_cb(Lv_btn_exit, event_btn_exit_handler);
-//	lv_obj_align(Lv_btn_exit, Lv_btn_down, LV_ALIGN_IN_BOTTOM_RIGHT, 128/4, 0);
-//	label = lv_label_create(Lv_btn_exit, NULL);
-	//lv_label_set_text(label, "exit");
 
+	lb_uid = lv_label_create(Setup_Screen, NULL);
+	lv_obj_add_style(lb_uid, LV_OBJ_PART_MAIN, &text_style_nomal);
+	char UID_infor[25];
+	sprintf(UID_infor,"ID: %s",UID);
+	lv_label_set_text(lb_uid,UID_infor);
+	lv_obj_align(lb_uid, NULL, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_set_hidden(lb_uid, true);
+
+	lb_calib_infor = lv_label_create(Setup_Screen, NULL);
+	lv_obj_add_style(lb_calib_infor, LV_OBJ_PART_MAIN, &text_style_smal);
+	lv_label_set_text(lb_calib_infor,"Please immerse the\nsensor in 12.88mS/\nCm solution and \npress SET");
+	lv_obj_align(lb_calib_infor, NULL, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_set_hidden(lb_calib_infor, true);
 
 	lv_scr_load(Main_Screen);
 

@@ -5,12 +5,11 @@ lv_obj_style_dec.h:110:1:lv_obj_get_style_pad_top	16	static
 lv_obj_style_dec.h:112:1:lv_obj_get_style_pad_left	16	static
 lv_obj_style_dec.h:113:1:lv_obj_get_style_pad_right	16	static
 lv_obj_style_dec.h:114:1:lv_obj_get_style_pad_inner	16	static
-lv_obj_style_dec.h:169:1:lv_obj_get_style_line_width	16	static
-lv_obj_style_dec.h:194:1:lv_obj_get_style_scale_width	16	static
+lv_obj_style_dec.h:168:1:lv_obj_get_style_line_width	16	static
+lv_obj_style_dec.h:193:1:lv_obj_get_style_scale_width	16	static
 lv_gauge.h:113:20:lv_gauge_set_critical_value	16	static
 lv_gauge.h:181:23:lv_gauge_get_min_value	16	static
 lv_gauge.h:191:23:lv_gauge_get_max_value	16	static
-lv_gauge.h:238:24:lv_gauge_get_angle_offset	16	static
 lv_gauge.c:65:12:lv_gauge_create	40	static
 lv_gauge.c:145:6:lv_gauge_set_needle_count	48	static
 lv_gauge.c:180:6:lv_gauge_set_value	88	static

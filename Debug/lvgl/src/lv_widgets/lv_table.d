@@ -1,7 +1,6 @@
 lvgl/src/lv_widgets/lv_table.o: ../lvgl/src/lv_widgets/lv_table.c \
  ../lvgl/src/lv_widgets/lv_table.h \
- ../lvgl/src/lv_widgets/../lv_conf_internal.h \
- ../lvgl/src/lv_widgets/../lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ ../lvgl/src/lv_widgets/../lv_conf_internal.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_widgets/../lv_core/lv_obj.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
  ../lvgl/src/lv_widgets/../lv_core/lv_style.h \
@@ -41,7 +40,6 @@ lvgl/src/lv_widgets/lv_table.o: ../lvgl/src/lv_widgets/lv_table.c \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_line.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_img.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_img_decoder.h \
@@ -75,7 +73,6 @@ lvgl/src/lv_widgets/lv_table.o: ../lvgl/src/lv_widgets/lv_table.c \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_obj.h \
  ../lvgl/src/lv_widgets/../lv_misc/lv_math.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_label.h \
- ../lvgl/src/lv_widgets/../lv_misc/lv_printf.h \
  ../lvgl/src/lv_widgets/../lv_themes/lv_theme.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h \
@@ -88,8 +85,6 @@ lvgl/src/lv_widgets/lv_table.o: ../lvgl/src/lv_widgets/lv_table.c \
 ../lvgl/src/lv_widgets/lv_table.h:
 
 ../lvgl/src/lv_widgets/../lv_conf_internal.h:
-
-../lvgl/src/lv_widgets/../lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 
@@ -171,8 +166,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h:
-
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_line.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_img.h:
@@ -238,8 +231,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_obj.h:
 ../lvgl/src/lv_widgets/../lv_misc/lv_math.h:
 
 ../lvgl/src/lv_widgets/../lv_draw/lv_draw_label.h:
-
-../lvgl/src/lv_widgets/../lv_misc/lv_printf.h:
 
 ../lvgl/src/lv_widgets/../lv_themes/lv_theme.h:
 

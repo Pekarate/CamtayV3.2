@@ -1,4 +1,4 @@
-lv_obj_style_dec.h:169:1:lv_obj_get_style_line_width	16	static
+lv_obj_style_dec.h:168:1:lv_obj_get_style_line_width	16	static
 lv_line.c:53:12:lv_line_create	40	static
 lv_line.c:117:6:lv_line_set_points	48	static
 lv_line.c:147:6:lv_line_set_auto_size	32	static

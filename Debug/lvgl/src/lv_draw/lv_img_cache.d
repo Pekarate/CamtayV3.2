@@ -1,7 +1,6 @@
 lvgl/src/lv_draw/lv_img_cache.o: ../lvgl/src/lv_draw/lv_img_cache.c \
  ../lvgl/src/lv_draw/../lv_misc/lv_debug.h \
- ../lvgl/src/lv_draw/../lv_misc/../lv_conf_internal.h \
- ../lvgl/src/lv_draw/../lv_misc/../lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ ../lvgl/src/lv_draw/../lv_misc/../lv_conf_internal.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_draw/lv_img_cache.h ../lvgl/src/lv_draw/lv_img_decoder.h \
  ../lvgl/src/lv_draw/../lv_conf_internal.h \
  ../lvgl/src/lv_draw/lv_img_buf.h \
@@ -41,8 +40,6 @@ lvgl/src/lv_draw/lv_img_cache.o: ../lvgl/src/lv_draw/lv_img_cache.c \
 ../lvgl/src/lv_draw/../lv_misc/lv_debug.h:
 
 ../lvgl/src/lv_draw/../lv_misc/../lv_conf_internal.h:
-
-../lvgl/src/lv_draw/../lv_misc/../lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 

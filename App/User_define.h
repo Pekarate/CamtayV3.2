@@ -30,7 +30,7 @@ typedef enum{
 
 }System_state_t;
 
-
+#define TIME_RUN 120000 //ms
 
 typedef enum{
 
@@ -58,7 +58,7 @@ typedef struct{
 
 extern USBD_HandleTypeDef hUsbDeviceFS;
 extern uint8_t Sensor_Id;
-
+extern char UID[20];
 
 extern Sensor_typedef_t Sensor[MAX_SENSOR_NUM];
 void MainfunctionTask(void const * argument);

@@ -1,4 +1,4 @@
-lv_mem.h:214:44:_lv_memcpy_small	32	static
+lv_mem.h:153:44:_lv_memcpy_small	32	static
 lv_area.h:100:20:lv_area_copy	16	static
 lv_area.h:110:26:lv_area_get_width	16	static
 lv_area.h:120:26:lv_area_get_height	16	static
@@ -25,6 +25,6 @@ lv_cont.c:310:13:lv_cont_refr_layout	24	static
 lv_cont.c:341:13:lv_cont_layout_col	56	static
 lv_cont.c:395:13:lv_cont_layout_row	40	static
 lv_cont.c:451:13:lv_cont_layout_center	40	static
-lv_cont.c:489:13:lv_cont_layout_pretty	88	static
-lv_cont.c:623:13:lv_cont_layout_grid	40	static
-lv_cont.c:657:13:lv_cont_refr_autofit	72	static
+lv_cont.c:489:13:lv_cont_layout_pretty	80	static
+lv_cont.c:613:13:lv_cont_layout_grid	40	static
+lv_cont.c:647:13:lv_cont_refr_autofit	72	static

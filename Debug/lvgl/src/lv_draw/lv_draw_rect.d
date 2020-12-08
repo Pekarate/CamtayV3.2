@@ -2,8 +2,7 @@ lvgl/src/lv_draw/lv_draw_rect.o: ../lvgl/src/lv_draw/lv_draw_rect.c \
  ../lvgl/src/lv_draw/lv_draw_rect.h \
  ../lvgl/src/lv_draw/../lv_core/lv_style.h \
  ../lvgl/src/lv_draw/../lv_core/../lv_font/lv_font.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_draw/../lv_core/../lv_font/lv_symbol_def.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
@@ -45,7 +44,6 @@ lvgl/src/lv_draw/lv_draw_rect.o: ../lvgl/src/lv_draw/lv_draw_rect.c \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h \
  ../lvgl/src/lv_draw/../lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/src/lv_draw/../lv_core/../lv_draw/lv_draw_img.h \
@@ -64,8 +62,6 @@ lvgl/src/lv_draw/lv_draw_rect.o: ../lvgl/src/lv_draw/lv_draw_rect.c \
 ../lvgl/src/lv_draw/../lv_core/../lv_font/lv_font.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 
@@ -152,8 +148,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h:
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_style.h:
 

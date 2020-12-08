@@ -19,7 +19,7 @@ extern "C" {
 #include "lv_area.h"
 #include "lv_area.h"
 #include "../lv_font/lv_font.h"
-#include "lv_printf.h"
+
 /*********************
  *      DEFINES
  *********************/
@@ -101,7 +101,7 @@ lv_coord_t _lv_txt_get_width(const char * txt, uint32_t length, const lv_font_t 
                              lv_txt_flag_t flag);
 
 /**
- * Check next character in a string and decide if the character is part of the command or not
+ * Check next character in a string and decide if te character is part of the command or not
  * @param state pointer to a txt_cmd_state_t variable which stores the current state of command
  * processing
  * @param c the current character
@@ -126,13 +126,6 @@ void _lv_txt_ins(char * txt_buf, uint32_t pos, const char * ins_txt);
  * @param len number of characters to delete
  */
 void _lv_txt_cut(char * txt, uint32_t pos, uint32_t len);
-
-/**
- * return a new formatted text. Memory will be allocated to store the text.
- * @param fmt `printf`-like format
- * @return pointer to the allocated text string.
- */
-char * _lv_txt_set_text_vfmt(const char * fmt, va_list ap);
 
 /***************************************************************
  *  GLOBAL FUNCTION POINTERS FOR CAHRACTER ENCODING INTERFACE

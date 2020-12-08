@@ -611,16 +611,16 @@ static void MX_RTC_Init(void)
   }
 
   /* USER CODE BEGIN Check_RTC_BKUP */
-  if(HAL_RTCEx_BKUPRead(&hrtc, 19)!= 1000)
+  if(HAL_RTCEx_BKUPRead(&hrtc, 19)!= 12)
   {
-	  HAL_RTCEx_BKUPWrite(&hrtc, 19, 1000);
+	  HAL_RTCEx_BKUPWrite(&hrtc, 19, 12);
   /* USER CODE END Check_RTC_BKUP */
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 10;
-  sTime.Minutes = 0;
-  sTime.Seconds = 0;
+  sTime.Hours = 19;
+  sTime.Minutes = 18;
+  sTime.Seconds = 30;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
   if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)

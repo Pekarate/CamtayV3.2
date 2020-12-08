@@ -81,10 +81,13 @@ enum {
 
 typedef uint8_t lv_text_decor_t;
 
-typedef uint8_t lv_style_attr_t;
-
-#define LV_STYLE_ATTR_GET_INHERIT(f) ((f)&0x80)
-#define LV_STYLE_ATTR_GET_STATE(f) ((f)&0x7F)
+typedef union {
+    struct {
+        uint8_t state       : 7; /* To which state the property refers to*/
+        uint8_t inherit     : 1; /*1: The property can be inherited*/
+    } bits;
+    uint8_t full;
+} lv_style_attr_t;
 
 #define LV_STYLE_ID_VALUE 0x0   /*max 9 pcs*/
 #define LV_STYLE_ID_COLOR 0x9   /*max 3 pcs*/
@@ -99,7 +102,7 @@ enum {
     LV_STYLE_PROP_INIT(LV_STYLE_TRANSFORM_WIDTH,    0x0, LV_STYLE_ID_VALUE + 4, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_TRANSFORM_HEIGHT,   0x0, LV_STYLE_ID_VALUE + 5, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_TRANSFORM_ANGLE,    0x0, LV_STYLE_ID_VALUE + 6, LV_STYLE_ATTR_NONE),
-    LV_STYLE_PROP_INIT(LV_STYLE_TRANSFORM_ZOOM,     0x0, LV_STYLE_ID_VALUE + 7, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_TRANSFORM_ZOOM,   0x0, LV_STYLE_ID_VALUE + 7, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_OPA_SCALE,          0x0, LV_STYLE_ID_OPA + 0,   LV_STYLE_ATTR_INHERIT),
 
     LV_STYLE_PROP_INIT(LV_STYLE_PAD_TOP,            0x1, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_NONE),
@@ -134,8 +137,8 @@ enum {
     LV_STYLE_PROP_INIT(LV_STYLE_OUTLINE_OPA,         0x4, LV_STYLE_ID_OPA   + 0, LV_STYLE_ATTR_NONE),
 
     LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_WIDTH,       0x5, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_NONE),
-    LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_OFS_X,       0x5, LV_STYLE_ID_VALUE + 1, LV_STYLE_ATTR_NONE),
-    LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_OFS_Y,       0x5, LV_STYLE_ID_VALUE + 2, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_OFS_X,    0x5, LV_STYLE_ID_VALUE + 1, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_OFS_Y,    0x5, LV_STYLE_ID_VALUE + 2, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_SPREAD,      0x5, LV_STYLE_ID_VALUE + 3, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_BLEND_MODE,  0x5, LV_STYLE_ID_VALUE + 4, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_SHADOW_COLOR,       0x5, LV_STYLE_ID_COLOR + 0, LV_STYLE_ATTR_NONE),
@@ -159,15 +162,14 @@ enum {
     LV_STYLE_PROP_INIT(LV_STYLE_VALUE_FONT,          0x7, LV_STYLE_ID_PTR   + 0, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_VALUE_STR,           0x7, LV_STYLE_ID_PTR   + 1, LV_STYLE_ATTR_NONE),
 
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_LETTER_SPACE,   0x8, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_LINE_SPACE,     0x8, LV_STYLE_ID_VALUE + 1, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_DECOR,          0x8, LV_STYLE_ID_VALUE + 2, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_BLEND_MODE,     0x8, LV_STYLE_ID_VALUE + 3, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_COLOR,          0x8, LV_STYLE_ID_COLOR + 0, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_SEL_COLOR,      0x8, LV_STYLE_ID_COLOR + 1, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_SEL_BG_COLOR,   0x8, LV_STYLE_ID_COLOR + 2, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_OPA,            0x8, LV_STYLE_ID_OPA   + 0, LV_STYLE_ATTR_INHERIT),
-    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_FONT,           0x8, LV_STYLE_ID_PTR   + 0, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_LETTER_SPACE,  0x8, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_LINE_SPACE,    0x8, LV_STYLE_ID_VALUE + 1, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_DECOR,         0x8, LV_STYLE_ID_VALUE + 2, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_BLEND_MODE,    0x8, LV_STYLE_ID_VALUE + 3, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_COLOR,         0x8, LV_STYLE_ID_COLOR + 0, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_SEL_COLOR,     0x8, LV_STYLE_ID_COLOR + 1, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_OPA,           0x8, LV_STYLE_ID_OPA   + 0, LV_STYLE_ATTR_INHERIT),
+    LV_STYLE_PROP_INIT(LV_STYLE_TEXT_FONT,          0x8, LV_STYLE_ID_PTR   + 0, LV_STYLE_ATTR_INHERIT),
 
     LV_STYLE_PROP_INIT(LV_STYLE_LINE_WIDTH,         0x9, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_LINE_BLEND_MODE,    0x9, LV_STYLE_ID_VALUE + 1, LV_STYLE_ATTR_NONE),
@@ -192,12 +194,12 @@ enum {
     LV_STYLE_PROP_INIT(LV_STYLE_TRANSITION_PROP_6,  0xB, LV_STYLE_ID_VALUE + 7, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_TRANSITION_PATH,    0xB, LV_STYLE_ID_PTR + 0, LV_STYLE_ATTR_NONE),
 
-    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_WIDTH,            0xC, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_WIDTH,         0xC, LV_STYLE_ID_VALUE + 0, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_SCALE_BORDER_WIDTH,     0xC, LV_STYLE_ID_VALUE + 1, LV_STYLE_ATTR_NONE),
     LV_STYLE_PROP_INIT(LV_STYLE_SCALE_END_BORDER_WIDTH, 0xC, LV_STYLE_ID_VALUE + 2, LV_STYLE_ATTR_NONE),
-    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_END_LINE_WIDTH,   0xC, LV_STYLE_ID_VALUE + 3, LV_STYLE_ATTR_NONE),
-    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_GRAD_COLOR,       0xC, LV_STYLE_ID_COLOR + 0, LV_STYLE_ATTR_NONE),
-    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_END_COLOR,        0xC, LV_STYLE_ID_COLOR + 1, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_END_LINE_WIDTH, 0xC, LV_STYLE_ID_VALUE + 3, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_GRAD_COLOR,     0xC, LV_STYLE_ID_COLOR + 0, LV_STYLE_ATTR_NONE),
+    LV_STYLE_PROP_INIT(LV_STYLE_SCALE_END_COLOR,      0xC, LV_STYLE_ID_COLOR + 1, LV_STYLE_ATTR_NONE),
 };
 
 typedef uint16_t lv_style_property_t;
@@ -222,37 +224,11 @@ typedef struct {
 #if LV_USE_ASSERT_STYLE
     uint32_t sentinel;
 #endif
-    uint32_t style_cnt     : 6;
-    uint32_t has_local     : 1;
-    uint32_t has_trans     : 1;
-    uint32_t skip_trans    : 1;      /*1: Temporally skip the transition style if any*/
-    uint32_t ignore_trans  : 1;      /*1: Mark that this style list shouldn't receive transitions at all*/
-    uint32_t valid_cache   : 1;      /*1: The cache is valid and can be used*/
-    uint32_t ignore_cache  : 1;      /*1: Ignore cache while getting value of properties*/
-
-    uint32_t radius_zero : 1;
-    uint32_t opa_scale_cover      : 1;
-    uint32_t clip_corner_off       : 1;
-    uint32_t transform_all_zero  : 1;
-    uint32_t pad_all_zero : 1;
-    uint32_t margin_all_zero : 1;
-    uint32_t blend_mode_all_normal : 1;
-    uint32_t bg_opa_transp : 1;
-    uint32_t bg_opa_cover : 1;
-
-    uint32_t border_width_zero : 1;
-    uint32_t border_side_full : 1;
-    uint32_t border_post_off : 1;
-
-    uint32_t outline_width_zero : 1;
-    uint32_t pattern_img_null : 1;
-    uint32_t shadow_width_zero : 1;
-    uint32_t value_txt_str : 1;
-    uint32_t img_recolor_opa_transp : 1;
-
-    uint32_t text_space_zero : 1;
-    uint32_t text_decor_none : 1;
-    uint32_t text_font_normal : 1;
+    uint8_t style_cnt;
+    uint8_t has_local    : 1;
+    uint8_t has_trans    : 1;
+    uint8_t skip_trans   : 1;       /*1: Temporally skip the transition style if any*/
+    uint8_t ignore_trans   : 1;     /*1: Mark that this style list shouldn't receive transitions at all*/
 } lv_style_list_t;
 
 /**********************
@@ -597,7 +573,7 @@ bool lv_debug_check_style_list(const lv_style_list_t * list);
  *     lv_style_init(&my_style);
  *     lv_style_copy(&my_style, &style_to_copy);
  */
-#define LV_STYLE_CREATE(name, copy_p) static lv_style_t name; lv_style_init(&name); lv_style_copy(&name, copy_p);
+#define LV_STYLE_CREATE(name, copy_p) static lv_style_t name; lv_style_init(&name); lv_style_copy(&name, copy);
 
 
 
@@ -619,13 +595,13 @@ bool lv_debug_check_style_list(const lv_style_list_t * list);
 #   define LV_ASSERT_STYLE_LIST(list_p) LV_DEBUG_ASSERT(LV_DEBUG_IS_STYLE_LIST(list_p), "Invalid style list", list_p);
 #  endif
 # else
-#   define LV_ASSERT_STYLE(style_p)
-#   define LV_ASSERT_STYLE_LIST(list_p)
+#   define LV_ASSERT_STYLE(style_p) true
+#   define LV_ASSERT_STYLE_LIST(list_p) true
 # endif
 
 #else
-# define LV_ASSERT_STYLE(p)
-# define LV_ASSERT_STYLE_LIST(p)
+# define LV_ASSERT_STYLE(p) true
+# define LV_ASSERT_STYLE_LIST(p) true
 #endif
 
 #ifdef __cplusplus

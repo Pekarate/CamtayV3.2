@@ -1,8 +1,7 @@
 lvgl/src/lv_draw/lv_img_buf.o: ../lvgl/src/lv_draw/lv_img_buf.c \
  ../lvgl/src/lv_draw/lv_img_buf.h \
  ../lvgl/src/lv_draw/../lv_misc/lv_color.h \
- ../lvgl/src/lv_draw/../lv_misc/../lv_conf_internal.h \
- ../lvgl/src/lv_draw/../lv_misc/../lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ ../lvgl/src/lv_draw/../lv_misc/../lv_conf_internal.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_draw/../lv_misc/lv_math.h \
  ../lvgl/src/lv_draw/../lv_misc/lv_area.h \
  ../lvgl/src/lv_draw/../lv_misc/lv_mem.h \
@@ -37,8 +36,6 @@ lvgl/src/lv_draw/lv_img_buf.o: ../lvgl/src/lv_draw/lv_img_buf.c \
 ../lvgl/src/lv_draw/../lv_misc/lv_color.h:
 
 ../lvgl/src/lv_draw/../lv_misc/../lv_conf_internal.h:
-
-../lvgl/src/lv_draw/../lv_misc/../lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 

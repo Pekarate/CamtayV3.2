@@ -13,7 +13,12 @@ void lv_obj_init(void);
 
 typedef enum{
 	MAIN_SCREEN,
-	SETUP_SCREEN
+	SETUP_SCREEN,
+	GET_UID_SCREEN,
+	CALIB_MODE,
+	CALIB_START,
+	CALIB_RESULT,
+	IDE_MODE
 }Sys_Screen_Active;
 
 extern Sys_Screen_Active current_active;
@@ -35,7 +40,8 @@ void Lv_Sensor_Unit_set(char *Unit);
 int App_add_console_log(char *log,int len);
 
 void Lv_DateTime_update(char *Time);
-
+int lv_list_get_forcus_index();
 void Lv_list_up(uint8_t up_down);
-
+void lv_list_forcus_btn();
+void lv_set_sensor_running(int id);
 #endif /* APP_LVGL_H_ */

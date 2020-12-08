@@ -40,7 +40,7 @@
  * @param clip_area the triangle will be drawn only in this area
  * @param draw_dsc pointer to an initialized `lv_draw_rect_dsc_t` variable
  */
-void lv_draw_triangle(const lv_point_t points[], const lv_area_t * clip_area, const lv_draw_rect_dsc_t * draw_dsc)
+void lv_draw_triangle(const lv_point_t points[], const lv_area_t * clip_area, lv_draw_rect_dsc_t * draw_dsc)
 {
     lv_draw_polygon(points, 3, clip_area, draw_dsc);
 }
@@ -53,7 +53,7 @@ void lv_draw_triangle(const lv_point_t points[], const lv_area_t * clip_area, co
  * @param draw_dsc pointer to an initialized `lv_draw_rect_dsc_t` variable
  */
 void lv_draw_polygon(const lv_point_t points[], uint16_t point_cnt, const lv_area_t * clip_area,
-                     const lv_draw_rect_dsc_t * draw_dsc)
+                     lv_draw_rect_dsc_t * draw_dsc)
 {
     if(point_cnt < 3) return;
     if(points == NULL) return;
@@ -94,28 +94,16 @@ void lv_draw_polygon(const lv_point_t points[], uint16_t point_cnt, const lv_are
     int32_t i_next_right;
     uint32_t mask_cnt = 0;
 
-    /*Get the index of the left and right points*/
+    /* Check if the order of points is inverted or not.
+     * The normal case is when the left point is on `y_min_i - 1`*/
     i_next_left = y_min_i - 1;
     if(i_next_left < 0) i_next_left = point_cnt + i_next_left;
 
     i_next_right = y_min_i + 1;
     if(i_next_right > point_cnt - 1) i_next_right = 0;
 
-
-    /* Check if the order of points is inverted or not.
-     * The normal case is when the left point is on `y_min_i - 1`
-     * Explanation:
-     *   if angle(p_left) < angle(p_right) -> inverted
-     *   dy_left/dx_left < dy_right/dx_right
-     *   dy_left * dx_right < dy_right * dx_left
-     */
-    lv_coord_t dxl = points[i_next_left].x - points[y_min_i].x;
-    lv_coord_t dxr = points[i_next_right].x - points[y_min_i].x;
-    lv_coord_t dyl = points[i_next_left].y - points[y_min_i].y;
-    lv_coord_t dyr = points[i_next_right].y - points[y_min_i].y;
-
     bool inv = false;
-    if(dyl * dxr < dyr * dxl) inv = true;
+    if(points[i_next_left].x > points[i_next_right].x && points[i_next_left].y < points[i_next_right].y) inv = true;
 
     do {
         if(!inv) {

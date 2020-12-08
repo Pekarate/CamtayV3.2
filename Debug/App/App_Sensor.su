@@ -1,4 +1,6 @@
 App_Sensor.c:18:5:Sensor_parse	80	static
 App_Sensor.c:91:6:App_Sensor_Init	16	static
 App_Sensor.c:95:5:App_Sensor_Get_NumSensor	4	static
-App_Sensor.c:100:5:Sensor_Scan	32	static,ignoring_inline_asm
+App_Sensor.c:101:6:Calib_sanity	16	static
+App_Sensor.c:128:5:Calib_PH	16	static
+App_Sensor.c:154:5:Sensor_Scan	32	static,ignoring_inline_asm

@@ -100,13 +100,6 @@ void lv_msgbox_add_btns(lv_obj_t * mbox, const char * btn_mapaction[]);
 void lv_msgbox_set_text(lv_obj_t * mbox, const char * txt);
 
 /**
- * Set a formatted text for the message box
- * @param mbox pointer to a message box
- * @param fmt `printf`-like format
- */
-void lv_msgbox_set_text_fmt(lv_obj_t * mbox, const char * fmt, ...);
-
-/**
  * Set animation duration
  * @param mbox pointer to a message box object
  * @param anim_time animation length in  milliseconds (0: no animation)
@@ -128,7 +121,7 @@ void lv_msgbox_stop_auto_close(lv_obj_t * mbox);
 
 /**
  * Set whether recoloring is enabled. Must be called after `lv_msgbox_add_btns`.
- * @param mbox pointer to message box object
+ * @param btnm pointer to button matrix object
  * @param en whether recoloring is enabled
  */
 void lv_msgbox_set_recolor(lv_obj_t * mbox, bool en);
@@ -147,7 +140,7 @@ const char * lv_msgbox_get_text(const lv_obj_t * mbox);
 /**
  * Get the index of the lastly "activated" button by the user (pressed, released etc)
  * Useful in the the `event_cb`.
- * @param mbox pointer to message box object
+ * @param btnm pointer to button matrix object
  * @return  index of the last released button (LV_BTNMATRIX_BTN_NONE: if unset)
  */
 uint16_t lv_msgbox_get_active_btn(lv_obj_t * mbox);
@@ -155,7 +148,7 @@ uint16_t lv_msgbox_get_active_btn(lv_obj_t * mbox);
 /**
  * Get the text of the lastly "activated" button by the user (pressed, released etc)
  * Useful in the the `event_cb`.
- * @param mbox pointer to message box object
+ * @param btnm pointer to button matrix object
  * @return text of the last released button (NULL: if unset)
  */
 const char * lv_msgbox_get_active_btn_text(lv_obj_t * mbox);

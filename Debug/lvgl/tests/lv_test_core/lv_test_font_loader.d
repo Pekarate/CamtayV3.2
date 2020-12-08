@@ -2,8 +2,7 @@ lvgl/tests/lv_test_core/lv_test_font_loader.o: \
  ../lvgl/tests/lv_test_core/lv_test_font_loader.c \
  d:\arm\bocamtay\camtayv3.2\lvgl\lvgl.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_misc/lv_log.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h ../lvgl/lv_conf.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_misc/lv_task.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_misc/lv_mem.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_misc/lv_log.h \
@@ -49,7 +48,6 @@ lvgl/tests/lv_test_core/lv_test_font_loader.o: \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_line.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_img.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_img_decoder.h \
@@ -74,7 +72,6 @@ lvgl/tests/lv_test_core/lv_test_font_loader.o: \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_themes/lv_theme_material.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_themes/lv_theme_mono.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font_loader.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font_fmt_txt.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_misc/lv_printf.h \
@@ -154,8 +151,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\lvgl.h:
 d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_misc/lv_log.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 
@@ -249,8 +244,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h:
-
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_line.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_img.h:
@@ -298,8 +291,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_themes/lv_theme_material.h:
 d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_themes/lv_theme_mono.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font_loader.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src/lv_font/lv_font_fmt_txt.h:
 

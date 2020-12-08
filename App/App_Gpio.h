@@ -40,7 +40,8 @@ typedef enum{
 	BTN_ID_MENU,
 	BTN_ID_UP,
 	BTN_ID_DOWN,
-	BTN_ID_EXIT
+	BTN_ID_EXIT,
+	BTN_FREE
 }Btn_Id;
 
 

@@ -52,5 +52,6 @@ lvgl/src/lv_widgets \
 lvgl/tests \
 lvgl/tests/lv_test_core \
 lvgl/tests/lv_test_fonts \
+lvgl/tests/lv_test_objx \
 lvgl/tests/lv_test_widgets \
 

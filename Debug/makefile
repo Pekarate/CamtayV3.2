@@ -9,6 +9,7 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include lvgl/tests/lv_test_widgets/subdir.mk
+-include lvgl/tests/lv_test_objx/subdir.mk
 -include lvgl/tests/lv_test_fonts/subdir.mk
 -include lvgl/tests/lv_test_core/subdir.mk
 -include lvgl/tests/subdir.mk

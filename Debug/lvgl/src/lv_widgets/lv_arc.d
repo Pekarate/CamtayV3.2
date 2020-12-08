@@ -1,7 +1,6 @@
 lvgl/src/lv_widgets/lv_arc.o: ../lvgl/src/lv_widgets/lv_arc.c \
  ../lvgl/src/lv_widgets/lv_arc.h \
- ../lvgl/src/lv_widgets/../lv_conf_internal.h \
- ../lvgl/src/lv_widgets/../lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ ../lvgl/src/lv_widgets/../lv_conf_internal.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_widgets/../lv_core/lv_obj.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
  ../lvgl/src/lv_widgets/../lv_core/lv_style.h \
@@ -41,7 +40,6 @@ lvgl/src/lv_widgets/lv_arc.o: ../lvgl/src/lv_widgets/lv_arc.c \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_txt.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_line.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_img.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_img_decoder.h \
@@ -50,11 +48,6 @@ lvgl/src/lv_widgets/lv_arc.o: ../lvgl/src/lv_widgets/lv_arc.c \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_fs.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_types.h \
  ../lvgl/src/lv_widgets/../lv_core/lv_obj_style_dec.h \
- ../lvgl/src/lv_widgets/../lv_core/lv_group.h \
- ../lvgl/src/lv_widgets/../lv_core/lv_obj.h \
- ../lvgl/src/lv_widgets/../lv_core/lv_indev.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_hal\lv_hal_indev.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_group.h \
  ../lvgl/src/lv_widgets/../lv_misc/lv_debug.h \
  ../lvgl/src/lv_widgets/../lv_misc/lv_math.h \
  ../lvgl/src/lv_widgets/../lv_draw/lv_draw_arc.h \
@@ -71,8 +64,6 @@ lvgl/src/lv_widgets/lv_arc.o: ../lvgl/src/lv_widgets/lv_arc.c \
 ../lvgl/src/lv_widgets/lv_arc.h:
 
 ../lvgl/src/lv_widgets/../lv_conf_internal.h:
-
-../lvgl/src/lv_widgets/../lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 
@@ -154,8 +145,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_area.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_printf.h:
-
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_line.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_draw\lv_draw_img.h:
@@ -171,16 +160,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_fs.h:
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_misc\lv_types.h:
 
 ../lvgl/src/lv_widgets/../lv_core/lv_obj_style_dec.h:
-
-../lvgl/src/lv_widgets/../lv_core/lv_group.h:
-
-../lvgl/src/lv_widgets/../lv_core/lv_obj.h:
-
-../lvgl/src/lv_widgets/../lv_core/lv_indev.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_hal\lv_hal_indev.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_core\lv_group.h:
 
 ../lvgl/src/lv_widgets/../lv_misc/lv_debug.h:
 

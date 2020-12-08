@@ -9,7 +9,7 @@
 #include "App_Sensor.h"
 #include "ModbusMaster.h"
 #include "cJSON.h"
-
+#include "cmsis_os.h"
 Sensor_typedef_t Sensor[MAX_SENSOR_NUM];
 
 int Sensor_num = 0;
@@ -97,6 +97,60 @@ int App_Sensor_Get_NumSensor()
 	return Sensor_num;
 }
 uint16_t id;
+#define SENSOR_LOG printf
+int  Calib_sanity()
+{
+	SENSOR_LOG("start calib sanity");
+	if(MBm_Write_signal_data(4,40001+0x40,0x60) == MB_OK)
+	{
+		SENSOR_LOG("Enter the calibration successful");
+		if(MBm_Write_signal_data(4,40001+0x41,1288) == MB_OK)
+		{
+			SENSOR_LOG("Wait for 2 minutes");
+			osDelay(60000);
+			SENSOR_LOG("Wait for 1 minutes");
+			osDelay(60000);
+			{
+				uint16_t result =100;
+				MBm_Read_data_hoilding(4,40001+0x43,1,&result);
+				SENSOR_LOG("result: %d",result);
+				return result;
+			}
+		}
+	}
+	else
+	{
+		SENSOR_LOG("Enter the calibration fail");
+	}
+	return -1;
+
+}
+int Calib_PH()
+{
+	SENSOR_LOG("start calib PH");
+	if(MBm_Write_signal_data(5,40001+0x40,0x60) == MB_OK)
+	{
+		SENSOR_LOG("Enter the calibration successful");
+		if(MBm_Write_signal_data(5,40001+0x41,0x04) == MB_OK)
+		{
+			SENSOR_LOG("Wait for 10 seconds");
+			osDelay(15000);
+			{
+				uint16_t result =100;
+				MBm_Read_data_hoilding(5,40001+0x43,1,&result);
+				SENSOR_LOG("result: %d",result);
+				return result;
+			}
+		}
+	}
+	else
+	{
+		SENSOR_LOG("Enter the calibration fail");
+	}
+	return -1;
+}
+
+
 int Sensor_Scan(int Sensor_index,int valueIndex)
 {
 		for(uint8_t i =0;i<3;i++)

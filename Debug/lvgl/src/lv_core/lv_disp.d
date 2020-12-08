@@ -3,8 +3,7 @@ lvgl/src/lv_core/lv_disp.o: ../lvgl/src/lv_core/lv_disp.c \
  ../lvgl/src/lv_core/../lv_hal/lv_hal_disp.h \
  ../lvgl/src/lv_core/../lv_hal/lv_hal.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_color.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h \
- d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_kconfig.h ../lvgl/lv_conf.h \
+ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h ../lvgl/lv_conf.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_math.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_area.h \
  ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_mem.h \
@@ -40,7 +39,6 @@ lvgl/src/lv_core/lv_disp.o: ../lvgl/src/lv_core/lv_disp.c \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_txt.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_area.h \
  d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h \
- ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_line.h \
  ../lvgl/src/lv_core/../lv_draw/lv_draw_img.h \
  ../lvgl/src/lv_core/../lv_draw/lv_img_decoder.h \
@@ -50,9 +48,7 @@ lvgl/src/lv_core/lv_disp.o: ../lvgl/src/lv_core/lv_disp.c \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_mem.h \
  ../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_types.h \
  ../lvgl/src/lv_core/lv_obj_style_dec.h \
- ../lvgl/src/lv_core/../lv_misc/lv_math.h \
- ../lvgl/src/lv_core/../lv_core/lv_refr.h \
- ../lvgl/src/lv_core/../lv_core/lv_obj.h
+ ../lvgl/src/lv_core/../lv_misc/lv_math.h
 
 ../lvgl/src/lv_core/lv_disp.h:
 
@@ -65,8 +61,6 @@ lvgl/src/lv_core/lv_disp.o: ../lvgl/src/lv_core/lv_disp.c \
 ../lvgl/src/lv_core/../lv_hal/../lv_misc/lv_color.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
-
-d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_kconfig.h:
 
 ../lvgl/lv_conf.h:
 
@@ -144,8 +138,6 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_conf_internal.h:
 
 d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 
-../lvgl/src/lv_core/../lv_draw/../lv_misc/lv_printf.h:
-
 ../lvgl/src/lv_core/../lv_draw/lv_draw_line.h:
 
 ../lvgl/src/lv_core/../lv_draw/lv_draw_img.h:
@@ -165,7 +157,3 @@ d:\arm\bocamtay\camtayv3.2\lvgl\src\lv_font\lv_font.h:
 ../lvgl/src/lv_core/lv_obj_style_dec.h:
 
 ../lvgl/src/lv_core/../lv_misc/lv_math.h:
-
-../lvgl/src/lv_core/../lv_core/lv_refr.h:
-
-../lvgl/src/lv_core/../lv_core/lv_obj.h:
