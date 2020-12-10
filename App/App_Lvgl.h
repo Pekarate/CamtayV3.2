@@ -18,8 +18,17 @@ typedef enum{
 	CALIB_MODE,
 	CALIB_START,
 	CALIB_RESULT,
-	IDE_MODE
+	IDE_MODE,
+	UPDATE_DATA
 }Sys_Screen_Active;
+typedef enum{
+	WAITING_GPS,
+	WAITING_NETWORK,
+	WAITING_RESULT,
+	UPDATE_DONE,
+	UPDATE_IDLE
+
+}Updat_data_state;
 
 extern Sys_Screen_Active current_active;
 void Lv_switch_to_screen(Sys_Screen_Active screen);
@@ -36,7 +45,7 @@ void Lv_Battery_set(int Presen,int change);
 void Lv_Sensor_Data_set(float val);
 void Lv_Sensor_Name_set(char *Name);
 void Lv_Sensor_Unit_set(char *Unit);
-
+void lv_cablib_result_show(int res);
 int App_add_console_log(char *log,int len);
 
 void Lv_DateTime_update(char *Time);
@@ -44,4 +53,5 @@ int lv_list_get_forcus_index();
 void Lv_list_up(uint8_t up_down);
 void lv_list_forcus_btn();
 void lv_set_sensor_running(int id);
+void lv_update_data_show(Updat_data_state state,uint16_t arg);
 #endif /* APP_LVGL_H_ */

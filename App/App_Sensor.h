@@ -11,6 +11,8 @@ void App_Sensor_Init(char *Sensor_info);
 int Sensor_Scan(int Sensor_index,int valueIndex);
 int App_Sensor_Get_NumSensor();
 
+int Calib_PH();
+int  Calib_sanity();
 
 typedef enum{
 	SS_INIT,

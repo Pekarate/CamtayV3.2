@@ -266,9 +266,9 @@ MBm_StateTypedef MBm_Write_signal_data(uint8_t SlaveID,uint16_t reg,Mb_data valu
 	Tx_buf[7] = tam;					//dao ma crc	-> 	50
 
 	//MBm_HardwareCheck(Slave);
-	MBm_Send_Buff_Data(Tx_buf,8,100);
+	MBm_Send_Buff_Data(Tx_buf,8,1000);
 
-	Rx_size =  MBm_Recv_Buff_Data(Rx_buf,256,100);
+	Rx_size =  MBm_Recv_Buff_Data(Rx_buf,8,3000);
 	if(Rx_size != 8)
 	{
 			return MB_TIME_OUT;

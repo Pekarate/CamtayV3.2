@@ -205,7 +205,7 @@ void Button_process(volatile Button *Btn)
 					Btn->State = BTN_STATE_RELEASE;
 
 					Btn->Press_time  = HAL_GetTick() - Btn->Start_time;
-					GPIO_Add_message(BTN_RELEASE,Btn->Id,Btn->Press_time);
+//					GPIO_Add_message(BTN_RELEASE,Btn->Id,Btn->Press_time);
 				}
 				break;
 			default:

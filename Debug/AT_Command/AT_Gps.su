@@ -2,6 +2,9 @@ AT_Gps.c:12:5:AT_Gps_On	8	static
 AT_Gps.c:24:5:AT_Gps_Getlocation	16	static
 AT_Gps.c:37:5:AT_Gps_Getconfig	8	static
 AT_Gps.c:49:5:AT_Gps_Set_auto	8	static
-AT_Gps.c:61:5:AT_Gps_Off	8	static
-AT_Gps.c:72:5:AT_Gps_GNSS_nmeasrc_enable	8	static
-AT_Gps.c:83:5:AT_Gps_GNSS_nmeasrc_data	8	static
+AT_Gps.c:61:5:AT_GNSS_nmeasrc_enable	8	static
+AT_Gps.c:73:5:AT_GNSS_nmeasrc_RMC	8	static
+AT_Gps.c:85:5:AT_GNSS_nmeasrc_GGA	8	static
+AT_Gps.c:98:5:AT_Gps_Off	8	static
+AT_Gps.c:109:5:AT_Gps_GNSS_nmeasrc_enable	8	static
+AT_Gps.c:120:5:AT_Gps_GNSS_nmeasrc_data	8	static

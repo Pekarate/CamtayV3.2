@@ -185,12 +185,12 @@ uint8_t Rxdata[100];
 
 int _write(int file, char *ptr, int len)
 {
-///	HAL_UART_Transmit(&huart3, (uint8_t *)ptr,len, 3000);
-//	for(int i =0;i<len;i++)
-//	{
-//		ITM_SendChar(*ptr);
-//		ptr++;
-//	}
+	HAL_UART_Transmit(&huart3, (uint8_t *)ptr,len, 3000);
+	for(int i =0;i<len;i++)
+	{
+		ITM_SendChar(*ptr);
+		ptr++;
+	}
 	return len;
 }
 

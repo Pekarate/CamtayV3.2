@@ -58,6 +58,43 @@ int AT_Gps_Set_auto(void)
 	 }
 }
 
+int AT_GNSS_nmeasrc_enable(void)
+{
+	 if(At_Command((char*)"AT+QGPSCFG=\"nmeasrc\",1\r\n", (char*)"OK\r\n", 2000)>=0)
+	 {
+		 return 1;
+	 }
+	 else
+	 {
+		 return -1;
+	 }
+}
+
+int AT_GNSS_nmeasrc_RMC(void)
+{
+	 if(At_Command((char*)"AT+QGPSGNMEA=\"RMC\"\r\n", (char*)"OK\r\n", 2000)>=0)
+	 {
+		 return 1;
+	 }
+	 else
+	 {
+		 return -1;
+	 }
+}
+
+int AT_GNSS_nmeasrc_GGA(void)
+{
+	 if(At_Command((char*)"AT+QGPSGNMEA=\"GGA\"\r\n", (char*)"OK\r\n", 2000)>=0)
+	 {
+		 return 1;
+	 }
+	 else
+	 {
+		 return -1;
+	 }
+}
+
+
 int AT_Gps_Off(void)
 {
 	 if(At_Command((char*)"AT+QGPSEND\r\n", (char*)"OK\r\n", 2000)>=0)

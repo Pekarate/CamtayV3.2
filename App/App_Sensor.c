@@ -90,7 +90,7 @@ int Sensor_parse(char *info,int language)
 }
 void App_Sensor_Init(char *Sensor_info)
 {
-	Sensor_parse(Sensor_info,0);
+	Sensor_parse(Sensor_info,1);
 }
 int App_Sensor_Get_NumSensor()
 {

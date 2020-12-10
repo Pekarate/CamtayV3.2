@@ -14,4 +14,7 @@ int AT_Gps_Getconfig(void);
 int AT_Gps_Set_auto(void);
 int AT_Gps_GNSS_nmeasrc_enable(void);
 int AT_Gps_GNSS_nmeasrc_data(void);
+int AT_GNSS_nmeasrc_RMC(void);
+int AT_GNSS_nmeasrc_enable(void);
+int AT_GNSS_nmeasrc_GGA(void);
 #endif /* AT_GPS_H_ */

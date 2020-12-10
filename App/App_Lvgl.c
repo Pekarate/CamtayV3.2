@@ -59,12 +59,19 @@ lv_obj_t * Battery;
 lv_obj_t * Img_Sd;
 lv_obj_t * Gps_on;
 lv_obj_t * Img_Warnig;
+
 lv_obj_t * Main_Screen;
+
 lv_obj_t * Setup_Screen;
+lv_obj_t * UpdateData_Screen;
+lv_obj_t * lb_server_info;
+
+
 uint32_t Bat_cnt =0;
 uint8_t bat_offset[] = {10,33,66,96};
 
 Sys_Screen_Active current_active = MAIN_SCREEN;
+
 
 void lv_cablib_start_show()
 {
@@ -84,13 +91,48 @@ void lv_cablib_init_show()
 	{
 		lv_label_set_text(lb_calib_infor,"Please immerse the\nsensor in 12.88mS/\nCm solution and \npress SET");
 	}
-	else if(sensor_running == 4)
+	else if(sensor_running == 5)
 	{
 		lv_label_set_text(lb_calib_infor,"cablib PH sensor");
 	}
 	else
 		lv_label_set_text(lb_calib_infor,"START CALIIB FAIL");
 	lv_obj_align(lb_calib_infor, NULL, LV_ALIGN_CENTER, 0, 0);
+}
+void lv_cablib_result_show(int res)
+{
+	char kq[20];
+	sprintf(kq,"calib return: %d",res);
+	lv_label_set_text(lb_calib_infor,kq);
+	lv_obj_align(lb_calib_infor, NULL, LV_ALIGN_CENTER, 0, 0);
+}
+
+void lv_update_data_show(Updat_data_state state,uint16_t arg)
+{
+	switch (state) {
+		case WAITING_GPS:
+			lv_label_set_text(lb_server_info,"Waiting GPS...");
+			lv_obj_align(lb_server_info, NULL, LV_ALIGN_CENTER, 0, 0);
+			break;
+		case WAITING_NETWORK:
+			lv_label_set_text(lb_server_info,"Waiting network...");
+			lv_obj_align(lb_server_info, NULL, LV_ALIGN_CENTER, 0, 0);
+			break;
+		case WAITING_RESULT:
+			lv_label_set_text(lb_server_info,"Waiting result...");
+			lv_obj_align(lb_server_info, NULL, LV_ALIGN_CENTER, 0, 0);
+			break;
+		case UPDATE_DONE:
+			{
+				char tmp[30];
+				sprintf(tmp,"result: %d",arg);
+				lv_label_set_text(lb_server_info,tmp);
+				lv_obj_align(lb_server_info, NULL, LV_ALIGN_CENTER, 0, 0);
+			}
+			break;
+		default:
+			break;
+	}
 }
 
 void Lv_switch_to_screen(Sys_Screen_Active screen)
@@ -128,6 +170,10 @@ void Lv_switch_to_screen(Sys_Screen_Active screen)
 		case CALIB_START:
 			lv_obj_set_hidden(listConfig, true);
 			lv_cablib_start_show();
+			//lv_obj_set_hidden(lb_calib_infor, true);
+			break;
+		case UPDATE_DATA:
+			lv_scr_load(UpdateData_Screen);
 			//lv_obj_set_hidden(lb_calib_infor, true);
 			break;
 		default:
@@ -306,7 +352,7 @@ static void lv_Battery_setting(void)
 
     Gps_on = lv_img_create(Main_Screen, NULL);
     lv_img_set_src(Gps_on, LV_SYMBOL_GPS);
-    lv_obj_set_pos(Gps_on, 64, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_set_pos(Gps_on, 95, -2);//(img2, NULL, LV_ALIGN_CENTER, 0, -20);
     lv_Gps_off();
 
     LvSimready = lv_img_create(Main_Screen, NULL);
@@ -482,6 +528,7 @@ void lv_obj_init(void) {
 
 	Main_Screen = lv_obj_create(NULL, NULL);
 	Setup_Screen = lv_obj_create(NULL, NULL);
+	UpdateData_Screen = lv_obj_create(NULL, NULL);
 	lv_Battery_setting();
 	lv_font_init();
 	/*Create a Label on the currently active screen*/
@@ -549,6 +596,12 @@ void lv_obj_init(void) {
 	lv_label_set_text(lb_calib_infor,"Please immerse the\nsensor in 12.88mS/\nCm solution and \npress SET");
 	lv_obj_align(lb_calib_infor, NULL, LV_ALIGN_CENTER, 0, 0);
 	lv_obj_set_hidden(lb_calib_infor, true);
+
+	lb_server_info = lv_label_create(UpdateData_Screen, NULL);
+	lv_obj_add_style(lb_server_info, LV_OBJ_PART_MAIN, &text_style_smal);
+	lv_label_set_text(lb_server_info,"UpdateData_Screen.");
+	lv_obj_align(lb_server_info, NULL, LV_ALIGN_CENTER, 0, 0);
+	//lv_obj_set_hidden(lb_server_info, true);
 
 	lv_scr_load(Main_Screen);
 

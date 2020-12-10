@@ -18,6 +18,8 @@
 #include "AT_Gps.h"
 #include "AT_Command.h"
 
+#include "lwgps/lwgps.h"
+
 #define UID0 (*(volatile uint32_t *)0x1FFF7A10) //Unique device ID register
 #define UID1 (*(volatile uint32_t *)0x1FFF7A14)
 #define UID2 (*(volatile uint32_t *)0x1FFF7A18)
@@ -30,7 +32,7 @@ char UID[20];
 uint32_t at_ok =0,at_fail = 0;
 uint8_t tmpp[100];
 uint8_t Simready = 0;
-uint8_t Network_on = 0;
+
 char lat[20] = {0};
 char Longs[20] = {0};
 int rssi;
@@ -76,13 +78,24 @@ uint32_t DateTime_Updatetime = 0;
 SemaphoreHandle_t xSemaphore;
 SemaphoreHandle_t xSemaphore_battery;
 SemaphoreHandle_t xSemaphore_Sensordata;
-
+SemaphoreHandle_t xSemaphore_UCsim;
 
 QueueHandle_t Queue_Handle = NULL;
 
 RTC_TimeTypeDef sTime = {0};
 RTC_DateTypeDef sDate = {0};
 uint32_t System_runtime;
+
+uint8_t GPS_done = 0;
+uint8_t Network_on = 0;
+
+uint8_t result_calib;
+Updat_data_state update_state = UPDATE_IDLE;
+
+void Sys_refresh_time(void)
+{
+	System_runtime = HAL_GetTick() +TIME_RUN;
+}
 int Make_aData_packeg()
 {
 	Packeg_len = sprintf(SysTemData,"{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\","
@@ -162,6 +175,26 @@ static void Update_Datetime()
 	char strr[7];
 	sprintf(strr,"%d:%02d",sTime.Hours,sTime.Minutes);
 	Lv_DateTime_update(strr);
+}
+static int Sensor_calib(void)
+{
+	int res = -1;
+	if( xSemaphoreTake( xSemaphore_Sensordata, ( TickType_t ) 1000 ) == pdTRUE )
+	{
+		switch (Sensor_index) {
+			case 0:
+				res =  Calib_sanity();
+				break;
+			case 1:
+				res =  Calib_PH();
+				break;
+			default:
+				break;
+		}
+		xSemaphoreGive( xSemaphore_Sensordata );
+		return res;
+	}
+	return -2;
 }
 static void Updata_data_sensor()
 {
@@ -273,6 +306,21 @@ void Btn_Main_Screen_process()
 		case BTN_ID_EXIT:
 			break;
 		case BTN_ID_UP:
+			switch (BTN_Message.event) {
+				case BTN_RELEASE:
+					if(BTN_Message.Time_press <1000) //pre Presslong
+					{
+						//
+
+					}
+					break;
+				case BTN_PRESS_LONG:
+					update_state = WAITING_GPS;
+					Lv_switch_to_screen(UPDATE_DATA);
+					break;
+				default:
+					break;
+			}
 			break;
 		case BTN_ID_DOWN:
 			break;
@@ -288,7 +336,7 @@ void Btn_Setup_Screen_process()
 				case BTN_RELEASE:
 					if(BTN_Message.Time_press <1000) //pre Presslong
 					{
-						if(lv_list_get_forcus_index() == 2)
+						if(lv_list_get_forcus_index() == 1)
 						{
 						//Lv_switch_to_screen(GET_UID_SCREEN);
 								if(Sensor_Scan_res >= 0) // cam bien running
@@ -392,13 +440,28 @@ void Btn_calib_result_Screen_process()
 {
 	switch (BTN_Message.btn_id){
 		case BTN_ID_MENU:
-
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(SETUP_SCREEN);
+			}
 			break;
 		case BTN_ID_EXIT:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(SETUP_SCREEN);
+			}
 			break;
 		case BTN_ID_UP:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(SETUP_SCREEN);
+			}
 			break;
 		case BTN_ID_DOWN:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(SETUP_SCREEN);
+			}
 			break;
 		default:
 			break;
@@ -435,6 +498,41 @@ void Btn_get_id_Screen_process()
 			break;
 	}
 }
+
+void Btn_Update_Data_process()
+{
+	switch (BTN_Message.btn_id){
+		case BTN_ID_MENU:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(MAIN_SCREEN);
+			}
+			break;
+		case BTN_ID_EXIT:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(MAIN_SCREEN);
+			}
+			break;
+		case BTN_ID_UP:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(MAIN_SCREEN);
+			}
+			break;
+		case BTN_ID_DOWN:
+			if(BTN_Message.event == BTN_RELEASE)
+			{
+				Lv_switch_to_screen(MAIN_SCREEN);
+			}
+			break;
+		default:
+			break;
+	}
+}
+
+
+
 void Screen_process()
 {
 
@@ -463,14 +561,51 @@ void Screen_process()
 			break;
 
 		case CALIB_START:
-			Btn_calib_Start_Screen_process();
-					break;
+			//Btn_calib_Start_Screen_process();
+			{
+				result_calib = Sensor_calib();
+				Sys_refresh_time();
+				current_active = CALIB_RESULT;
+			}
+			break;
 		case CALIB_RESULT:
+			lv_cablib_result_show(result_calib);
 			Btn_calib_result_Screen_process();
 					break;
 		case GET_UID_SCREEN:
 			Btn_get_id_Screen_process();
 					break;
+		case UPDATE_DATA:
+			switch (update_state) {
+				case WAITING_GPS:
+					lv_update_data_show(WAITING_GPS,0);
+					if(GPS_done)
+						update_state = WAITING_NETWORK;
+					break;
+				case WAITING_NETWORK:
+					osDelay(100);
+					lv_update_data_show(WAITING_NETWORK,0);
+					if(Network_on)
+						update_state = UPDATE_IDLE;
+					break;
+				case WAITING_RESULT:
+					lv_update_data_show(WAITING_RESULT,0);
+					if( xSemaphoreTake( xSemaphore_UCsim, ( TickType_t ) 10 ) == pdTRUE )
+					{
+						Make_aData_packeg();
+					}
+					break;
+				case UPDATE_DONE:
+					osDelay(100);
+					int Http_Res = AT_Http_post(SysTemData);
+					lv_update_data_show(WAITING_RESULT,Http_Res);
+					xSemaphoreGive(xSemaphore_UCsim);
+					break;
+				default:
+					break;
+			}
+			Btn_Update_Data_process();
+			break;
 		default:
 			break;
 	}
@@ -481,6 +616,7 @@ void Screen_process()
 	  xSemaphore = xSemaphoreCreateMutex();
 	  xSemaphore_battery = xSemaphoreCreateMutex();
 	  xSemaphore_Sensordata = xSemaphoreCreateMutex();
+	  xSemaphore_UCsim  =xSemaphoreCreateMutex();
 	  Queue_Handle = xQueueCreate(10, sizeof( xMessage ) );
 
 	  if( xSemaphoreTake( xSemaphore, ( TickType_t ) 10 ) == pdTRUE )
@@ -515,12 +651,13 @@ void Screen_process()
 		  	  	  	Screen_process();
 		  	  	  	if(System_runtime < HAL_GetTick())
 		  	  	  	{
-		  	  	  		System_Add_event(SYSTEM_OFF);
+		  	  	  		//System_Add_event(SYSTEM_OFF);
 		  	  	  	}
 					if(xQueueReceive(Queue_Handle, &Handle, ( TickType_t )1) == pdPASS )
 					{
 						switch (Handle.handle_id) {
 							case GPS_GET_LOCATION_DONE:
+								GPS_done = 1;
 								lv_Gps_on();
 								break;
 							case GPS_GET_LOCATION_FAIL:
@@ -533,6 +670,7 @@ void Screen_process()
 								lv_Sim_not_ready();
 								break;
 							case GSM_ON:
+								Network_on = 1;
 								lv_Gsm_on();
 								break;
 							case GSM_OFF:
@@ -624,28 +762,30 @@ uint32_t time_tt1,time_tt2 = 0;
 		 osDelay(1); // 5ms
 	}
  }
+ lwgps_t hgps;
 uint8_t PECi_run = 0;
  void Start_Uc20(void const * argument){
+	 uint8_t Network_on_t = 0;
 	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
 	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
-	 for(;;)
-	 {
-		 if(PECi_run == 1)
-		 {
-			 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
-			 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
-			 HAL_GPIO_WritePin(PCIE_WLAN_DIS_GPIO_Port, PCIE_WLAN_DIS_Pin, GPIO_PIN_RESET);
-			 PECi_run = 0;
-		 }
-		 if(PECi_run == 2)
-		 {
-			 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
-			 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
-			 HAL_GPIO_WritePin(PCIE_WLAN_DIS_GPIO_Port, PCIE_WLAN_DIS_Pin, GPIO_PIN_SET);
-			 PECi_run = 0;
-		 }
-		osDelay(1);
-	 }
+//	 for(;;)
+//	 {
+//		 if(PECi_run == 1)
+//		 {
+//			 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
+//			 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
+//			 HAL_GPIO_WritePin(PCIE_WLAN_DIS_GPIO_Port, PCIE_WLAN_DIS_Pin, GPIO_PIN_RESET);
+//			 PECi_run = 0;
+//		 }
+//		 if(PECi_run == 2)
+//		 {
+//			 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
+//			 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
+//			 HAL_GPIO_WritePin(PCIE_WLAN_DIS_GPIO_Port, PCIE_WLAN_DIS_Pin, GPIO_PIN_SET);
+//			 PECi_run = 0;
+//		 }
+//		osDelay(1);
+//	 }
 	 osDelay(10);
 	 HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
 	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
@@ -662,7 +802,14 @@ uint8_t PECi_run = 0;
 	 }
 //	 AT_Gps_Getconfig();
 	 AT_Gps_Set_auto();
-	 AT_Gps_On();
+
+	 while(AT_Gps_On()!=1)
+	 {
+		 osDelay(100);
+	 }
+	 osDelay(1000);
+	 AT_GNSS_nmeasrc_enable();
+	 osDelay(2000);
 //	 AT_Gps_GNSS_nmeasrc_enable();
 //	 while(1)
 //	 {
@@ -672,6 +819,48 @@ uint8_t PECi_run = 0;
 //	 AT_Gps_Getconfig();
 	 char *url = "http://apihandsetmanager.namlongtekgroup.com/api/station/AddStationData";
 	 char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"10.834650\",\"Extention2\":\"106.700431\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
+	 uint8_t RequestGps =1;
+	 for(;;)
+	 {
+		  if( xSemaphoreTake( xSemaphore_UCsim, ( TickType_t ) 10 ) == pdTRUE )
+		  {
+			 if(!Simready)
+			 {
+				 if(AT_Check_SimReady())
+				 {
+					 Simready =1;
+					 System_Add_event(SIM_READY);
+				 }
+			 }
+			 else
+			 {
+				 if (!Network_on_t)
+				 {
+					 if(AT_TurnOn_network())
+					 {
+						 Network_on_t = 1;
+						 System_Add_event(GSM_ON);
+						 AT_Http_Init();
+
+					 }
+				 }
+			 }
+			  AT_GNSS_nmeasrc_RMC();
+			  AT_GNSS_nmeasrc_GGA();
+			 if(RequestGps)
+			 {
+				 if(AT_Gps_Getlocation(lat, Longs) == 1)
+				 {
+					 System_Add_event(GPS_GET_LOCATION_DONE);
+					 RequestGps = 0;
+				 }
+			 }
+			 AT_CheckModule_ready();
+			 AT_Check_Network_Quality(&rssi);
+			 xSemaphoreGive(xSemaphore_UCsim);
+		 }
+		 osDelay(2000);
+	 }
 	 for(;;)
 	 {
 		 if(!Simready)
@@ -683,7 +872,6 @@ uint8_t PECi_run = 0;
 //				 xMessage Gps;
 //				 Gps.handle_id = SIM_READY;
 //				 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
-				 Simready = 1;
 			 }
 		 }
 		 else
@@ -712,13 +900,7 @@ uint8_t PECi_run = 0;
 		 {
 			 printf("network quality: %d\n",rssi);
 		 }
-		 if(AT_Gps_Getlocation(lat, Longs)<1)
-		 {
-//			 xMessage Gps;
-//			 Gps.handle_id = GPS_GET_LOCATION_FAIL;
-//			 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
-			 System_Add_event(GPS_GET_LOCATION_FAIL);
-		 }
+
 		 if(Network_on)
 			 if(AT_Http_set_url(url)>0)
 			 {
