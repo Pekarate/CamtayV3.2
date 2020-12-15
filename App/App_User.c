@@ -54,6 +54,10 @@ char Sensor_info[512];// ="[{\"Addr\":4,\"SSname\":[\"Đo mặn\",\"Saility\"],\
 char Systeminfo[512];// = "{\"Config_title\":[\"Cài đặt\",\"Setting\"],\"language_config\":[\"Ngôn ngữ\",\"Language\"],\"save_ok\":[\"Lưu thành công\",\"Save data successful\"],\"save_fail\":[\"Lưu thành thất bại\",\"Failed to save data\"],\"language_title\":[\"Chọn ngôn ngữ\",\"Language select\"]}";
 char Sys_Setting[256];
 
+char *url = "http://apihandsetmanager.namlongtekgroup.com/api/station/AddStationData";
+char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"10.834650\",\"Extention2\":\"106.700431\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
+
+
 uint8_t Update_Name = 1;
 char SensorNam[30];
 uint8_t Update_Data = 1;
@@ -256,7 +260,7 @@ static void Updata_data_sensor()
 		{
 			Time_sendata = HAL_GetTick() + 2000;
 			Make_aData_packeg();
-			Sendata_via_Ble();
+			//Sendata_via_Ble();
 		}
 	}
 }
@@ -531,7 +535,8 @@ void Btn_Update_Data_process()
 	}
 }
 
-
+uint8_t http_request_url = 1;
+int Http_Res = -1;
 
 void Screen_process()
 {
@@ -578,6 +583,7 @@ void Screen_process()
 		case UPDATE_DATA:
 			switch (update_state) {
 				case WAITING_GPS:
+					Http_Res = -1;
 					lv_update_data_show(WAITING_GPS,0);
 					if(GPS_done)
 						update_state = WAITING_NETWORK;
@@ -586,20 +592,30 @@ void Screen_process()
 					osDelay(100);
 					lv_update_data_show(WAITING_NETWORK,0);
 					if(Network_on)
-						update_state = UPDATE_IDLE;
+						update_state = WAITING_RESULT;
 					break;
 				case WAITING_RESULT:
 					lv_update_data_show(WAITING_RESULT,0);
-					if( xSemaphoreTake( xSemaphore_UCsim, ( TickType_t ) 10 ) == pdTRUE )
+					if( xSemaphoreTake( xSemaphore_UCsim, ( TickType_t ) 100 ) == pdTRUE )
 					{
-						Make_aData_packeg();
+						 if(http_request_url == 0)
+						 {
+								Make_aData_packeg();
+								Http_Res = AT_Http_post(SysTemData);
+								update_state = UPDATE_DONE;
+						 }
+						 else
+						 {
+							 if(AT_Http_set_url(url)>0)
+							 {
+								 http_request_url = 0;
+							 }
+						 }
+						 xSemaphoreGive(xSemaphore_UCsim);
 					}
 					break;
 				case UPDATE_DONE:
-					osDelay(100);
-					int Http_Res = AT_Http_post(SysTemData);
-					lv_update_data_show(WAITING_RESULT,Http_Res);
-					xSemaphoreGive(xSemaphore_UCsim);
+					lv_update_data_show(UPDATE_DONE,Http_Res);
 					break;
 				default:
 					break;
@@ -802,10 +818,10 @@ uint8_t PECi_run = 0;
 	 }
 //	 AT_Gps_Getconfig();
 	 AT_Gps_Set_auto();
-
 	 while(AT_Gps_On()!=1)
 	 {
-		 osDelay(100);
+		 osDelay(1000);
+		 AT_Gps_Off();
 	 }
 	 osDelay(1000);
 	 AT_GNSS_nmeasrc_enable();
@@ -817,8 +833,6 @@ uint8_t PECi_run = 0;
 //		 osDelay(1000);
 //	 }
 //	 AT_Gps_Getconfig();
-	 char *url = "http://apihandsetmanager.namlongtekgroup.com/api/station/AddStationData";
-	 char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"10.834650\",\"Extention2\":\"106.700431\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
 	 uint8_t RequestGps =1;
 	 for(;;)
 	 {

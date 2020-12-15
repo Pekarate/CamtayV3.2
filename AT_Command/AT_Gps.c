@@ -21,6 +21,8 @@ int AT_Gps_On(void)
 	 }
 }
 
+
+
 int AT_Gps_Getlocation(char *lat,char *longs)
 {
 	 if(At_Command((char*)"AT+QGPSLOC=2\r\n", (char*)"OK\r\n", 2000)>0)
