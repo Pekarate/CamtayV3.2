@@ -855,6 +855,11 @@ uint8_t PECi_run = 0;
 						 Network_on_t = 1;
 						 System_Add_event(GSM_ON);
 						 AT_Http_Init();
+						 At_Command("AT+QIFGCNT=0\r\n", "OK\r\n", 2000);
+
+						 At_Command("AT+QICSGP=1,\"CMNET\"\r\n", "OK\r\n", 2000);
+
+						 At_Command("AT+QGSMLOC=4\r\n", "OK\r\n", 10000);
 
 					 }
 				 }
@@ -901,6 +906,13 @@ uint8_t PECi_run = 0;
 //					 xQueueSend(Queue_Handle,( void * ) &Gps,( TickType_t )1000);
 
 					 AT_Http_Init();
+
+					 At_Command("AT+QIFGCNT=0\r\n", "OK\r\n", 2000);
+
+					 At_Command("AT+QICSGP=1,\"CMNET\"\r\n", "OK\r\n", 2000);
+
+					 At_Command("AT+QGSMLOC=4\r\n", "OK\r\n", 10000);
+
 
 				 }
 			 }

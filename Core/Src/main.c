@@ -72,6 +72,7 @@ DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart3_rx;
+DMA_HandleTypeDef hdma_usart3_tx;
 
 osThreadId MainfunctionHandle;
 osThreadId io_handleHandle;
@@ -250,7 +251,28 @@ int main(void)
   HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_RESET);
   HAL_Delay(10);
   HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_SET);
-  HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
+  //HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
+
+	HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
+
+	osDelay(10);
+	HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
+	uint8_t PICE,BLE;
+	while(1)
+	{
+		if(HAL_UART_Receive(&huart1,&PICE, 1,0)==HAL_OK)
+		{
+			HAL_UART_Transmit(&huart3, &PICE, 1, 0);
+		}
+		if(HAL_UART_Receive(&huart3,&BLE, 1,0)==HAL_OK)
+		{
+			HAL_UART_Transmit(&huart1, &BLE, 1, 0);
+		}
+	}
+
+
 //  uint32_t Message_ID;
 //  char *dt = "{\"APIKey\":\"9E95D850FD2096889E8B30102BB0FEF4\",\"StationID\":\"76-17-174-111-249-236\",\"Extention1\":\"10.834650\",\"Extention2\":\"106.700431\",\"Extention3\":\"1\",\"Extention4\":\"123\",\"Extention5\":\"string\",\"Extention6\":\"string\",\"Extention7\":\"string\",\"Extention8\":\"string\",\"Extention9\":\"string\",\"Extention10\":\"string\"}";
 //
@@ -618,9 +640,9 @@ static void MX_RTC_Init(void)
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 19;
-  sTime.Minutes = 18;
-  sTime.Seconds = 30;
+  sTime.Hours = 10;
+  sTime.Minutes = 0;
+  sTime.Seconds = 0;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
   if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
@@ -867,6 +889,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+  /* DMA1_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
   /* DMA1_Stream5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
