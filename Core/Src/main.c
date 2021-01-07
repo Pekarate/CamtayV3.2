@@ -253,24 +253,24 @@ int main(void)
   HAL_GPIO_WritePin(V_BLE_E_GPIO_Port, V_BLE_E_Pin, GPIO_PIN_SET);
   //HAL_UART_Receive_DMA(&huart3, Rxdata, 100);
 
-	HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
-
-	osDelay(10);
-	HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
-	uint8_t PICE,BLE;
-	while(1)
-	{
-		if(HAL_UART_Receive(&huart1,&PICE, 1,0)==HAL_OK)
-		{
-			HAL_UART_Transmit(&huart3, &PICE, 1, 0);
-		}
-		if(HAL_UART_Receive(&huart3,&BLE, 1,0)==HAL_OK)
-		{
-			HAL_UART_Transmit(&huart1, &BLE, 1, 0);
-		}
-	}
+//	HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
+//
+//	osDelay(10);
+//	HAL_GPIO_WritePin(V_BOOT_EN_GPIO_Port, V_BOOT_EN_Pin, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
+//	uint8_t PICE,BLE;
+//	while(1)
+//	{
+//		if(HAL_UART_Receive(&huart1,&PICE, 1,0)==HAL_OK)
+//		{
+//			HAL_UART_Transmit(&huart3, &PICE, 1, 0);
+//		}
+//		if(HAL_UART_Receive(&huart3,&BLE, 1,0)==HAL_OK)
+//		{
+//			HAL_UART_Transmit(&huart1, &BLE, 1, 0);
+//		}
+//	}
 
 
 //  uint32_t Message_ID;
@@ -633,25 +633,25 @@ static void MX_RTC_Init(void)
   }
 
   /* USER CODE BEGIN Check_RTC_BKUP */
-  if(HAL_RTCEx_BKUPRead(&hrtc, 19)!= 12)
+  if(HAL_RTCEx_BKUPRead(&hrtc, 19)!= 1234)
   {
-	  HAL_RTCEx_BKUPWrite(&hrtc, 19, 12);
+	  HAL_RTCEx_BKUPWrite(&hrtc, 19, 1234);
   /* USER CODE END Check_RTC_BKUP */
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 10;
-  sTime.Minutes = 0;
-  sTime.Seconds = 0;
+  sTime.Hours = 14;
+  sTime.Minutes = 46;
+  sTime.Seconds = 00;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
   if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
   {
     Error_Handler();
   }
-  sDate.WeekDay = RTC_WEEKDAY_TUESDAY;
+  sDate.WeekDay = RTC_WEEKDAY_FRIDAY;
   sDate.Month = RTC_MONTH_DECEMBER;
-  sDate.Date = 1;
+  sDate.Date = 18;
   sDate.Year = 20;
 
   if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)

@@ -816,16 +816,32 @@ uint8_t PECi_run = 0;
 	 {
 		 osDelay(100);
 	 }
-//	 AT_Gps_Getconfig();
-	 AT_Gps_Set_auto();
-	 while(AT_Gps_On()!=1)
+	 At_Command((char *)"AT+QGPSXTRA=1\r\n",(char *)"OK\r\n",5000);
+	 printf("restart sim \r");
+	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_RESET);
+	 osDelay(10);
+	 HAL_GPIO_WritePin(PCIE_RST_GPIO_Port, PCIE_RST_Pin, GPIO_PIN_SET);
+	 osDelay(5000);
+//	 At_init();
+	 while(AT_CheckModule_ready() == 0)
 	 {
-		 osDelay(1000);
-		 AT_Gps_Off();
+		 osDelay(500);
 	 }
-	 osDelay(1000);
-	 AT_GNSS_nmeasrc_enable();
-	 osDelay(2000);
+	 while(AT_Echo_Off() == 0)
+	 {
+		 osDelay(100);
+	 }
+	 At_Command((char *)"AT+QGPSXTRA?\r\n",(char *)"OK\r\n",5000);
+//	 AT_Gps_Getconfig();
+//	 AT_Gps_Set_auto();
+//	 while(AT_Gps_On()!=1)
+//	 {
+//		 osDelay(1000);
+//		 AT_Gps_Off();
+//	 }
+//	 osDelay(1000);
+//	 AT_GNSS_nmeasrc_enable();
+//	 osDelay(2000);
 //	 AT_Gps_GNSS_nmeasrc_enable();
 //	 while(1)
 //	 {
@@ -855,12 +871,16 @@ uint8_t PECi_run = 0;
 						 Network_on_t = 1;
 						 System_Add_event(GSM_ON);
 						 AT_Http_Init();
-						 At_Command("AT+QIFGCNT=0\r\n", "OK\r\n", 2000);
-
-						 At_Command("AT+QICSGP=1,\"CMNET\"\r\n", "OK\r\n", 2000);
-
-						 At_Command("AT+QGSMLOC=4\r\n", "OK\r\n", 10000);
-
+						 AT_Http_set_url("http://xtrapath1.izatcloud.net/xtra2.bin");
+						 At_Command((char *)"AT+QHTTPGET=80\r\n",(char *)"60764\r\n",5000);
+						 At_Command((char *)"AT+QHTTPREAD=1,\"RAM:xtra2.bin\",80\r\n",(char *)"FILE: 0\r\n",15000);
+						 while(At_Command((char *)"AT+QGPSXTRATIME=0,\"2020/12/18,9:37:23\",1,1,5000\r\n",(char *)"OK\r\n",5000) < 0)
+						 {
+							 osDelay(2000);
+						 }
+						 At_Command((char *)"AT+QGPSXTRADATA=\"RAM:xtra2.bin\"\r\n",(char *)"OK\r\n",5000);
+						 At_Command((char *)"AT+QFDEL=\"RAM:xtra2.bin\"\r\n",(char *)"OK\r\n",5000);
+						 AT_Gps_On();
 					 }
 				 }
 			 }

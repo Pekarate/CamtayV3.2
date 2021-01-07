@@ -18,10 +18,10 @@ int AT_Http_Init(void){
 	 {
 
 	 }
-	 if(At_Command((char *)"AT+QHTTPCFG=\"requestheader\",1\r\n",(char *)"OK\r\n",5000)> 0)
-	 {
-
-	 }
+//	 if(At_Command((char *)"AT+QHTTPCFG=\"requestheader\",1\r\n",(char *)"OK\r\n",5000)> 0)
+//	 {
+//
+//	 }
 	 if(At_Command((char *)"AT+QIACT?\r\n",(char *)"OK\r\n",5000)> 0)
 	 {
 
